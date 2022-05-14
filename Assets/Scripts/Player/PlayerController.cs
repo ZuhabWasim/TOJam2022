@@ -10,10 +10,13 @@ public class PlayerController : MonoBehaviour
     private const string HORIZONTAL_AXIS = "Horizontal";
     private const string VERTICAL_AXIS = "Vertical";
     private const string PLAYER_TAG = "Player";
-
+    private const float DASH_TIME = 1f;
+    // TODO: Max movement 
+    
     [Header("Movement")] public float moveSpeed;
 
     public float jumpForce;
+    public float crouchDashForce;
     //public int maxJumpCount;
 
     [Header("Collision")] public Transform ceilingCheck;
@@ -27,18 +30,24 @@ public class PlayerController : MonoBehaviour
 
     [Header("Animation")] public GameObject sprite;
 
+    // Movement values.
     private Rigidbody2D _rigidbody;
-    private bool _facingRight = true;
     private float _lateralMovement;
+    private float _crouchDashCooldown;
+    
+    /*private int _jumpCount;*/
+
+    // Movement states.
     private bool _isCrouching;
     private bool _isClimbing;
     private bool _isJumping = false;
-    private int _jumpCount;
     private bool _isGrounded;
+    
+    // Sprite information
+    private bool _facingRight = true;
     private Vector2 _colliderSize;
     private Vector3 _spriteScale;
-
-
+    
     // Awake is called after initialization of all objects.
     void Awake()
     {
@@ -72,26 +81,45 @@ public class PlayerController : MonoBehaviour
         // Only be able to jump again if we come back down. Put this back in Update because it works better.
         _isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundObjects);
         MovePlayer();
+
+        // Debug.Log("_isJumping" + _isJumping + ",    " +
+        //           "_isCrouching" + _isCrouching + ",    " +
+        //           "_isClimbing" +  _isClimbing + ",    " +
+        //           "_isGrounded" + _isGrounded + ",    ");
     }
 
     void GetPlayerInput()
     {
         _lateralMovement = Input.GetAxis(HORIZONTAL_AXIS); // Left/Right movement.
+        float verticalMovement = Input.GetAxisRaw(VERTICAL_AXIS);
+        _isClimbing = verticalMovement > 0f;
+        _isCrouching = verticalMovement < 0f;
 
-        if (!_isGrounded) // If the player can jump.
+        // Prioritize climbing in the air.
+        if (_isClimbing)
+        {
+            _isCrouching = false;
+            return;
+        }
+
+        // Player is in the air elsewise.
+        if (!_isGrounded)
         {
             _isCrouching = false;
             _isClimbing = false;
             return;
         }
 
-        // If the player is doing anything else.
-        _isCrouching = Input.GetKey(KeyCode.DownArrow);
-        _isClimbing = Input.GetKey(KeyCode.UpArrow);
-
+        // Prioritize climbing over crouching if both are pressed.
         if (_isCrouching && _isClimbing)
         {
             _isCrouching = false;
+        }
+
+        // Otherwise we see if the player was crouching.
+        if (_isCrouching)
+        {
+            _lateralMovement = 0f;
         }
     }
 
@@ -110,6 +138,14 @@ public class PlayerController : MonoBehaviour
         // TODO: Add animations/sprites.
         SpriteRenderer playerSprite = sprite.GetComponent<SpriteRenderer>();
 
+        // Climbing sprite. TODO: Change the precedence so you dont see climbing sprite unless you're actually on a rope.
+        if (_isClimbing)
+        {
+            this.transform.localScale = Vector3.one;
+            playerSprite.color = new Color(1f, 0f, 0f);
+            return;
+        }
+
         // Mid-air sprite.
         if (!_isGrounded)
         {
@@ -124,14 +160,6 @@ public class PlayerController : MonoBehaviour
         {
             playerSprite.color = new Color(0f, 1f, 0f);
             CrouchCharacter(true);
-            return;
-        }
-
-        // Climbing sprite.
-        if (_isClimbing)
-        {
-            this.transform.localScale = Vector3.one;
-            playerSprite.color = new Color(1f, 0f, 0f);
             return;
         }
 
@@ -150,6 +178,7 @@ public class PlayerController : MonoBehaviour
         }
 
         _isJumping = false;
+        Debug.Log(_rigidbody.velocity);
     }
 
     void FlipCharacter()
@@ -191,7 +220,7 @@ public class PlayerController : MonoBehaviour
     void HandleAttack()
     {
         // TODO: If the player was climbing, you can't attack.
-        
+
         // Visualize Attack
         Color attackColor = attackPoint.GetComponentInChildren<SpriteRenderer>().color;
         attackPoint.GetComponentInChildren<SpriteRenderer>().color =
