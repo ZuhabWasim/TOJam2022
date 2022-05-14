@@ -96,7 +96,7 @@ public class InputManager : MonoBehaviour
 public enum KeyBinds
 {
     JUMP_KEY = KeyCode.Space,
-    ATTACK_KEY = KeyCode.X,
+    ATTACK_KEY = KeyCode.J,
     INTERACT_KEY = KeyCode.C,
     MENU_KEY = KeyCode.Escape,
 
