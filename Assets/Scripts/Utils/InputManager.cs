@@ -102,6 +102,13 @@ public enum KeyBinds
 
     UP_KEY = KeyCode.UpArrow,
     DOWN_KEY = KeyCode.DownArrow,
+    
+    // Armour piece keys for debugging.
+    CHEST_PIECE = KeyCode.Alpha1,
+    GAUNTLET = KeyCode.Alpha3,
+    LEGGINGS = KeyCode.Alpha2,
+    SWORD = KeyCode.Alpha4,
+    
     // This is for debug only
     DEBUG_TRIGGER = KeyCode.Alpha0
 }

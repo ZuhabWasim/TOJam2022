@@ -54,10 +54,16 @@ public class PlayerController : MonoBehaviour
     private float _ropeX;
     private bool _crouching = false;
 
-    // Sprite information
+    // Sprite information.
     private bool _facingRight = true;
     private Vector2 _colliderSize;
     private Vector3 _spriteScale;
+
+    // Armour Pieces.
+    private bool _chestPiece = false;
+    private bool _gauntlets = false;
+    private bool _leggings = false;
+    private bool _sword = false;
 
     // Awake is called after initialization of all objects.
     void Awake()
@@ -80,6 +86,12 @@ public class PlayerController : MonoBehaviour
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.ATTACK_KEY), HandleAttack);
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.INTERACT_KEY), HandleInteract);
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.MENU_KEY), HandleMenu);
+
+        // Placeholder events for each armour piece lost.
+        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.CHEST_PIECE), LostChestPiece);
+        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.GAUNTLET), LostGauntlets);
+        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.LEGGINGS), LostLeggings);
+        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.SWORD), LostSword);
     }
 
     private void FixedUpdate()
@@ -94,6 +106,7 @@ public class PlayerController : MonoBehaviour
     {
         GetPlayerInput();
 
+
         AnimatePlayer();
 
         // Debug.Log("_isJumping" + _isJumping + ",    " +
@@ -101,8 +114,6 @@ public class PlayerController : MonoBehaviour
         //           "_isClimbing" +  _isClimbing + ",    " +
         //           "_isGrounded" + _isGrounded + ",    ");
         TickCooldowns();
-
-        Debug.Log(_crouching);
     }
 
     void GetPlayerInput()
@@ -369,6 +380,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public bool isCrouching()
+    {
+        return _crouching;
+    }
+
 #if DEBUG
     private void OnDrawGizmos()
     {
@@ -378,4 +394,36 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
     }
 #endif
+
+    void LostChestPiece()
+    {
+        _chestPiece = true;
+#if DEBUG
+        Debug.Log("Lost Chest Piece");
+#endif
+    }
+
+    void LostGauntlets()
+    {
+        _gauntlets = true;
+#if DEBUG
+        Debug.Log("Lost Gauntlets");
+#endif
+    }
+
+    void LostLeggings()
+    {
+        _leggings = true;
+#if DEBUG
+        Debug.Log("Lost Leggings");
+#endif
+    }
+
+    void LostSword()
+    {
+        _sword = true;
+#if DEBUG
+        Debug.Log("Lost Sword");
+#endif
+    }
 }
