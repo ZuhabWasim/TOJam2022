@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public float moveSpeed = 3f;
+    
+    private const float JUMP_FORCE = 3.025f;
+    private const float GRAVITY = -1f;
+    
+    
     // Start is called before the first frame update
     void Start()
     {
