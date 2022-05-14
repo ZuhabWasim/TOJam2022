@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private float _moveDirection;
     private bool _isJumping = false;
     private int _jumpCount;
+    private bool _isGrounded;
 
     // Done after initialization of all objects.
     void Awake()
@@ -45,6 +46,9 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // Only be able to jump again if we come back down.
+        _isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundObjects);
+        Debug.Log(_isGrounded);
         MovePlayer();
     }
 
@@ -59,7 +63,7 @@ public class PlayerController : MonoBehaviour
     void GetLateralInput()
     {
         _moveDirection = Input.GetAxis(HORIZONTAL_AXIS);
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump") && _isGrounded)
         {
             _isJumping = true;
         }
@@ -95,7 +99,7 @@ public class PlayerController : MonoBehaviour
     
     void HandleJumpDown()
     {
-        //_isJumping = true;
+        //_isJumping = _isGrounded;
         Debug.Log("JUMP!!");
     }
     
@@ -118,5 +122,11 @@ public class PlayerController : MonoBehaviour
     void HandleMenu()
     {
         Debug.Log("Menu? Thinking emoji");
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(groundCheck.position, checkRadius);
     }
 }
