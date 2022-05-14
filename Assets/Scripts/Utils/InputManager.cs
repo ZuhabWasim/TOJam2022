@@ -100,6 +100,8 @@ public enum KeyBinds
     INTERACT_KEY = KeyCode.C,
     MENU_KEY = KeyCode.Escape,
 
+    UP_KEY = KeyCode.UpArrow,
+    DOWN_KEY = KeyCode.DownArrow,
     // This is for debug only
     DEBUG_TRIGGER = KeyCode.Alpha0
 }
