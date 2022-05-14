@@ -3,6 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// ---------------------
+// Cameron Hadfield
+// TOJam 2022
+// DebugWeapon.cs
+// Just a debug weapon that lets you attack a specific (assigned) gameobject
+// ---------------------
 public class DebugWeapon : Weapon
 {
     [SerializeField] GameObject target;
