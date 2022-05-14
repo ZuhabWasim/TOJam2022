@@ -258,6 +258,7 @@ MonoBehaviour:
     m_Bits: 128
   checkRadius: 0.45
   maxJumpCount: 0
+  sprite: {fileID: 3027465567994917839}
 --- !u!70 &5386949733879220112
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
