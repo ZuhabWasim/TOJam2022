@@ -255,7 +255,7 @@ MonoBehaviour:
   groundCheck: {fileID: 8766890022844081722}
   groundObjects:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 128
   checkRadius: 0.45
   maxJumpCount: 0
 --- !u!70 &5386949733879220112
