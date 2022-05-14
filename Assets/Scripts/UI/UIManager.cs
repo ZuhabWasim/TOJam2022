@@ -12,21 +12,25 @@ public class UIManager : MonoBehaviour
 
 	void Start() { Time.timeScale = 1; }
 	
-	public void OpenSettings() {
+	public void OpenMenuSettings() {
 		startButton.SetBool("isHidden", true);
 		settingsButton.SetBool("isHidden", true);
 		dialog.SetBool("isHidden", false);
 	}
 	
+	
+	
+	
 	public void StartGame(){
 		SceneManager.LoadScene("UIOverlay");
 	}
 	
-	public void CloseSettings(){
+	public void CloseMenuSettings(){
 		startButton.SetBool("isHidden", false);
 		settingsButton.SetBool("isHidden", false);
 		dialog.SetBool("isHidden", true);
 	}
 	
+
 	
 }

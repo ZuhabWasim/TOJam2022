@@ -1,6 +1,6 @@
 // PREPROC
 #define DEBUG
-//#define DMGTEST
+#define DMGTEST
 #define DEATHTEST
 
 using System.Collections;
@@ -41,7 +41,7 @@ public class Health : MonoBehaviour, IDamageable
     }
 
     // -------- DEATH :( ------------------------
-    [SerializeField] private float maxHealth = 10; // Provide default for rapid dev
+    [SerializeField] public float maxHealth = 10; // Provide default for rapid dev
 
     public void BeDamaged(float dmg){
         health -= dmg;
