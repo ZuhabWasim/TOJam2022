@@ -1,3 +1,4 @@
+#define DEBUG
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,16 +9,25 @@ public class PlayerController : MonoBehaviour
 {
     private const string HORIZONTAL_AXIS = "Horizontal";
     private const string VERTICAL_AXIS = "Vertical";
-        
+    private const string PLAYER_TAG = "Player";
+    
+    [Header( "Movement" )]
     public float moveSpeed;
     public float jumpForce;
-
+    //public int maxJumpCount;
+    
+    [Header( "Collision" )]
     public Transform ceilingCheck;
     public Transform groundCheck;
     public LayerMask groundObjects;
-    
     public float checkRadius;
-    public int maxJumpCount;
+
+    [Header("Combat")] 
+    public Transform attackPoint;
+    public float attackRadius;
+    public LayerMask enemyLayer;
+    
+    [Header( "Animation" )]
     public GameObject sprite;
 
     private Rigidbody2D _rigidbody;
@@ -61,10 +71,14 @@ public class PlayerController : MonoBehaviour
 
         AnimatePlayer();
 
-        Debug.Log("_isJumping" + _isJumping + ",    " +
-                  "_isCrouching" + _isCrouching + ",    " +
-                  "_isClimbing" +  _isClimbing + ",    " +
-                  "_isGrounded" + _isGrounded + ",    ");
+/*
+#if DEBUG
+        // Debug.Log("_isJumping" + _isJumping + ",    " +
+        //           "_isCrouching" + _isCrouching + ",    " +
+        //           "_isClimbing" +  _isClimbing + ",    " +
+        //           "_isGrounded" + _isGrounded + ",    ");
+#endif
+*/
         
         // Only be able to jump again if we come back down.
         _isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundObjects);
@@ -81,7 +95,6 @@ public class PlayerController : MonoBehaviour
             _isClimbing = false;
             return;
         }
-        Debug.Log(Input.GetKey(KeyCode.UpArrow));
         _isCrouching = Input.GetKey(KeyCode.DownArrow);
         _isClimbing = Input.GetKey(KeyCode.UpArrow);
 
@@ -104,7 +117,7 @@ public class PlayerController : MonoBehaviour
 
         SpriteRenderer playerSprite = sprite.GetComponent<SpriteRenderer>();
 
-        // Changing the player sprite.
+        // Changing the player sprite. TODO: Add animations/sprites.
         if (!_isGrounded)
         {
             this.transform.localScale = Vector3.one;
@@ -171,7 +184,9 @@ public class PlayerController : MonoBehaviour
             _isJumping = true;
             _isCrouching = false;
             _isClimbing = false;
+#if DEBUG
             Debug.Log("JUMP!!");
+#endif
         }
     }
 
@@ -197,7 +212,33 @@ public class PlayerController : MonoBehaviour
     
     void HandleAttack()
     {
+        // Visualize Attack
+        Color attackColor = attackPoint.GetComponentInChildren<SpriteRenderer>().color;
+        attackPoint.GetComponentInChildren<SpriteRenderer>().color = new Color(attackColor.g, attackColor.b, attackColor.r);
+        
+        // Detect everything hit by player.
+        // TODO: Change from Default layer to Enemy layer.
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius, enemyLayer);
+        
+        // Damage the enemies
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            // Don't damage yourself.
+            if (enemy.gameObject.tag == PLAYER_TAG)
+            {
+                continue;
+            }
+            
+            // For now de-rendering objects hit but this is where you can damage enemies.
+            // TODO: Add damaging of enemies.
+            enemy.gameObject.SetActive(false);
+#if DEBUG
+            Debug.Log(" Hit enemy:  " + enemy.name);
+#endif
+        }
+#if DEBUG
         Debug.Log("ATTACK!!");
+#endif
     }
     
     void HandleInteract()
@@ -209,10 +250,13 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Menu? Thinking emoji");
     }
-
+#if DEBUG
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(groundCheck.position, checkRadius);
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
     }
+#endif
 }
