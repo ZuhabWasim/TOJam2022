@@ -278,7 +278,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7461344696706572161}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63c0b1aa6ca329243a132b5b97ddd41b, type: 3}
+  m_Script: {fileID: 11500000, guid: 5e93c42b34cda134e9f56afd6ebc3e3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 7
@@ -286,7 +286,8 @@ MonoBehaviour:
   terminalVelocity: 20
   crouchDashForce: 0
   climbingSpeed: 5
-  climbCooldown: 0.3
+  climbCooldownDuration: 0.3
+  climbGraceDuration: 0.2
   climbingLayer:
     serializedVersion: 2
     m_Bits: 512
