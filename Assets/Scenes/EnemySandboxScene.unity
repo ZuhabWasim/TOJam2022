@@ -239,6 +239,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   distanceForRay: 30
+  movingRight: 1
+  groundDetection: {fileID: 1900629278}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!212 &924553263
 SpriteRenderer:
   m_ObjectHideFlags: 0
