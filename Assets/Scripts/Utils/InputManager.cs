@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
+ * EventManager heavily based on Lakshya's design from Reflection.
+ * 
  * RegisteredKeyBind struct that holds the information of any particular bind.
  */
 struct RegisteredKeybind

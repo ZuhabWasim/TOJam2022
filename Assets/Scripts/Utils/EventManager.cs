@@ -34,7 +34,6 @@ public class EventManager : MonoBehaviour
                 try
                 {
                     callback();
-                    Debug.Log(triggerEvent);
                 }
                 catch (System.Exception)
                 {
