@@ -11,16 +11,18 @@ public class PlayerController : MonoBehaviour
     private const string VERTICAL_AXIS = "Vertical";
     private const string PLAYER_TAG = "Player";
     private const float GRAVITY_SCALE = 5f;
-    
-    [Header("Movement")] public float moveSpeed;
 
+    [Header("Movement")] 
+    public float moveSpeed;
     public float jumpForce;
-    public float crouchDashForce;
     public float terminalVelocity = 18f;
-    public float climbingSpeed;
-
-    public LayerMask climbingLayer;
+    public float crouchDashForce;
     
+    [Header("Climbing")] 
+    public float climbingSpeed;
+    public float climbCooldown = 0.3f;
+    public LayerMask climbingLayer;
+
     [Header("Collision")]
     public Transform groundCheck;
     public LayerMask groundObjects;
@@ -37,6 +39,7 @@ public class PlayerController : MonoBehaviour
     private float _lateralMovement;
     private float _verticalMovement;
     private float _crouchDashCooldown;
+    private float _climbTimer;
     
     // Movement states.
     private bool _onRope;
@@ -46,7 +49,7 @@ public class PlayerController : MonoBehaviour
     private bool _isGrounded;
 
     private bool climbing;
-    
+
     // Sprite information
     private bool _facingRight = true;
     private Vector2 _colliderSize;
@@ -93,6 +96,7 @@ public class PlayerController : MonoBehaviour
         //           "_isCrouching" + _isCrouching + ",    " +
         //           "_isClimbing" +  _isClimbing + ",    " +
         //           "_isGrounded" + _isGrounded + ",    ");
+        TickCooldowns();
     }
 
     void GetPlayerInput()
@@ -103,7 +107,7 @@ public class PlayerController : MonoBehaviour
         _crouchPress = _verticalMovement < 0f;
 
         // Prioritize climbing in the air.
-        if (_onRope && _verticalMovement != 0)
+        if (_onRope && _verticalMovement != 0 && _climbTimer == 0f)
         {
             climbing = true;
             return;
@@ -111,7 +115,6 @@ public class PlayerController : MonoBehaviour
         
         if (_climbPress)
         {
-            
             _crouchPress = false;
             return;
         }
@@ -191,29 +194,6 @@ public class PlayerController : MonoBehaviour
         CrouchCharacter(false);
     }
 
-    void MovePlayer()
-    {
-        // Disable gravity to only rely on up/down input when the player is climbing.
-        if (climbing)
-        {
-            _rigidbody.gravityScale = 0f;
-            _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed, _verticalMovement * climbingSpeed);
-        }
-        else
-        {
-            _rigidbody.gravityScale = GRAVITY_SCALE;
-            _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed,
-                Mathf.Clamp(_rigidbody.velocity.y, -terminalVelocity, terminalVelocity));
-        }
-
-        // If the player scheduled a jump, trigger it once and set it to false.
-        if (_isJumping)
-        {
-            _rigidbody.AddForce(new Vector2(0f, jumpForce));
-        }
-        _isJumping = false;
-    }
-
     void FlipCharacter()
     {
         _facingRight = !_facingRight;
@@ -237,9 +217,47 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void MovePlayer()
+    {
+        // Disable gravity to only rely on up/down input when the player is climbing.
+        if (climbing)
+        {
+            _rigidbody.gravityScale = 0f;
+            _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed, _verticalMovement * climbingSpeed);
+        }
+        else
+        {
+            _rigidbody.gravityScale = GRAVITY_SCALE;
+            _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed,
+                Mathf.Clamp(_rigidbody.velocity.y, -terminalVelocity, terminalVelocity));
+        }
+
+        // If the player scheduled a jump, trigger it once and set it to false.
+        if (_isJumping)
+        {
+            // Re-enable regular movement
+            _rigidbody.gravityScale = GRAVITY_SCALE;
+            _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed,
+                Mathf.Clamp(_rigidbody.velocity.y, -terminalVelocity, terminalVelocity));
+            
+            // Add the jump velocity.
+            _rigidbody.AddForce(new Vector2(0f, jumpForce));
+            
+            // Set climbing on cooldown for a bit.
+            climbing = false;
+            _climbTimer = climbCooldown;
+        }
+        _isJumping = false;
+    }
+
+    void TickCooldowns()
+    {
+        _climbTimer = Mathf.Max(0f, _climbTimer - Time.deltaTime);
+    }
+
     void HandleJump()
     {
-        if (_isGrounded)
+        if (_isGrounded || climbing)
         {
             _isJumping = true;
             _crouchPress = false;
