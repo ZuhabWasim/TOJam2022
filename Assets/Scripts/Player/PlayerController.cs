@@ -10,16 +10,18 @@ public class PlayerController : MonoBehaviour
     private const string HORIZONTAL_AXIS = "Horizontal";
     private const string VERTICAL_AXIS = "Vertical";
     private const string PLAYER_TAG = "Player";
-    private const float DASH_TIME = 1f;
-    // TODO: Max movement 
+    private const float GRAVITY_SCALE = 5f;
     
     [Header("Movement")] public float moveSpeed;
 
     public float jumpForce;
     public float crouchDashForce;
-    //public int maxJumpCount;
+    public float terminalVelocity = 18f;
+    public float climbingSpeed;
 
-    [Header("Collision")] public Transform ceilingCheck;
+    public LayerMask climbingLayer;
+    
+    [Header("Collision")]
     public Transform groundCheck;
     public LayerMask groundObjects;
     public float checkRadius;
@@ -33,21 +35,23 @@ public class PlayerController : MonoBehaviour
     // Movement values.
     private Rigidbody2D _rigidbody;
     private float _lateralMovement;
+    private float _verticalMovement;
     private float _crouchDashCooldown;
     
-    /*private int _jumpCount;*/
-
     // Movement states.
-    private bool _isCrouching;
-    private bool _isClimbing;
+    private bool _onRope;
+    private bool _crouchPress;
+    private bool _climbPress;
     private bool _isJumping = false;
     private bool _isGrounded;
+
+    private bool climbing;
     
     // Sprite information
     private bool _facingRight = true;
     private Vector2 _colliderSize;
     private Vector3 _spriteScale;
-    
+
     // Awake is called after initialization of all objects.
     void Awake()
     {
@@ -71,16 +75,19 @@ public class PlayerController : MonoBehaviour
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.MENU_KEY), HandleMenu);
     }
 
+    private void FixedUpdate()
+    {
+        // Only be able to jump again if we come back down. Put this back in Update because it works better.
+        _isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundObjects);
+        MovePlayer();
+    }
+
     // Update is called once per frame
     void Update()
     {
         GetPlayerInput();
 
         AnimatePlayer();
-
-        // Only be able to jump again if we come back down. Put this back in Update because it works better.
-        _isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundObjects);
-        MovePlayer();
 
         // Debug.Log("_isJumping" + _isJumping + ",    " +
         //           "_isCrouching" + _isCrouching + ",    " +
@@ -90,37 +97,45 @@ public class PlayerController : MonoBehaviour
 
     void GetPlayerInput()
     {
-        _lateralMovement = Input.GetAxis(HORIZONTAL_AXIS); // Left/Right movement.
-        float verticalMovement = Input.GetAxisRaw(VERTICAL_AXIS);
-        _isClimbing = verticalMovement > 0f;
-        _isCrouching = verticalMovement < 0f;
+        _lateralMovement = Input.GetAxis(HORIZONTAL_AXIS);
+        _verticalMovement = Input.GetAxisRaw(VERTICAL_AXIS);
+        _climbPress = _verticalMovement > 0f;
+        _crouchPress = _verticalMovement < 0f;
 
         // Prioritize climbing in the air.
-        if (_isClimbing)
+        if (_onRope && _verticalMovement != 0)
         {
-            _isCrouching = false;
+            climbing = true;
+            return;
+        }
+        
+        if (_climbPress)
+        {
+            
+            _crouchPress = false;
             return;
         }
 
         // Player is in the air elsewise.
         if (!_isGrounded)
         {
-            _isCrouching = false;
-            _isClimbing = false;
+            _crouchPress = false;
+            _climbPress = false;
             return;
         }
 
         // Prioritize climbing over crouching if both are pressed.
-        if (_isCrouching && _isClimbing)
+        if (_crouchPress && _climbPress)
         {
-            _isCrouching = false;
+            _crouchPress = false;
         }
 
-        // Otherwise we see if the player was crouching.
-        if (_isCrouching)
+        // Otherwise if the player isn't crouching, then get the player input.
+        /*if (!_isCrouching)
         {
-            _lateralMovement = 0f;
-        }
+            _lateralMovement = Input.GetAxis(HORIZONTAL_AXIS); // Left/Right movement.
+            //_lateralMovement = 0f;
+        }*/
     }
 
     void AnimatePlayer()
@@ -139,10 +154,17 @@ public class PlayerController : MonoBehaviour
         SpriteRenderer playerSprite = sprite.GetComponent<SpriteRenderer>();
 
         // Climbing sprite. TODO: Change the precedence so you dont see climbing sprite unless you're actually on a rope.
-        if (_isClimbing)
+        if (climbing)
         {
             this.transform.localScale = Vector3.one;
-            playerSprite.color = new Color(1f, 0f, 0f);
+            if (!_isGrounded)
+            {
+                playerSprite.color = new Color(1f, 0f, 0f);
+            } else 
+            {
+                playerSprite.color = new Color(1f, 1f, 1f);
+            }
+            CrouchCharacter(false);
             return;
         }
 
@@ -156,7 +178,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Crouching sprite.
-        if (_isCrouching)
+        if (_crouchPress)
         {
             playerSprite.color = new Color(0f, 1f, 0f);
             CrouchCharacter(true);
@@ -171,14 +193,25 @@ public class PlayerController : MonoBehaviour
 
     void MovePlayer()
     {
-        _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed, _rigidbody.velocity.y);
+        // Disable gravity to only rely on up/down input when the player is climbing.
+        if (climbing)
+        {
+            _rigidbody.gravityScale = 0f;
+            _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed, _verticalMovement * climbingSpeed);
+        }
+        else
+        {
+            _rigidbody.gravityScale = GRAVITY_SCALE;
+            _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed,
+                Mathf.Clamp(_rigidbody.velocity.y, -terminalVelocity, terminalVelocity));
+        }
+
+        // If the player scheduled a jump, trigger it once and set it to false.
         if (_isJumping)
         {
             _rigidbody.AddForce(new Vector2(0f, jumpForce));
         }
-
         _isJumping = false;
-        Debug.Log(_rigidbody.velocity);
     }
 
     void FlipCharacter()
@@ -209,8 +242,8 @@ public class PlayerController : MonoBehaviour
         if (_isGrounded)
         {
             _isJumping = true;
-            _isCrouching = false;
-            _isClimbing = false;
+            _crouchPress = false;
+            _climbPress = false;
 #if DEBUG
             Debug.Log("JUMP!!");
 #endif
@@ -260,6 +293,30 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log("Menu? Thinking emoji");
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if ((int) Math.Pow(2, other.gameObject.layer) == climbingLayer.value)
+        {
+            _onRope = true;
+#if DEBUG
+            Debug.Log("On climbing surface.");
+#endif
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if ((int) Math.Pow(2, other.gameObject.layer) == climbingLayer.value)
+        {
+            _onRope = false;
+            climbing = false;
+#if DEBUG
+            Debug.Log("Off of climbing surface.");
+#endif
+        }
+    }
+
 #if DEBUG
     private void OnDrawGizmos()
     {
