@@ -42,10 +42,10 @@ GameObject:
   - component: {fileID: 470036570082652376}
   - component: {fileID: 671417885641631047}
   - component: {fileID: 5769426122916321879}
-  - component: {fileID: 3874097162145524853}
+  - component: {fileID: 6061073066040459036}
   m_Layer: 0
   m_Name: PatrolEnemyGrassland
-  m_TagString: Untagged
+  m_TagString: PatrolEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -107,8 +107,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!61 &3874097162145524853
-BoxCollider2D:
+--- !u!58 &6061073066040459036
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -120,19 +120,9 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_Offset: {x: 0, y: -0.2}
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.5}
-  m_EdgeRadius: 0
+  m_Radius: 0.3
 --- !u!1 &5911117911456773403
 GameObject:
   m_ObjectHideFlags: 0
@@ -159,7 +149,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5911117911456773403}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.177, y: 0.177, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 3.1062, y: 3.1062, z: 3.1062}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -207,7 +197,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1290114603, guid: d920c501880164342af62ab8f1a889bb, type: 3}
+  m_Sprite: {fileID: 969946435, guid: 42b8d92c282b9e9478a448367206c68c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -228,7 +218,7 @@ Animator:
   m_GameObject: {fileID: 5911117911456773403}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 2211c26f523538949a5851af51a44584, type: 2}
+  m_Controller: {fileID: 9100000, guid: 736c894ecb59e784daf9bb8c26d79d9d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

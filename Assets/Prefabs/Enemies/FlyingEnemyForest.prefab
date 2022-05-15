@@ -201,7 +201,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7402408862601029608}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.3632, y: -0.3632, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 3.135, y: 3.135, z: 3.135}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -321,9 +321,10 @@ GameObject:
   m_Component:
   - component: {fileID: 7402408864245190551}
   - component: {fileID: 7402408864245190548}
+  - component: {fileID: 2382770573133919689}
   m_Layer: 0
   m_Name: FlyingEnemyForest
-  m_TagString: Untagged
+  m_TagString: FlyingEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -369,6 +370,22 @@ MonoBehaviour:
   returnSpeed: 5
   _flyingRight: 1
   isAggroed: 0
+--- !u!58 &2382770573133919689
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7402408864245190550}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.7
 --- !u!1 &7402408864422396731
 GameObject:
   m_ObjectHideFlags: 0

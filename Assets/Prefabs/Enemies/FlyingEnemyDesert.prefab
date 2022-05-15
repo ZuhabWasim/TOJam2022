@@ -185,9 +185,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3446372859269836916}
   - component: {fileID: 3446372859269836919}
+  - component: {fileID: 4836875633267617638}
   m_Layer: 0
   m_Name: FlyingEnemyDesert
-  m_TagString: Untagged
+  m_TagString: FlyingEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -231,8 +232,24 @@ MonoBehaviour:
   climax: {fileID: 3446372859226848475}
   swoopSpeed: 1
   returnSpeed: 5
-  _flyingRight: 1
+  _flyingRight: 0
   isAggroed: 0
+--- !u!58 &4836875633267617638
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3446372859269836917}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.7
 --- !u!1 &3446372860245657786
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,7 +338,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3446372860913997835}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.3632, y: -0.3632, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 3.135, y: 3.135, z: 3.135}
   m_ConstrainProportionsScale: 0
   m_Children: []
