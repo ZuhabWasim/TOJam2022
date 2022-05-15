@@ -14,6 +14,7 @@ public class Patrol : MonoBehaviour
 
     private int _directionModifier = 1;
     private SpriteRenderer _spriteRenderer;
+    private Health _health;
 
     private void OnDrawGizmos()
     {
@@ -24,6 +25,11 @@ public class Patrol : MonoBehaviour
     void Start()
     {
         _spriteRenderer = gameObject.GetComponentInChildren<SpriteRenderer>();
+        _health = gameObject.GetComponent<Health>();
+        if (_health)
+        {
+            _health.Death += OnDeath;
+        }
     }
 
    
@@ -39,6 +45,11 @@ public class Patrol : MonoBehaviour
         } else {
             reverseMovement();
         }
+    }
+
+    private void OnDeath()
+    {
+        gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
