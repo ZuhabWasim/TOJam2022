@@ -10,9 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
+<<<<<<<< HEAD:Assets/Tiles/Tilemaps/desert/desert_tileset_0.asset
   m_Name: desert_tileset_0
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: -957007163, guid: 861d03eafb141b946861639c32c2e95b, type: 3}
+========
+  m_Name: desert_tileset_1
+  m_EditorClassIdentifier: 
+  m_Sprite: {fileID: -87992721, guid: 861d03eafb141b946861639c32c2e95b, type: 3}
+>>>>>>>> main:Assets/Tiles/Tilemaps/desert/desert_tileset_1.asset
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
