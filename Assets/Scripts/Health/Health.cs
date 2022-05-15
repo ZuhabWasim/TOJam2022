@@ -1,7 +1,7 @@
 // PREPROC
 #define DEBUG
-#define DMGTEST
-#define DEATHTEST
+//#define DMGTEST
+//#define DEATHTEST
 
 using System.Collections;
 using System.Collections.Generic;

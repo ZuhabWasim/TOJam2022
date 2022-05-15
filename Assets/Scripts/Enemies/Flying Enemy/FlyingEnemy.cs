@@ -22,6 +22,8 @@ public class FlyingEnemy : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private float _count = 0.0f;
 
+    private Health _health;
+
     private void Start()
     {
         _spriteRenderer = gameObject.GetComponentInChildren<SpriteRenderer>();
@@ -31,6 +33,7 @@ public class FlyingEnemy : MonoBehaviour
         _defaultClimaxPos = climax.position;
         _defaultFlyingRight = _flyingRight;
         _animator = gameObject.GetComponentInChildren<Animator>();
+        _health = gameObject.GetComponent<Health>();
 
         if (_flyingRight)
         {
@@ -41,6 +44,10 @@ public class FlyingEnemy : MonoBehaviour
             _spawnPos = _defaultEndPos;
         }
         gameObject.transform.position = _spawnPos;
+        if (_health)
+        {
+            _health.Death += OnDeath;
+        }
     }
 
     // Update is called once per frame
@@ -55,6 +62,11 @@ public class FlyingEnemy : MonoBehaviour
         {
             Return();
         }
+    }
+
+    private void OnDeath()
+    {
+        gameObject.SetActive(false);
     }
 
     private void Return()

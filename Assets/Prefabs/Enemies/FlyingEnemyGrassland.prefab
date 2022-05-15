@@ -322,6 +322,7 @@ GameObject:
   - component: {fileID: 3405846577576775900}
   - component: {fileID: 3405846577576775903}
   - component: {fileID: 8706486821105468236}
+  - component: {fileID: 6417053099048396509}
   m_Layer: 0
   m_Name: FlyingEnemyGrassland
   m_TagString: FlyingEnemy
@@ -386,6 +387,20 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.7
+--- !u!114 &6417053099048396509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3405846577576775901}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0159359cb2cc83641a48b670bb3b72b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: 0
+  maxHealth: 1
 --- !u!1 &3405846577617673328
 GameObject:
   m_ObjectHideFlags: 0
