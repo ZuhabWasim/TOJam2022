@@ -2431,7 +2431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75075abedcaf4d6438a7c118202e9b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newTrack: {fileID: 8300000, guid: 70f0e90ebc3e1b24b9737fef684890a4, type: 3}
+  newTrack: {fileID: 8300000, guid: 9e7238c89d3a350429013b28eaac5410, type: 3}
 --- !u!4 &1526925891
 Transform:
   m_ObjectHideFlags: 0
@@ -2756,6 +2756,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2910900733743382065, guid: 345d31868639bb64a881d76eee40bd8f, type: 3}
+      propertyPath: m_Volume
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2910900733743382065, guid: 345d31868639bb64a881d76eee40bd8f, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 9e7238c89d3a350429013b28eaac5410, type: 3}
     - target: {fileID: 2910900733743382068, guid: 345d31868639bb64a881d76eee40bd8f, type: 3}
       propertyPath: m_Name
       value: AudioManager
