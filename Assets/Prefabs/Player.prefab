@@ -284,7 +284,8 @@ MonoBehaviour:
   moveSpeed: 7
   jumpForce: 1000
   terminalVelocity: 20
-  crouchDashForce: 0
+  _dashForce: 6
+  _StartDashTime: 0.4
   climbingSpeed: 5
   climbCooldownDuration: 0.3
   climbGraceDuration: 0.2
