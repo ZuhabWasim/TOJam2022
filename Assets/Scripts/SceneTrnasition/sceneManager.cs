@@ -5,10 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class sceneManager: MonoBehaviour
 {
-    [Header("PlayerPrefab")]
+  
     public GameObject Player;
 
-    [Header("Starting Transforms")]public static int sceneIndex;
+    
+    public static int sceneIndex;
     public Transform StartingPosition1;
     public Transform StartingPosition2;
     
