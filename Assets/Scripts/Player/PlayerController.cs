@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
 
     // Armour constants.
     private const float POST_CHESTPPIECE_SPEED = 1000f;
-    private const float PRE_CHESTPIECE_SPEED = 550f;
+    private const float PRE_CHESTPIECE_SPEED = 350f;
     private const float STARTING_MOVE_SPEED = 4f;
     private const float POST_SWORD_ATTACK_RANGE = 0.65f;
     private const float PRE_SWORD_ATTACK_RANGE = 1f;
@@ -46,6 +46,20 @@ public class PlayerController : MonoBehaviour
     [Header("Animation")] public GameObject sprite;
     public GameObject playerCenter;
     public Animator animator;
+    
+    [Header("Camera")] 
+    [SerializeField] Transform cameraFollowPoint;
+    [SerializeField] float lookaheadMinimumHoldTime = 1f;
+    [SerializeField][Range(0, 3f)] float lookaheadDistance;
+
+
+    [Header("RuntimeController")]
+    [SerializeField] private RuntimeAnimatorController a_Armored;
+    [SerializeField] private RuntimeAnimatorController a_ChestPiece;
+    [SerializeField] private RuntimeAnimatorController a_Gauntlets;
+    [SerializeField] private RuntimeAnimatorController a_Unarmoured;
+
+
 
     // Movement values.
     private Rigidbody2D _rigidbody;
@@ -90,6 +104,9 @@ public class PlayerController : MonoBehaviour
     private float _lastAttack = 0f;
     private float _attackCooldown = 0f;
 
+    // Camera related
+    private float _verticalLookCooldown = 0f;
+
     // Awake is called after initialization of all objects.
     void Awake()
     {
@@ -99,6 +116,9 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //default runTimeController;
+        animator.runtimeAnimatorController = a_Armored;
+
         _colliderSize = GetComponent<CapsuleCollider2D>().size;
         _spriteScale = sprite.transform.localScale;
 
@@ -106,6 +126,11 @@ public class PlayerController : MonoBehaviour
         _dashTime = _StartDashTime;
 
         PutOnArmour();
+
+        if(cameraFollowPoint == null){
+            Debug.LogWarning("You should add a camera follow point, assigning self for now");
+            cameraFollowPoint = this.transform;
+        }
     }
 
     void RegisterEventListeners()
@@ -136,10 +161,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         GetPlayerInput();
-
-
         AnimatePlayer();
-
         // Debug.Log("_isJumping" + _isJumping + ",    " +
         //           "_isCrouching" + _isCrouching + ",    " +
         //           "_isClimbing" +  _isClimbing + ",    " +
@@ -179,7 +201,25 @@ public class PlayerController : MonoBehaviour
         if (_climbPress)
         {
             _crouchPress = false;
-            return;
+        }
+
+
+        // Lookahead Camera Related
+        if ((Math.Abs(_verticalMovement) > 0) && !_climbing )
+        {
+            _verticalLookCooldown = _verticalLookCooldown == -1? lookaheadMinimumHoldTime :  _verticalLookCooldown;
+            if(_verticalLookCooldown == 0){
+                Debug.Log("Moving");
+                cameraFollowPoint.localPosition = new Vector2(0, lookaheadDistance * _verticalMovement);
+                _verticalLookCooldown = -1;
+            }
+
+        }
+        else if (Math.Abs(_verticalMovement) == 0){
+            // We run this each update...
+            // Good enough for now?
+            _verticalLookCooldown = -1;
+            cameraFollowPoint.localPosition = new Vector2(0, 0);
         }
 
         // Player is in the air elsewise.
@@ -290,6 +330,9 @@ public class PlayerController : MonoBehaviour
 
             Vector3 position = sprite.transform.position;
             sprite.transform.position = new Vector3(position.x, position.y - 0.2f, position.z);
+            
+            position = transform.position;
+            this.transform.position = new Vector3(position.x, position.y + 0.2f, position.z);
         }
     }
 
@@ -373,6 +416,7 @@ public class PlayerController : MonoBehaviour
         _climbTimer = Mathf.Max(0f, _climbTimer - Time.deltaTime);
         _climbGrace = Mathf.Max(0f, _climbGrace - Time.deltaTime);
         _attackCooldown = Mathf.Max(0f, _attackCooldown - Time.deltaTime);
+        _verticalLookCooldown = _verticalLookCooldown >= 0? Mathf.Max(0f, _verticalLookCooldown - Time.deltaTime) : _verticalLookCooldown; // Has a -1 state
     }
 
     void HandleJump()
@@ -453,24 +497,28 @@ public class PlayerController : MonoBehaviour
 #endif
         }
 
-        if (other.tag == "LostArmor")
+        if (other.tag == "LostArmor" && !_chestPiece)
         {
             LostChestPiece();
+            other.GetComponent<PlaceOnAlter>().Place();
         }
 
-        if (other.tag == "LostLeggings")
+        if (other.tag == "LostLeggings" && !_leggings)
         {
             LostLeggings();
+            other.GetComponent<PlaceOnAlter>().Place();
         }
 
-        if (other.tag == "LostSword")
+        if (other.tag == "LostSword" && !_sword)
         {
             LostSword();
+            other.GetComponent<PlaceOnAlter>().Place();
         }
 
-        if (other.tag == "LostGauntlets")
+        if (other.tag == "LostGauntlets" && !_gauntlets)
         {
             LostGauntlets();
+            other.GetComponent<PlaceOnAlter>().Place();
         }
     }
 
@@ -523,6 +571,7 @@ public class PlayerController : MonoBehaviour
 
     void LostChestPiece()
     {
+        animator.runtimeAnimatorController = a_ChestPiece;
         _chestPiece = true;
         jumpForce = POST_CHESTPPIECE_SPEED;
         moveSpeed += 1f;
@@ -534,6 +583,7 @@ public class PlayerController : MonoBehaviour
 
     void LostGauntlets()
     {
+        animator.runtimeAnimatorController = a_Gauntlets;
         _gauntlets = true;
         moveSpeed += 1f;
 #if DEBUG
@@ -543,6 +593,7 @@ public class PlayerController : MonoBehaviour
 
     void LostLeggings()
     {
+        animator.runtimeAnimatorController = a_Unarmoured;
         _leggings = true;
         moveSpeed += 1f;
 #if DEBUG
@@ -552,6 +603,7 @@ public class PlayerController : MonoBehaviour
 
     void LostSword()
     {
+
         _sword = true;
         /*attackRadius = POST_SWORD_ATTACK_RANGE;
         // Visualization
