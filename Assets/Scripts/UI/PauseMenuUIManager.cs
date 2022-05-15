@@ -12,6 +12,7 @@ public class PauseMenuUIManager : MonoBehaviour
 	public Animator quitButton;
 	public Animator menuButton;
 	public Animator dialog;
+	public Animator finalCutscene;
 	public Animator animator;
 	
 	void Awake() {
@@ -57,11 +58,18 @@ public class PauseMenuUIManager : MonoBehaviour
 		menuButton.SetBool("isHidden", true);
 	}
 	
-	public void CloseDialog(){
+	
+	
+	public void CloseDialogue(){
 		dialog.SetBool("isHidden", true);
 		settingsButton.SetBool("isHidden", false);
 		quitButton.SetBool("isHidden", false);
 		menuButton.SetBool("isHidden", false);
+	}
+	
+	public void StartFinalCutscene(){
+		StopAllCoroutines();
+		finalCutscene.SetBool("finalCutscene",true);
 	}
 
 }
