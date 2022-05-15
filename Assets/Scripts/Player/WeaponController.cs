@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-[RequireComponent(typeof(Collider2D))]
 public class WeaponController : MonoBehaviour
 {
-    [SerializeField] ContactFilter2D attackFilter;
-    [SerializeField] Collider2D collider;
+    [SerializeField] LayerMask attackFilter;
     [SerializeField] Weapon _weapon;
     public Weapon weapon {
         get{
@@ -27,13 +25,11 @@ public class WeaponController : MonoBehaviour
                 Debug.LogWarning("No weapon assigned");
             }
         }
-        collider = GetComponent<Collider2D>();
     }
     
     public void Attack(){
-        List<Collider2D> collisions = new List<Collider2D>();
-        int numCollisions = collider.OverlapCollider(attackFilter, collisions);
-        if(numCollisions > 0){
+        Collider2D[] collisions = Physics2D.OverlapCircleAll(transform.position, weapon.range, attackFilter.value);
+        if(collisions.Length > 0){
             collisions.Where(collider => collider.GetComponent<IDamageable>() != null)
                 .Select(collider => collider.gameObject)
                 .ToList()
