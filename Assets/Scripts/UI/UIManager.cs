@@ -8,9 +8,15 @@ public class UIManager : MonoBehaviour
 	public Animator startButton;
 	public Animator settingsButton;
 	public Animator dialog;
-	
+	public Animator animator;
 
-	void Start() { Time.timeScale = 1; }
+	void Awake() {
+		animator = GameObject.Find("Transition").GetComponent<Animator>();
+	}
+	void Start() { 
+		Time.timeScale = 1; 
+	}
+	
 	
 	public void OpenMenuSettings() {
 		startButton.SetBool("isHidden", true);
@@ -18,11 +24,9 @@ public class UIManager : MonoBehaviour
 		dialog.SetBool("isHidden", false);
 	}
 	
-	
-	
-	
 	public void StartGame(){
-		SceneManager.LoadScene("UIOverlay");
+		animator.SetTrigger("TriggerTransition");
+		SceneManager.LoadScene("TestSceneLarge");
 	}
 	
 	public void CloseMenuSettings(){
@@ -30,6 +34,8 @@ public class UIManager : MonoBehaviour
 		settingsButton.SetBool("isHidden", false);
 		dialog.SetBool("isHidden", true);
 	}
+	
+
 	
 
 	

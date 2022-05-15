@@ -285,7 +285,7 @@ MonoBehaviour:
   jumpForce: 1000
   terminalVelocity: 20
   crouchDashForce: 0
-  climbingSpeed: 0
+  climbingSpeed: 5
   climbCooldownDuration: 0.3
   climbGraceDuration: 0.2
   climbingLayer:
