@@ -574,6 +574,10 @@ MonoBehaviour:
   sprite: {fileID: 3027465567994917839}
   playerCenter: {fileID: 4290942047550092717}
   animator: {fileID: 4045254213662357037}
+  a_Armored: {fileID: 9100000, guid: b3ce3b80cb4d1e6479a802b6994f6378, type: 2}
+  a_ChestPiece: {fileID: 9100000, guid: 25ea4197c52e25b478ae11c5e465f325, type: 2}
+  a_Gauntlets: {fileID: 9100000, guid: c779b1b4fa47e0f4c8f972cfdae3ec16, type: 2}
+  a_Unarmoured: {fileID: 9100000, guid: 78b06d3ba26728f42a6a8274598f3a74, type: 2}
 --- !u!70 &5386949733879220112
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

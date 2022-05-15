@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
 
 	void Awake() {
 		animator = GameObject.Find("Transition").GetComponent<Animator>();
+
 	}
 	void Start() { 
 		Time.timeScale = 1; 
@@ -25,7 +26,9 @@ public class UIManager : MonoBehaviour
 	}
 	
 	public void StartGame(){
+
 		animator.SetTrigger("TriggerTransition");
+		
 		SceneManager.LoadScene("TestSceneLarge");
 	}
 	
