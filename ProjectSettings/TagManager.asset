@@ -10,6 +10,10 @@ TagManager:
   - GameMusic
   - PatrolEnemy
   - FlyingEnemy
+  - LostArmor
+  - LostLeggings
+  - LostSword
+  - LostGauntlets
   layers:
   - Default
   - TransparentFX
