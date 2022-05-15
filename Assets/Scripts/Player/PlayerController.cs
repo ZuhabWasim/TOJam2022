@@ -362,6 +362,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleJump()
     {
+        if(_inputFrozen) return;
         if (_isGrounded || _climbing)
         {
             _isJumping = true;
@@ -375,6 +376,7 @@ public class PlayerController : MonoBehaviour
     
     void HandleCrowchDash()
     {
+        if(_inputFrozen) return;
         if (_crouching)
         {
             _isCrowchDashing = true;
@@ -382,15 +384,10 @@ public class PlayerController : MonoBehaviour
     }
 
     
-    // MUST be called by someone outside of the player controller, 
-    // ideally UI or a dedicated script
-    public void FreezeInput(){
-        _inputFrozen = !_inputFrozen;
-        InputFreeze?.Invoke(_inputFrozen);
-    }
     
     void HandleAttack()
     {
+        if(_inputFrozen) return;
         float timeSinceLastAttack = Time.time - _lastAttack;
         if(timeSinceLastAttack < attackSpeed) return;
         _lastAttack = Time.time;
@@ -418,11 +415,13 @@ public class PlayerController : MonoBehaviour
 
     void HandleInteract()
     {
+        if(_inputFrozen) return;
         Debug.Log("INTERACT!!");
     }
 
     void HandleMenu()
     {
+        if(_inputFrozen) return;
         Debug.Log("Menu? Thinking emoji");
     }
 
@@ -476,6 +475,13 @@ public class PlayerController : MonoBehaviour
 
         // Sword
         /*attackRadius = PRE_SWORD_ATTACK_RANGE;*/
+    }
+
+    // MUST be called by someone outside of the player controller, 
+    // ideally UI or a dedicated script
+    public void FreezeInput(){
+        _inputFrozen = !_inputFrozen;
+        InputFreeze?.Invoke(_inputFrozen);
     }
 
     void LostChestPiece()
