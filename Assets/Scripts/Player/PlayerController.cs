@@ -152,6 +152,7 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("horizontalSpeed", Mathf.Abs(_lateralMovement));
         animator.SetBool("isClimbing", _climbing && Mathf.Abs(_verticalMovement) > 0.01f);
         animator.SetBool("isOnRope", _climbing);
+        animator.SetBool("isCrouchSliding", _isCrowchDashing);
     }
 
     void GetPlayerInput()
