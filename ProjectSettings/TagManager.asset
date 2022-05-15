@@ -8,6 +8,8 @@ TagManager:
   - ReturnTriggerFE
   - DamageTriggerFE
   - GameMusic
+  - PatrolEnemy
+  - FlyingEnemy
   layers:
   - Default
   - TransparentFX
