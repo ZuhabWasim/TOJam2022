@@ -26,7 +26,7 @@ public class UIManager : MonoBehaviour
 	
 	public void StartGame(){
 		animator.SetTrigger("TriggerTransition");
-		SceneManager.LoadScene("UIOverlay");
+		SceneManager.LoadScene("TestSceneLarge");
 	}
 	
 	public void CloseMenuSettings(){
