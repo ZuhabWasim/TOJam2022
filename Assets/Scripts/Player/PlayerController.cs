@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
 
     // Armour constants.
     private const float POST_CHESTPPIECE_SPEED = 1000f;
-    private const float PRE_CHESTPIECE_SPEED = 550f;
+    private const float PRE_CHESTPIECE_SPEED = 350f;
     private const float STARTING_MOVE_SPEED = 4f;
     private const float POST_SWORD_ATTACK_RANGE = 0.65f;
     private const float PRE_SWORD_ATTACK_RANGE = 1f;
