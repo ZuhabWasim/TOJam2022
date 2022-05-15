@@ -51,11 +51,10 @@ public class DialogueManager : MonoBehaviour
 		foreach (char letter in sentence.ToCharArray()){
 			dialogueText.text += letter;
 			if (Input.GetKey(KeyCode.Space)){
-				yield return new WaitForSeconds(0.01f);
+				yield return null;
 			} else {
 				yield return new WaitForSeconds(0.04f);
 			}
-			
 		}
 		
 		playsound.GetComponent<AudioSource>().Stop();
