@@ -47,6 +47,15 @@ public class PlayerController : MonoBehaviour
     public GameObject playerCenter;
     public Animator animator;
 
+
+    [Header("RuntimeController")]
+    [SerializeField] private RuntimeAnimatorController a_Armored;
+    [SerializeField] private RuntimeAnimatorController a_ChestPiece;
+    [SerializeField] private RuntimeAnimatorController a_Gauntlets;
+    [SerializeField] private RuntimeAnimatorController a_Unarmoured;
+
+
+
     // Movement values.
     private Rigidbody2D _rigidbody;
     private float _lateralMovement;
@@ -99,6 +108,9 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //default runTimeController;
+        animator.runtimeAnimatorController = a_Armored;
+
         _colliderSize = GetComponent<CapsuleCollider2D>().size;
         _spriteScale = sprite.transform.localScale;
 
@@ -106,6 +118,7 @@ public class PlayerController : MonoBehaviour
         _dashTime = _StartDashTime;
 
         PutOnArmour();
+        
     }
 
     void RegisterEventListeners()
@@ -136,10 +149,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         GetPlayerInput();
-
-
         AnimatePlayer();
-
         // Debug.Log("_isJumping" + _isJumping + ",    " +
         //           "_isCrouching" + _isCrouching + ",    " +
         //           "_isClimbing" +  _isClimbing + ",    " +
@@ -526,6 +536,7 @@ public class PlayerController : MonoBehaviour
 
     void LostChestPiece()
     {
+        animator.runtimeAnimatorController = a_ChestPiece;
         _chestPiece = true;
         jumpForce = POST_CHESTPPIECE_SPEED;
         moveSpeed += 1f;
@@ -537,6 +548,7 @@ public class PlayerController : MonoBehaviour
 
     void LostGauntlets()
     {
+        animator.runtimeAnimatorController = a_Gauntlets;
         _gauntlets = true;
         moveSpeed += 1f;
 #if DEBUG
@@ -546,6 +558,7 @@ public class PlayerController : MonoBehaviour
 
     void LostLeggings()
     {
+        animator.runtimeAnimatorController = a_Unarmoured;
         _leggings = true;
         moveSpeed += 1f;
 #if DEBUG
@@ -555,6 +568,7 @@ public class PlayerController : MonoBehaviour
 
     void LostSword()
     {
+
         _sword = true;
         /*attackRadius = POST_SWORD_ATTACK_RANGE;
         // Visualization
