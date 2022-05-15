@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: e9832094185ea5741a332eb8509ed750
+guid: 1f1e13acc0343e94cbde071ff70a9ff3
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -116,11 +116,11 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Cave_Hub_Tileset_0
+      name: waterfall_frames_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 192
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -130,18 +130,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3f2e1a5cf2c648f47b7cfbcfa2dada6c
-      internalID: 1920973001
+      spriteID: 4464606c227991346a329588d6869c21
+      internalID: -1343854859
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Cave_Hub_Tileset_1
+      name: waterfall_frames_1
       rect:
         serializedVersion: 2
         x: 32
-        y: 192
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -151,18 +151,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d25f761d6b411ec46aa3838aa5d3f681
-      internalID: 1903676043
+      spriteID: 7f98c3c736818534cb31135339c88302
+      internalID: -1007731465
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Cave_Hub_Tileset_2
+      name: waterfall_frames_2
       rect:
         serializedVersion: 2
         x: 64
-        y: 192
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -172,18 +172,60 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fa2db4d28ac2763438ebd890afbf66d0
-      internalID: -1396073178
+      spriteID: e06b66d85ff155f4782011453f40c503
+      internalID: 1603757331
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Cave_Hub_Tileset_3
+      name: waterfall_frames_3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45940df26fda4f042830f0c6d266481b
+      internalID: -1633020475
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: waterfall_frames_4
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1d5339cd1b907943afdacfb33f86a21
+      internalID: -1268240478
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: waterfall_frames_5
       rect:
         serializedVersion: 2
         x: 160
-        y: 192
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -193,39 +235,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 45bf277b820ba954e8becbe4e13a3473
-      internalID: 468130132
+      spriteID: 7ee9618e3a6327d4f870278832b41031
+      internalID: -102445976
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Cave_Hub_Tileset_4
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 192
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 06d6bea1beaf8c04180b52a1ce9299a2
-      internalID: -421920294
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cave_Hub_Tileset_5
+      name: waterfall_frames_6
       rect:
         serializedVersion: 2
         x: 0
-        y: 160
+        y: 0
         width: 32
         height: 32
       alignment: 0
@@ -235,18 +256,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d47bb32da2a06d745970ec54881baea7
-      internalID: -900552382
+      spriteID: b690134be901d6d459208e82a5aad22f
+      internalID: -851496494
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Cave_Hub_Tileset_6
+      name: waterfall_frames_7
       rect:
         serializedVersion: 2
         x: 32
-        y: 160
+        y: 0
         width: 32
         height: 32
       alignment: 0
@@ -256,18 +277,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4c7aa42bc7a8fa741b73d5e3875d00ff
-      internalID: -259858819
+      spriteID: 6fe08d273f1ff7847b378c30ff723a2c
+      internalID: 191295097
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Cave_Hub_Tileset_7
+      name: waterfall_frames_8
       rect:
         serializedVersion: 2
         x: 64
-        y: 160
+        y: 0
         width: 32
         height: 32
       alignment: 0
@@ -277,18 +298,60 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 132f9fe426006714a96c8956ce7ea3fc
-      internalID: -1586512615
+      spriteID: c4cd84c5709b99b4dbb6affbdbd34429
+      internalID: 39823623
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Cave_Hub_Tileset_8
+      name: waterfall_frames_9
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df22fa4f56835394e991452d98e11f8d
+      internalID: -247226653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: waterfall_frames_10
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d747b0a4bc7ccb45aeb5c1836e1a28d
+      internalID: -690109704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: waterfall_frames_11
       rect:
         serializedVersion: 2
         x: 160
-        y: 160
+        y: 0
         width: 32
         height: 32
       alignment: 0
@@ -298,239 +361,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: acb3cee1e655486489e89a7315c90c3c
-      internalID: -80578299
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cave_Hub_Tileset_9
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 160
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7cc029dec43f18a4db1ac0e3991119b1
-      internalID: 34041159
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cave_Hub_Tileset_10
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 128
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 201da6fc16bb29a45bcdce875222c170
-      internalID: 1422687911
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cave_Hub_Tileset_11
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 128
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1cefecd6b0bcfb34c91ad8030635a9c0
-      internalID: -28263030
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cave_Hub_Tileset_12
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 128
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 593070475cc61404ea59e58f5d0fd389
-      internalID: -1936949321
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cave_Hub_Tileset_13
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 128
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0a6a3c848ffb5554182d5e4017f31ea5
-      internalID: 599488468
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cave_Hub_Tileset_14
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 128
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c59dbce89b27a6849a1f020a587ac8ae
-      internalID: -783022755
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cave_Hub_Tileset_15
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 96
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3d8c1e6b6b1bccc4191182589c944f0e
-      internalID: -1160622811
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cave_Hub_Tileset_16
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 96
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: dfa01ad855f15cd44aa7c8dd1945f251
-      internalID: 455642953
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cave_Hub_Tileset_17
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 96
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d305b63874a7ecd4dbe9bd8d481f3ac7
-      internalID: -1209815365
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cave_Hub_Tileset_18
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 64
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4558b4cdd0b4daa479566e1c7f859db0
-      internalID: 224813005
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cave_Hub_Tileset_19
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 64
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 86936b87533e35a4eb24ed7694ff4aef
-      internalID: -708230926
+      spriteID: cdb37d7e875e93241b0b04b5a6543db1
+      internalID: -958448741
       vertices: []
       indices: 
       edges: []
@@ -546,26 +378,18 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Cave_Hub_Tileset_4: -421920294
-      Cave_Hub_Tileset_10: 1422687911
-      Cave_Hub_Tileset_7: -1586512615
-      Cave_Hub_Tileset_3: 468130132
-      Cave_Hub_Tileset_19: -708230926
-      Cave_Hub_Tileset_2: -1396073178
-      Cave_Hub_Tileset_6: -259858819
-      Cave_Hub_Tileset_11: -28263030
-      Cave_Hub_Tileset_16: 455642953
-      Cave_Hub_Tileset_0: 1920973001
-      Cave_Hub_Tileset_18: 224813005
-      Cave_Hub_Tileset_14: -783022755
-      Cave_Hub_Tileset_12: -1936949321
-      Cave_Hub_Tileset_1: 1903676043
-      Cave_Hub_Tileset_8: -80578299
-      Cave_Hub_Tileset_13: 599488468
-      Cave_Hub_Tileset_15: -1160622811
-      Cave_Hub_Tileset_5: -900552382
-      Cave_Hub_Tileset_9: 34041159
-      Cave_Hub_Tileset_17: -1209815365
+      waterfall_frames_8: 39823623
+      waterfall_frames_9: -247226653
+      waterfall_frames_7: 191295097
+      waterfall_frames_3: -1633020475
+      waterfall_frames_5: -102445976
+      waterfall_frames_0: -1343854859
+      waterfall_frames_4: -1268240478
+      waterfall_frames_2: 1603757331
+      waterfall_frames_11: -958448741
+      waterfall_frames_1: -1007731465
+      waterfall_frames_6: -851496494
+      waterfall_frames_10: -690109704
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
