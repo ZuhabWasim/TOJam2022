@@ -13,6 +13,7 @@ public class FlyingEnemy : MonoBehaviour
 
     public bool isAggroed;
 
+    private Animator _animator;
     private Vector3 _spawnPos;
     private Vector3 _defaultStartPos;
     private Vector3 _defaultEndPos;
@@ -29,6 +30,7 @@ public class FlyingEnemy : MonoBehaviour
         _defaultEndPos = end.position;
         _defaultClimaxPos = climax.position;
         _defaultFlyingRight = _flyingRight;
+        _animator = gameObject.GetComponentInChildren<Animator>();
 
         if (_flyingRight)
         {
@@ -57,15 +59,24 @@ public class FlyingEnemy : MonoBehaviour
 
     private void Return()
     {
+        _animator.SetBool("isAggroed", false);
+
         gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, _spawnPos, returnSpeed * Time.deltaTime);
         _count = 0.0f;
-        _flyingRight = _defaultFlyingRight;
+        // When returning, flip the sprite in the other direction
+        _flyingRight = !_defaultFlyingRight;
+        if (Vector3.Distance(gameObject.transform.position, _spawnPos) < 0.2f)
+        {
+            _flyingRight = _defaultFlyingRight;
+        }
     }
 
     private void Swoop()
     {
         Debug.DrawLine(_defaultStartPos, _defaultClimaxPos);
         Debug.DrawLine(_defaultClimaxPos, _defaultEndPos);
+        _animator.SetBool("isAggroed", true);
+
         if (_flyingRight)
         {
             if (_count < 1.0f)
