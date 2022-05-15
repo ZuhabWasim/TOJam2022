@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Tiles/Tilemaps/desert/Quicksand.asset.meta
 guid: 27390c7d52857af4ab0930b9496da4bc
+========
+guid: 9aee9f681927a3347b880cbf0f2ab2bd
+>>>>>>>> main:Assets/Tiles/Tilemaps/desert/desert_tileset_1.asset.meta
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 11400000
