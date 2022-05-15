@@ -713,9 +713,29 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Development\n\nZuhab \nJimmy Tan - Enemy Movement\n\nCameron Hadfield
-    - DevOps, Damage/Health Systems, Camera\n\nVal\n\nTim\n\nDarren Tran - Menu,
-    UI, Audio, Particles"
+  m_text: 'Development
+
+
+    Zuhab Wasim - Player movement and controls, Back end
+    Event/Input systems
+
+
+    Jimmy Tan - Enemy Movement
+
+
+    Cameron Hadfield -
+    DevOps, Damage/Health Systems, Camera
+
+
+    Val Roussel - Level Design and Tileset
+
+
+    Tim
+    Chang - Player Movement and Controls, Animation Implementation
+
+
+    Darren Tran
+    - Menu, UI, Audio, Particles'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e22d517f6b13b804187c51dd6f094034, type: 2}
   m_sharedMaterial: {fileID: -5622683010241522969, guid: e22d517f6b13b804187c51dd6f094034, type: 2}
@@ -756,7 +776,7 @@ MonoBehaviour:
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
+  m_paragraphSpacing: -12.28
   m_charWidthMaxAdj: 0
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
@@ -5635,7 +5655,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -165}
+  m_AnchoredPosition: {x: 0, y: -186}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5277879010908027389
@@ -6180,10 +6200,11 @@ MonoBehaviour:
 
 
     Michelle
+    Vu - Character Sprite Animations, Tilesets, Environment Assets
 
 
-    Yue
-    Lin - Character and Weapon Design, Background Design
+    Yue Lin
+    - Character and Weapon Design, Background Design
 
 
 
@@ -6229,7 +6250,7 @@ MonoBehaviour:
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
+  m_paragraphSpacing: -2.27
   m_charWidthMaxAdj: 0
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
