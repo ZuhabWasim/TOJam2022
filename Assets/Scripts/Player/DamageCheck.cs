@@ -9,7 +9,7 @@ public class DamageCheck : MonoBehaviour
     [SerializeField] private int _flyingEnemyDmg;
     [SerializeField] private float _invincibleTime;
     [SerializeField] private float invincibilityDeltaTime;
-    [SerializeField] private SpriteRenderer _spriteRenderer;
+    private SpriteRenderer _spriteRenderer;
     private bool _isInvincible;
     private Color _curColor;
 
