@@ -436,6 +436,22 @@ public class PlayerController : MonoBehaviour
             Debug.Log("On climbing surface.");
 #endif
         }
+        if (other.tag == "LostArmor")
+        {
+            LostChestPiece();
+        }
+        if (other.tag == "LostLeggings")
+        {
+            LostLeggings();
+        }
+        if (other.tag == "LostSword")
+        {
+            LostSword();
+        }
+        if (other.tag == "LostGauntlets")
+        {
+            LostGauntlets();
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
