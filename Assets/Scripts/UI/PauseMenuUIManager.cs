@@ -12,6 +12,11 @@ public class PauseMenuUIManager : MonoBehaviour
 	public Animator quitButton;
 	public Animator menuButton;
 	public Animator dialog;
+	public Animator animator;
+	
+	void Awake() {
+		animator = GameObject.Find("Transition").GetComponent<Animator>();
+	}
 	
 	void Start() { Time.timeScale = 1; }
 	
@@ -20,12 +25,11 @@ public class PauseMenuUIManager : MonoBehaviour
 	}
 	
 	public void MainMenu(){
+		animator.SetTrigger("TriggerTransition");
 		SceneManager.LoadScene("MenuScene");
 	}
 	
 	public void PauseButton(){
-		
-		
 		pauseMenu.SetActive(true);
 		pauseButton.SetActive(false);
 		settingsButton.SetBool("isHidden", false);
