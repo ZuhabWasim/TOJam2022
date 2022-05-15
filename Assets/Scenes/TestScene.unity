@@ -2981,6 +2981,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FlyingEnemyGrassland
       objectReference: {fileID: 0}
+    - target: {fileID: 3405846577576775903, guid: 357c4412fbb379042bdf8191e45dc351, type: 3}
+      propertyPath: _flyingRight
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 357c4412fbb379042bdf8191e45dc351, type: 3}
 --- !u!1001 &3112976318239425008

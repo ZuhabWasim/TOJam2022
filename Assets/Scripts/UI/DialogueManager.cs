@@ -50,7 +50,11 @@ public class DialogueManager : MonoBehaviour
 		
 		foreach (char letter in sentence.ToCharArray()){
 			dialogueText.text += letter;
-			yield return new WaitForSeconds(0.04f);
+			if (Input.GetKey(KeyCode.Space)){
+				yield return null;
+			} else {
+				yield return new WaitForSeconds(0.04f);
+			}
 		}
 		
 		playsound.GetComponent<AudioSource>().Stop();
@@ -58,6 +62,7 @@ public class DialogueManager : MonoBehaviour
 		while (!Input.GetKeyDown(KeyCode.Space))
 			yield return null;
 		
+		yield return new WaitForSeconds(0.02f);
 		DisplayNextSentence();
 		
 	}
