@@ -70,6 +70,10 @@ public class PlayerController : MonoBehaviour
     private float _ropeX;
     private bool _crouching = false;
 
+    private bool _inputFrozen = false;
+    public delegate void OnInputFreeze(bool frozen);
+    public event OnInputFreeze InputFreeze;
+
     // Sprite information.
     private bool _facingRight = true;
     private Vector2 _colliderSize;
@@ -143,6 +147,8 @@ public class PlayerController : MonoBehaviour
 
     void GetPlayerInput()
     {
+        if(_inputFrozen) return;
+
         _lateralMovement = Input.GetAxis(HORIZONTAL_AXIS);
         _verticalMovement = Input.GetAxisRaw(VERTICAL_AXIS);
         _climbPress = _gauntlets && _verticalMovement > 0f;
@@ -376,8 +382,11 @@ public class PlayerController : MonoBehaviour
     }
 
     
+    // MUST be called by someone outside of the player controller, 
+    // ideally UI or a dedicated script
     public void FreezeInput(){
-
+        _inputFrozen = !_inputFrozen;
+        InputFreeze?.Invoke(_inputFrozen);
     }
     
     void HandleAttack()
