@@ -16,14 +16,14 @@ public class HealthUI : MonoBehaviour
 
 	void Start()
     {
-         health = GameObject.Find("Player").GetComponent<Health>().health ;;
-		 maxHealth = GameObject.Find("Player").GetComponent<Health>().maxHealth ;;
+         health = GetComponent<Health>().health ;
+		 maxHealth = GetComponent<Health>().maxHealth ;
     }
     // Update is called once per frame
     void Update()
     {
-		health = GameObject.Find("Player").GetComponent<Health>().health ;;
-		maxHealth = GameObject.Find("Player").GetComponent<Health>().maxHealth ;;
+		health = GetComponent<Health>().health ;
+		maxHealth = GetComponent<Health>().maxHealth ;
 		// If the current health is greater than the total health of the player
         if (health > maxHealth){
 			// Set the current health to be the total health (aka don't overflow the allowed amount of health)
