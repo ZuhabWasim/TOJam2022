@@ -14,10 +14,22 @@ public class PlayerController : MonoBehaviour
     private const float GRAVITY_SCALE = 5f;
     private const float ROPE_SNAP_OFFSET = 0.5f;
 
+    // Armour constants.
+    private const float POST_CHESTPPIECE_SPEED = 1000f;
+    private const float PRE_CHESTPIECE_SPEED = 550f;
+    private const float STARTING_MOVE_SPEED = 4f;
+    private const float POST_SWORD_ATTACK_RANGE = 0.65f;
+    private const float PRE_SWORD_ATTACK_RANGE = 1f;
+
     [Header("Movement")] public float moveSpeed;
     public float jumpForce;
     public float terminalVelocity = 18f;
-    public float crouchDashForce;
+
+    // CROWCH DASH +++
+    [SerializeField] private float _dashForce;
+    [SerializeField] private float _StartDashTime;
+    private float _dashTime;
+
 
     [Header("Climbing")] public float climbingSpeed;
     public float climbCooldownDuration = 0.3f;
@@ -28,12 +40,13 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundObjects;
     public float checkRadius;
 
-    [Header("Combat")] public Transform attackPoint;
-    public float attackRadius;
-    public LayerMask enemyLayer;
+    [Header("Combat")] 
+    public WeaponController weaponController;
+    [SerializeField] private float attackSpeed = 0.5f;
 
     [Header("Animation")] public GameObject sprite;
     public GameObject playerCenter;
+
 
     // Movement values.
     private Rigidbody2D _rigidbody;
@@ -43,12 +56,15 @@ public class PlayerController : MonoBehaviour
     private float _climbTimer;
     private float _climbGrace;
 
+
     // Movement states.
     private bool _onRope;
     private bool _crouchPress;
     private bool _climbPress;
     private bool _isJumping = false;
     private bool _isGrounded;
+
+    private bool _isCrowchDashing;
 
     private bool _climbing;
     private float _ropeX;
@@ -65,6 +81,9 @@ public class PlayerController : MonoBehaviour
     private bool _leggings = false;
     private bool _sword = false;
 
+    // Combat related.
+    private float _lastAttack = 0f;
+
     // Awake is called after initialization of all objects.
     void Awake()
     {
@@ -78,6 +97,9 @@ public class PlayerController : MonoBehaviour
         _spriteScale = sprite.transform.localScale;
 
         RegisterEventListeners();
+        _dashTime = _StartDashTime;
+
+        PutOnArmour();
     }
 
     void RegisterEventListeners()
@@ -86,12 +108,14 @@ public class PlayerController : MonoBehaviour
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.ATTACK_KEY), HandleAttack);
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.INTERACT_KEY), HandleInteract);
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.MENU_KEY), HandleMenu);
-
+        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.CROWCH_DASH_KEY), HandleCrowchDash);
         // Placeholder events for each armour piece lost.
+#if DEBUG
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.CHEST_PIECE), LostChestPiece);
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.GAUNTLET), LostGauntlets);
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.LEGGINGS), LostLeggings);
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.SWORD), LostSword);
+#endif
     }
 
     private void FixedUpdate()
@@ -99,6 +123,7 @@ public class PlayerController : MonoBehaviour
         // Only be able to jump again if we come back down. Put this back in Update because it works better.
         _isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundObjects);
         MovePlayer();
+        crowchDash();
     }
 
     // Update is called once per frame
@@ -120,11 +145,11 @@ public class PlayerController : MonoBehaviour
     {
         _lateralMovement = Input.GetAxis(HORIZONTAL_AXIS);
         _verticalMovement = Input.GetAxisRaw(VERTICAL_AXIS);
-        _climbPress = _verticalMovement > 0f;
-        _crouchPress = _verticalMovement < 0f;
+        _climbPress = _gauntlets && _verticalMovement > 0f;
+        _crouchPress = _leggings && _verticalMovement < 0f;
 
         // Prioritize climbing in the air.
-        if (_onRope && _verticalMovement != 0 && _climbTimer == 0f)
+        if (_gauntlets && _onRope && _verticalMovement != 0 && _climbTimer == 0f)
         {
             _climbing = true;
             if (_climbGrace == 0f)
@@ -244,7 +269,7 @@ public class PlayerController : MonoBehaviour
             sprite.transform.localScale = new Vector3(_spriteScale.x, _spriteScale.y, _spriteScale.z);
             _crouching = false;
             Vector3 position = _rigidbody.position;
-            _rigidbody.position = new Vector3(position.x, position.y + _spriteScale.y / 2, position.z);
+            _rigidbody.position = new Vector3(position.x, position.y + _spriteScale.y / 4, position.z);
         }
     }
 
@@ -284,6 +309,39 @@ public class PlayerController : MonoBehaviour
         _isJumping = false;
     }
 
+    void crowchDash()
+    {
+        //Debug.Log(_dashTime);
+        if (!_isCrowchDashing)
+        {
+            return;
+        }
+
+        //dash if timer is greater than 0
+        if (_dashTime >= 0)
+        {
+            _dashTime -= Time.deltaTime;
+            if (!_facingRight)
+            {
+                //Debug.Log("DASH Left!!");
+                _rigidbody.velocity = Vector2.left * _dashForce;
+            }
+            else if (_facingRight)
+            {
+                //Debug.Log("DASH Right!!");
+                _rigidbody.velocity = Vector2.right * _dashForce;
+            }
+        }
+
+        //reset dash time and dash bool
+        if (_dashTime <= 0)
+        {
+            _isCrowchDashing = false;
+            _dashTime = _StartDashTime;
+        }
+    }
+
+
     void SnapToRope()
     {
         Vector3 position = _rigidbody.transform.position;
@@ -308,39 +366,42 @@ public class PlayerController : MonoBehaviour
 #endif
         }
     }
+    
+    void HandleCrowchDash()
+    {
+        if (_crouching)
+        {
+            _isCrowchDashing = true;
+        }
+    }
 
+    
+    public void FreezeInput(){
+
+    }
+    
     void HandleAttack()
     {
+        float timeSinceLastAttack = Time.time - _lastAttack;
+        if(timeSinceLastAttack < attackSpeed) return;
+        _lastAttack = Time.time;
+
         if (_climbing)
         {
             return;
         }
+        weaponController.Attack();
+        // ------Attack Visualization--------
+        // ----------------------------------
 
-        // Visualize Attack
-        Color attackColor = attackPoint.GetComponentInChildren<SpriteRenderer>().color;
-        attackPoint.GetComponentInChildren<SpriteRenderer>().color =
-            new Color(attackColor.g, attackColor.b, attackColor.r);
+        //Color attackColor = attackPoint.GetComponentInChildren<SpriteRenderer>().color;
+        //attackPoint.GetComponentInChildren<SpriteRenderer>().color =
+        //    new Color(attackColor.g, attackColor.b, attackColor.r);
 
-        // Detect everything hit by player.
-        // TODO: Change from Default layer to Enemy layer.
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius, enemyLayer);
-
-        // Damage the enemies
-        foreach (Collider2D enemy in hitEnemies)
-        {
-            // Don't damage yourself.
-            if (enemy.gameObject.tag == PLAYER_TAG)
-            {
-                continue;
-            }
-
-            // For now de-rendering objects hit but this is where you can damage enemies.
-            // TODO: Add damaging of enemies.
-            enemy.gameObject.SetActive(false);
 #if DEBUG
-            Debug.Log(" Hit enemy:  " + enemy.name);
+            //Debug.Log(" Hit enemy:  " + enemy.name);
 #endif
-        }
+        //}
 #if DEBUG
         Debug.Log("ATTACK!!");
 #endif
@@ -391,13 +452,29 @@ public class PlayerController : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(groundCheck.position, checkRadius);
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
+        //Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
     }
 #endif
+
+    // Start method to revoke abilities in the beginning of the game.
+    void PutOnArmour()
+    {
+        // General deabilitiation.
+        moveSpeed = STARTING_MOVE_SPEED;
+
+        // Chest piece.
+        jumpForce = PRE_CHESTPIECE_SPEED;
+
+        // Sword
+        /*attackRadius = PRE_SWORD_ATTACK_RANGE;*/
+    }
 
     void LostChestPiece()
     {
         _chestPiece = true;
+        jumpForce = POST_CHESTPPIECE_SPEED;
+        moveSpeed += 1f;
+
 #if DEBUG
         Debug.Log("Lost Chest Piece");
 #endif
@@ -406,6 +483,7 @@ public class PlayerController : MonoBehaviour
     void LostGauntlets()
     {
         _gauntlets = true;
+        moveSpeed += 1f;
 #if DEBUG
         Debug.Log("Lost Gauntlets");
 #endif
@@ -414,6 +492,7 @@ public class PlayerController : MonoBehaviour
     void LostLeggings()
     {
         _leggings = true;
+        moveSpeed += 1f;
 #if DEBUG
         Debug.Log("Lost Leggings");
 #endif
@@ -422,6 +501,9 @@ public class PlayerController : MonoBehaviour
     void LostSword()
     {
         _sword = true;
+        /*attackRadius = POST_SWORD_ATTACK_RANGE;
+        // Visualization
+        attackPoint.GetComponentInChildren<SpriteRenderer>().transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);*/
 #if DEBUG
         Debug.Log("Lost Sword");
 #endif
