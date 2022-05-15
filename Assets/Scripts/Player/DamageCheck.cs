@@ -25,13 +25,13 @@ public class DamageCheck : MonoBehaviour
         {
             if (collision.tag == "PatrolEnemy")
             {
-                this.gameObject.GetComponent<Health>().BeDamaged(_patrolEnemyDmg);
+                this.gameObject.GetComponent<IDamageable>().BeDamaged(_patrolEnemyDmg);
                 triggerInvcinibility();
             }
 
             if (collision.tag == "FlyingEnemy")
             {
-                this.gameObject.GetComponent<Health>().BeDamaged(_flyingEnemyDmg);
+                this.gameObject.GetComponent<IDamageable>().BeDamaged(_flyingEnemyDmg);
                 triggerInvcinibility();
             }
         }

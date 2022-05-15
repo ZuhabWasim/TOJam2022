@@ -509,8 +509,8 @@ GameObject:
   - component: {fileID: 3964087212061214031}
   - component: {fileID: 5386949733879220112}
   - component: {fileID: 8208154629794092988}
-  - component: {fileID: 2778714226321279721}
-  - component: {fileID: 7757284356869152889}
+  - component: {fileID: 2141645336}
+  - component: {fileID: 2141645337}
   - component: {fileID: 2141645341}
   - component: {fileID: 2141645342}
   m_Layer: 0
@@ -574,6 +574,10 @@ MonoBehaviour:
   sprite: {fileID: 3027465567994917839}
   playerCenter: {fileID: 4290942047550092717}
   animator: {fileID: 4045254213662357037}
+  a_Armored: {fileID: 9100000, guid: b3ce3b80cb4d1e6479a802b6994f6378, type: 2}
+  a_ChestPiece: {fileID: 9100000, guid: 25ea4197c52e25b478ae11c5e465f325, type: 2}
+  a_Gauntlets: {fileID: 9100000, guid: c779b1b4fa47e0f4c8f972cfdae3ec16, type: 2}
+  a_Unarmoured: {fileID: 9100000, guid: 78b06d3ba26728f42a6a8274598f3a74, type: 2}
 --- !u!70 &5386949733879220112
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -588,7 +592,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 0.8, y: 2}
   m_Direction: 0
 --- !u!50 &8208154629794092988
 Rigidbody2D:
@@ -611,7 +615,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &2778714226321279721
+--- !u!114 &2141645336
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -625,7 +629,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 10
   maxHealth: 10
---- !u!114 &7757284356869152889
+--- !u!114 &2141645337
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -648,8 +652,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  fullHeart: {fileID: 21300000, guid: b233a69bf1b6cd44194cfb2377abbf23, type: 3}
-  emptyHeart: {fileID: 21300000, guid: 6ae8c8d01f1f0a043883185fc98ee0f1, type: 3}
+  fullHeart: {fileID: 21300000, guid: 2b58bf5a5c9589147a39482d39555df3, type: 3}
+  emptyHeart: {fileID: 7482667652216324306, guid: 8d8067b169062f74cb239ab599d04607, type: 3}
 --- !u!114 &2141645341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -663,10 +667,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _patrolEnemyDmg: 1
-  _flyingEnemyDmg: 0
-  _invincibleTime: 5
-  invincibilityDeltaTime: 2.5
-  _spriteRenderer: {fileID: 0}
+  _flyingEnemyDmg: 2
+  _invincibleTime: 2
+  invincibilityDeltaTime: 0.2
 --- !u!114 &2141645342
 MonoBehaviour:
   m_ObjectHideFlags: 0

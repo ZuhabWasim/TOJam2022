@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 671417885641631047}
   - component: {fileID: 5769426122916321879}
   - component: {fileID: 6061073066040459036}
+  - component: {fileID: 1789589498}
   m_Layer: 0
   m_Name: PatrolEnemyGrassland
   m_TagString: PatrolEnemy
@@ -123,6 +124,20 @@ CircleCollider2D:
   m_Offset: {x: 0, y: -0.2}
   serializedVersion: 2
   m_Radius: 0.3
+--- !u!114 &1789589498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3945998341557001570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0159359cb2cc83641a48b670bb3b72b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: 0
+  maxHealth: 1
 --- !u!1 &5911117911456773403
 GameObject:
   m_ObjectHideFlags: 0
