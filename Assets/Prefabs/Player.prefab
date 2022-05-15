@@ -240,9 +240,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1320401380294874720}
-  - component: {fileID: 3964087212061214031}
   - component: {fileID: 5386949733879220112}
   - component: {fileID: 8208154629794092988}
+  - component: {fileID: 8770459398993149884}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -269,39 +269,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3964087212061214031
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7461344696706572161}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63c0b1aa6ca329243a132b5b97ddd41b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 7
-  jumpForce: 1000
-  terminalVelocity: 20
-  crouchDashForce: 0
-  climbingSpeed: 5
-  climbCooldown: 0.3
-  climbingLayer:
-    serializedVersion: 2
-    m_Bits: 512
-  groundCheck: {fileID: 8766890022844081722}
-  groundObjects:
-    serializedVersion: 2
-    m_Bits: 128
-  checkRadius: 0.45
-  attackPoint: {fileID: 5303141949330171119}
-  attackRadius: 1
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 1
-  sprite: {fileID: 3027465567994917839}
-  playerCenter: {fileID: 4290942047550092717}
 --- !u!70 &5386949733879220112
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -339,6 +306,40 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &8770459398993149884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7461344696706572161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e93c42b34cda134e9f56afd6ebc3e3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 7
+  jumpForce: 1000
+  terminalVelocity: 18
+  crouchDashForce: 0
+  climbingSpeed: 5
+  climbCooldownDuration: 0.3
+  climbGraceDuration: 0.2
+  climbingLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  groundCheck: {fileID: 8766890022844081722}
+  groundObjects:
+    serializedVersion: 2
+    m_Bits: 128
+  checkRadius: 0.45
+  attackPoint: {fileID: 5303141949330171119}
+  attackRadius: 1
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  sprite: {fileID: 3027465567994917839}
+  playerCenter: {fileID: 4290942047550092717}
 --- !u!1 &7632051539840187122
 GameObject:
   m_ObjectHideFlags: 0
