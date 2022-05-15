@@ -8,6 +8,9 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
+	// Particle System
+	public ParticleSystem dust;
+	
     private const string HORIZONTAL_AXIS = "Horizontal";
     private const string VERTICAL_AXIS = "Vertical";
     private const string PLAYER_TAG = "Player";
@@ -199,10 +202,12 @@ public class PlayerController : MonoBehaviour
         // Changing direction.
         if (_lateralMovement > 0 && !_facingRight)
         {
+			CreateDust(); 
             FlipCharacter();
         }
         else if (_lateralMovement < 0 && _facingRight)
         {
+			CreateDust(); 
             FlipCharacter();
         }
 
@@ -252,6 +257,7 @@ public class PlayerController : MonoBehaviour
 
     void FlipCharacter()
     {
+		
         _facingRight = !_facingRight;
         transform.Rotate(0f, 180f, 0f);
     }
@@ -305,6 +311,7 @@ public class PlayerController : MonoBehaviour
                 Mathf.Clamp(_rigidbody.velocity.y, -terminalVelocity, terminalVelocity));
 
             // Add the jump velocity.
+			CreateDust(); 
             _rigidbody.AddForce(new Vector2(0f, jumpForce));
 
             // Set climbing on cooldown for a bit.
@@ -523,4 +530,8 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Lost Sword");
 #endif
     }
+	
+	void CreateDust(){
+		dust.Play();
+	}
 }
