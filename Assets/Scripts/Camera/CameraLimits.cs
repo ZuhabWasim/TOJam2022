@@ -8,6 +8,7 @@ public class CameraLimits : CinemachineExtension
 {
     public GameObject boundingRect;
     public Camera c;
+    public Transform bg;
 
     private float min_X, max_X, min_Y, max_Y;
     private float cam_W, cam_H;
@@ -29,10 +30,17 @@ public class CameraLimits : CinemachineExtension
     {
         if (stage == CinemachineCore.Stage.Finalize)
         {
+            //camera position
             var pos = state.RawPosition;
             pos.x = Mathf.Clamp(pos.x, min_X, max_X);
             pos.y = Mathf.Clamp(pos.y, min_Y, max_Y);
             state.RawPosition = pos;
+
+            //background scrolling
+            float xPerc, yPerc;
+            xPerc = (pos.x - min_X) / (max_X - min_X);
+            yPerc = (pos.y - min_Y) / (max_Y - min_Y);
+            bg.transform.localPosition = new Vector3((float)(2.9f - (5.9 * xPerc)), (float)(5.95 - (11.9 * yPerc)), 10f);
         }
     }
 }
