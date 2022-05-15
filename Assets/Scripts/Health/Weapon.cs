@@ -21,7 +21,7 @@ public class Weapon : MonoBehaviour
         set{_damage=value;} // not really necessary to modify a weapon's damage but hey, might as well chuck it in there
     }
 
-    protected void Attack(GameObject other){
+    public virtual void Attack(GameObject other){
         IDamageable damageable = other.GetComponent<IDamageable>();
         if(damageable != null){
             damageable.BeDamaged(damage); // Damage the object

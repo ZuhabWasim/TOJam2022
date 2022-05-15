@@ -13,12 +13,19 @@ public class Checkpoint : MonoBehaviour, IDamageable {
     public static GameObject GetActiveCheckpoint() {
         return ActiveCheckpoint.gameObject;
     }
-
+    // ----------- STATIC EVENTS ------------
     public delegate void OnActivateCheckpoint();
-    public event OnActivateCheckpoint ActivateCheckpoint;
+    public static event OnActivateCheckpoint ActivateCheckpoint;
+    // --------------------------------------
+
+    public bool activated = false;
+
     public void BeDamaged(float _){
         ActiveCheckpoint = this;
         ActivateCheckpoint?.Invoke(); 
+
+        activated = true;
+        Debug.Log("Activated checkpoint!");
     }
 
 }

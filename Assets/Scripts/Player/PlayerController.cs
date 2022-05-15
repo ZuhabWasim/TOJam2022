@@ -40,12 +40,13 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundObjects;
     public float checkRadius;
 
-    [Header("Combat")] public Transform attackPoint;
-    public float attackRadius;
-    public LayerMask enemyLayer;
+    [Header("Combat")] 
+    public WeaponController weaponController;
+    [SerializeField] private float attackSpeed = 0.5f;
 
     [Header("Animation")] public GameObject sprite;
     public GameObject playerCenter;
+
 
     // Movement values.
     private Rigidbody2D _rigidbody;
@@ -79,6 +80,9 @@ public class PlayerController : MonoBehaviour
     private bool _gauntlets = false;
     private bool _leggings = false;
     private bool _sword = false;
+
+    // Combat related.
+    private float _lastAttack = 0f;
 
     // Awake is called after initialization of all objects.
     void Awake()
@@ -362,7 +366,7 @@ public class PlayerController : MonoBehaviour
 #endif
         }
     }
-
+    
     void HandleCrowchDash()
     {
         if (_crouching)
@@ -371,39 +375,33 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    
+    public void FreezeInput(){
 
+    }
+    
     void HandleAttack()
     {
+        float timeSinceLastAttack = Time.time - _lastAttack;
+        if(timeSinceLastAttack < attackSpeed) return;
+        _lastAttack = Time.time;
+
         if (_climbing)
         {
             return;
         }
+        weaponController.Attack();
+        // ------Attack Visualization--------
+        // ----------------------------------
 
-        // Visualize Attack
-        Color attackColor = attackPoint.GetComponentInChildren<SpriteRenderer>().color;
-        attackPoint.GetComponentInChildren<SpriteRenderer>().color =
-            new Color(attackColor.g, attackColor.b, attackColor.r);
+        //Color attackColor = attackPoint.GetComponentInChildren<SpriteRenderer>().color;
+        //attackPoint.GetComponentInChildren<SpriteRenderer>().color =
+        //    new Color(attackColor.g, attackColor.b, attackColor.r);
 
-        // Detect everything hit by player.
-        // TODO: Change from Default layer to Enemy layer.
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius, enemyLayer);
-
-        // Damage the enemies
-        foreach (Collider2D enemy in hitEnemies)
-        {
-            // Don't damage yourself.
-            if (enemy.gameObject.tag == PLAYER_TAG)
-            {
-                continue;
-            }
-
-            // For now de-rendering objects hit but this is where you can damage enemies.
-            // TODO: Add damaging of enemies.
-            enemy.gameObject.SetActive(false);
 #if DEBUG
-            Debug.Log(" Hit enemy:  " + enemy.name);
+            //Debug.Log(" Hit enemy:  " + enemy.name);
 #endif
-        }
+        //}
 #if DEBUG
         Debug.Log("ATTACK!!");
 #endif
@@ -454,7 +452,7 @@ public class PlayerController : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(groundCheck.position, checkRadius);
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
+        //Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
     }
 #endif
 
@@ -468,7 +466,7 @@ public class PlayerController : MonoBehaviour
         jumpForce = PRE_CHESTPIECE_SPEED;
 
         // Sword
-        attackRadius = PRE_SWORD_ATTACK_RANGE;
+        /*attackRadius = PRE_SWORD_ATTACK_RANGE;*/
     }
 
     void LostChestPiece()
@@ -503,9 +501,9 @@ public class PlayerController : MonoBehaviour
     void LostSword()
     {
         _sword = true;
-        attackRadius = POST_SWORD_ATTACK_RANGE;
+        /*attackRadius = POST_SWORD_ATTACK_RANGE;
         // Visualization
-        attackPoint.GetComponentInChildren<SpriteRenderer>().transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
+        attackPoint.GetComponentInChildren<SpriteRenderer>().transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);*/
 #if DEBUG
         Debug.Log("Lost Sword");
 #endif
