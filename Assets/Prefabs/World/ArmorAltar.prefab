@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1569561239219341177}
   - component: {fileID: 1569561239219341176}
+  - component: {fileID: 1300222316}
   m_Layer: 0
   m_Name: ArmorAltar
   m_TagString: LostArmor
@@ -24,7 +25,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1569561239219341179}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.03, y: -3.73, z: 0.07277253}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -50,6 +51,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &1300222316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1569561239219341179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e42e6c9426dcac9418b0962533548ccd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1569561239302673491
 GameObject:
   m_ObjectHideFlags: 0
@@ -145,8 +158,8 @@ GameObject:
   - component: {fileID: 7243992215217521858}
   - component: {fileID: 4642057618882100672}
   m_Layer: 0
-  m_Name: ChestSprite
-  m_TagString: Untagged
+  m_Name: ArmorSprite
+  m_TagString: AlterItemSprite
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
