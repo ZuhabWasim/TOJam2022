@@ -208,7 +208,6 @@ public class PlayerController : MonoBehaviour
         {
             _verticalLookCooldown = _verticalLookCooldown == -1? lookaheadMinimumHoldTime :  _verticalLookCooldown;
             if(_verticalLookCooldown == 0){
-                Debug.Log("Moving");
                 cameraFollowPoint.localPosition = new Vector2(0, lookaheadDistance * _verticalMovement);
                 _verticalLookCooldown = -1;
             }
