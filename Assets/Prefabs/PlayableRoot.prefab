@@ -64,15 +64,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3547926592014463010, guid: 1836a4873ef414544bae774bac250d8d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.6399994
+      value: -0.32672858
       objectReference: {fileID: 0}
     - target: {fileID: 3547926592014463010, guid: 1836a4873ef414544bae774bac250d8d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 11.91
+      value: -0.7149836
       objectReference: {fileID: 0}
     - target: {fileID: 3547926592014463010, guid: 1836a4873ef414544bae774bac250d8d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -11.556852
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 3547926592014463011, guid: 1836a4873ef414544bae774bac250d8d, type: 3}
       propertyPath: field of view
@@ -108,7 +108,7 @@ PrefabInstance:
       objectReference: {fileID: 4240536605531895041}
     - target: {fileID: 3547926592085222038, guid: 1836a4873ef414544bae774bac250d8d, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.9411764
+      value: 1.5903615
       objectReference: {fileID: 0}
     - target: {fileID: 3547926592506805312, guid: 1836a4873ef414544bae774bac250d8d, type: 3}
       propertyPath: m_RootOrder
@@ -164,7 +164,7 @@ PrefabInstance:
       objectReference: {fileID: 4240536605468690830}
     - target: {fileID: 3547926593832018545, guid: 1836a4873ef414544bae774bac250d8d, type: 3}
       propertyPath: m_Lens.m_SensorSize.x
-      value: 1.9411764
+      value: 1.5903615
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1836a4873ef414544bae774bac250d8d, type: 3}
@@ -322,6 +322,10 @@ PrefabInstance:
       propertyPath: playsound
       value: 
       objectReference: {fileID: 328766673966503775}
+    - target: {fileID: 7626054482101258371, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7759937118942612781, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
       propertyPath: m_RootOrder
       value: 6
