@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Tiles/Tilemaps/desert/desert_tileset_1.asset.meta
-guid: 9aee9f681927a3347b880cbf0f2ab2bd
-========
-guid: 6fef25f2e47f5104fbb288b57b7e113e
->>>>>>>> main:Assets/Tiles/Tilemaps/desert/desert_tileset_0.asset.meta
+guid: eeb2aca57ee176a48be3e3ae22255d78
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 11400000
