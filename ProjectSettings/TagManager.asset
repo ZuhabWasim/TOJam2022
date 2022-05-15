@@ -14,6 +14,7 @@ TagManager:
   - LostLeggings
   - LostSword
   - LostGauntlets
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -25,7 +26,7 @@ TagManager:
   - Ground
   - Background
   - Climbing
-  - 
+  - Player
   - 
   - 
   - 

@@ -186,6 +186,7 @@ GameObject:
   - component: {fileID: 3446372859269836916}
   - component: {fileID: 3446372859269836919}
   - component: {fileID: 4836875633267617638}
+  - component: {fileID: 7631215516203887984}
   m_Layer: 0
   m_Name: FlyingEnemyDesert
   m_TagString: FlyingEnemy
@@ -250,6 +251,20 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.7
+--- !u!114 &7631215516203887984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3446372859269836917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0159359cb2cc83641a48b670bb3b72b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: 0
+  maxHealth: 1
 --- !u!1 &3446372860245657786
 GameObject:
   m_ObjectHideFlags: 0
