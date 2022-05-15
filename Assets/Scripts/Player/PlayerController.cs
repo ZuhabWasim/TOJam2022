@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour
     [Header("Animation")] public GameObject sprite;
     public GameObject playerCenter;
     public Animator animator;
+    public ParticleSystem particles;
     
     [Header("Camera")] 
     [SerializeField] Transform cameraFollowPoint;
@@ -58,8 +59,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private RuntimeAnimatorController a_ChestPiece;
     [SerializeField] private RuntimeAnimatorController a_Gauntlets;
     [SerializeField] private RuntimeAnimatorController a_Unarmoured;
-
-
 
     // Movement values.
     private Rigidbody2D _rigidbody;
@@ -209,7 +208,6 @@ public class PlayerController : MonoBehaviour
         {
             _verticalLookCooldown = _verticalLookCooldown == -1? lookaheadMinimumHoldTime :  _verticalLookCooldown;
             if(_verticalLookCooldown == 0){
-                Debug.Log("Moving");
                 cameraFollowPoint.localPosition = new Vector2(0, lookaheadDistance * _verticalMovement);
                 _verticalLookCooldown = -1;
             }
@@ -244,6 +242,9 @@ public class PlayerController : MonoBehaviour
         }*/
     }
 
+    void CreateDust(){
+        particles?.Play();
+    }
     void AnimatePlayer()
     {
         // Changing direction.
@@ -351,6 +352,7 @@ public class PlayerController : MonoBehaviour
             _rigidbody.gravityScale = GRAVITY_SCALE;
             _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed,
                 Mathf.Clamp(_rigidbody.velocity.y, -terminalVelocity, terminalVelocity));
+            if(Math.Abs(_rigidbody.velocity.x) > 1 && _isGrounded) CreateDust();
         }
 
         // If the player scheduled a jump, trigger it once and set it to false.
@@ -368,7 +370,6 @@ public class PlayerController : MonoBehaviour
             _climbing = false;
             _climbTimer = climbCooldownDuration;
         }
-
         _isJumping = false;
     }
 
@@ -427,6 +428,7 @@ public class PlayerController : MonoBehaviour
             _isJumping = true;
             _crouchPress = false;
             _climbPress = false;
+            CreateDust();
 #if DEBUG
             Debug.Log("JUMP!!");
 #endif
