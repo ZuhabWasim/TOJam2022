@@ -15,6 +15,7 @@ TagManager:
   - LostSword
   - LostGauntlets
   - Enemy
+  - AlterItemSprite
   layers:
   - Default
   - TransparentFX

@@ -497,24 +497,28 @@ public class PlayerController : MonoBehaviour
 #endif
         }
 
-        if (other.tag == "LostArmor")
+        if (other.tag == "LostArmor" && !_chestPiece)
         {
             LostChestPiece();
+            other.GetComponent<PlaceOnAlter>().Place();
         }
 
-        if (other.tag == "LostLeggings")
+        if (other.tag == "LostLeggings" && !_leggings)
         {
             LostLeggings();
+            other.GetComponent<PlaceOnAlter>().Place();
         }
 
-        if (other.tag == "LostSword")
+        if (other.tag == "LostSword" && !_sword)
         {
             LostSword();
+            other.GetComponent<PlaceOnAlter>().Place();
         }
 
-        if (other.tag == "LostGauntlets")
+        if (other.tag == "LostGauntlets" && !_gauntlets)
         {
             LostGauntlets();
+            other.GetComponent<PlaceOnAlter>().Place();
         }
     }
 
