@@ -9,14 +9,16 @@ public class DialogueManager : MonoBehaviour
 	public TextMeshProUGUI dialogueText;
 	
 	public Animator animator;
+	public AudioSource playsound;
 	
 	private Queue<string> sentences;
 	
 	public void StartDialogue (Dialogue dialogue){
-		sentences = new Queue<string>();
 		animator.SetBool("isOpen",true);
-		nameText.text = dialogue.name;
+		FindObjectOfType<PlayerController>().FreezeInput();
 		
+		sentences = new Queue<string>();
+		nameText.text = dialogue.name;
 		sentences.Clear();
 		
 		foreach(string sentence in dialogue.sentences){
@@ -24,10 +26,12 @@ public class DialogueManager : MonoBehaviour
 		}
 		
 		DisplayNextSentence();
+		
 	}
 
 	public void DisplayNextSentence(){
 		if (sentences.Count == 0){
+			playsound.GetComponent<AudioSource>().Stop ();
 			EndDialogue();
 			return;
 		}
@@ -41,17 +45,29 @@ public class DialogueManager : MonoBehaviour
 	
 	IEnumerator TypeSentence (string sentence){
 		dialogueText.text = "";
+		
+		playsound.GetComponent<AudioSource>().Play();	
+		
 		foreach (char letter in sentence.ToCharArray()){
 			dialogueText.text += letter;
-			yield return null;
+			yield return new WaitForSeconds(0.04f);
 		}
 		
-	
+		playsound.GetComponent<AudioSource>().Stop();
+		
+		while (!Input.GetKeyDown(KeyCode.Space))
+			yield return null;
+		
+		DisplayNextSentence();
+		
 	}
+	
+
+
 	
 	void EndDialogue(){
 		
 		animator.SetBool("isOpen",false);
-
+		FindObjectOfType<PlayerController>().FreezeInput();
 	}
 }
