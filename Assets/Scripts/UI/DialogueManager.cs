@@ -16,6 +16,7 @@ public class DialogueManager : MonoBehaviour
 	public void StartDialogue (Dialogue dialogue){
 		animator.SetBool("isOpen",true);
 		FindObjectOfType<PlayerController>().FreezeInput();
+		
 		sentences = new Queue<string>();
 		nameText.text = dialogue.name;
 		sentences.Clear();
@@ -49,7 +50,7 @@ public class DialogueManager : MonoBehaviour
 		
 		foreach (char letter in sentence.ToCharArray()){
 			dialogueText.text += letter;
-			yield return new WaitForSeconds(0.03f);
+			yield return new WaitForSeconds(0.04f);
 		}
 		
 		playsound.GetComponent<AudioSource>().Stop();
@@ -60,6 +61,9 @@ public class DialogueManager : MonoBehaviour
 		DisplayNextSentence();
 		
 	}
+	
+
+
 	
 	void EndDialogue(){
 		
