@@ -8,6 +8,10 @@ TagManager:
   - ReturnTriggerFE
   - DamageTriggerFE
   - GameMusic
+  - LostArmor
+  - LostLeggings
+  - LostSword
+  - LostGauntlets
   layers:
   - Default
   - TransparentFX

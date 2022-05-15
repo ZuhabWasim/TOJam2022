@@ -40,13 +40,12 @@ public class PlayerController : MonoBehaviour
     public LayerMask groundObjects;
     public float checkRadius;
 
-    [Header("Combat")] 
-    public WeaponController weaponController;
+    [Header("Combat")] public WeaponController weaponController;
     [SerializeField] private float attackSpeed = 0.5f;
 
     [Header("Animation")] public GameObject sprite;
     public GameObject playerCenter;
-
+    public Animator animator;
 
     // Movement values.
     private Rigidbody2D _rigidbody;
@@ -71,7 +70,9 @@ public class PlayerController : MonoBehaviour
     private bool _crouching = false;
 
     private bool _inputFrozen = false;
+
     public delegate void OnInputFreeze(bool frozen);
+
     public event OnInputFreeze InputFreeze;
 
     // Sprite information.
@@ -87,6 +88,7 @@ public class PlayerController : MonoBehaviour
 
     // Combat related.
     private float _lastAttack = 0f;
+    private float _attackCooldown = 0f;
 
     // Awake is called after initialization of all objects.
     void Awake()
@@ -143,11 +145,16 @@ public class PlayerController : MonoBehaviour
         //           "_isClimbing" +  _isClimbing + ",    " +
         //           "_isGrounded" + _isGrounded + ",    ");
         TickCooldowns();
+
+        animator.SetBool("isCrouching", _crouching);
+        animator.SetBool("isJumping", !_isGrounded);
+        animator.SetBool("isAttacking", _attackCooldown > 0f);
+        animator.SetFloat("horizontalSpeed", Mathf.Abs(_lateralMovement));
     }
 
     void GetPlayerInput()
     {
-        if(_inputFrozen) return;
+        if (_inputFrozen) return;
 
         _lateralMovement = Input.GetAxis(HORIZONTAL_AXIS);
         _verticalMovement = Input.GetAxisRaw(VERTICAL_AXIS);
@@ -215,12 +222,12 @@ public class PlayerController : MonoBehaviour
 
             if (_isGrounded && _climbGrace == 0f)
             {
-                playerSprite.color = new Color(1f, 1f, 1f);
+                //playerSprite.color = new Color(1f, 1f, 1f);
                 _climbing = false;
             }
             else
             {
-                playerSprite.color = new Color(1f, 0f, 0f);
+                //playerSprite.color = new Color(1f, 0f, 0f);
             }
 
             CrouchCharacter(false);
@@ -231,7 +238,7 @@ public class PlayerController : MonoBehaviour
         if (!_isGrounded)
         {
             this.transform.localScale = Vector3.one;
-            playerSprite.color = new Color(0f, 0f, 1f);
+            //playerSprite.color = new Color(0f, 0f, 1f);
             CrouchCharacter(false);
             return;
         }
@@ -239,14 +246,14 @@ public class PlayerController : MonoBehaviour
         // Crouching sprite.
         if (_crouchPress)
         {
-            playerSprite.color = new Color(0f, 1f, 0f);
+            //playerSprite.color = new Color(0f, 1f, 0f);
             CrouchCharacter(true);
             return;
         }
 
         // Idle sprite.
         this.transform.localScale = Vector3.one;
-        playerSprite.color = new Color(1f, 1f, 1f);
+        //playerSprite.color = new Color(1f, 1f, 1f);
         CrouchCharacter(false);
     }
 
@@ -264,18 +271,22 @@ public class PlayerController : MonoBehaviour
         if (crouch && !_crouching)
         {
             collider.size = new Vector2(_colliderSize.x, _colliderSize.y / 2);
-            sprite.transform.localScale = new Vector3(_spriteScale.x, _spriteScale.y / 2, _spriteScale.z);
+            sprite.transform.localScale = new Vector3(_spriteScale.x, _spriteScale.y * 0.8f, _spriteScale.z);
+
+            Vector3 position = sprite.transform.position;
+            sprite.transform.position = new Vector3(position.x, position.y + 0.2f, position.z);
+
             _crouching = true;
-            Vector3 position = _rigidbody.position;
-            _rigidbody.position = new Vector3(position.x, position.y - _spriteScale.y / 4, position.z);
         }
         else if (!crouch && _crouching)
         {
             collider.size = new Vector2(_colliderSize.x, _colliderSize.y);
             sprite.transform.localScale = new Vector3(_spriteScale.x, _spriteScale.y, _spriteScale.z);
+
             _crouching = false;
-            Vector3 position = _rigidbody.position;
-            _rigidbody.position = new Vector3(position.x, position.y + _spriteScale.y / 4, position.z);
+
+            Vector3 position = sprite.transform.position;
+            sprite.transform.position = new Vector3(position.x, position.y - 0.2f, position.z);
         }
     }
 
@@ -358,6 +369,7 @@ public class PlayerController : MonoBehaviour
     {
         _climbTimer = Mathf.Max(0f, _climbTimer - Time.deltaTime);
         _climbGrace = Mathf.Max(0f, _climbGrace - Time.deltaTime);
+        _attackCooldown = Mathf.Max(0f, _attackCooldown - Time.deltaTime);
     }
 
     void HandleJump()
@@ -373,7 +385,7 @@ public class PlayerController : MonoBehaviour
 #endif
         }
     }
-    
+
     void HandleCrowchDash()
     {
         if(_inputFrozen) return;
@@ -383,29 +395,31 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    
-    
     void HandleAttack()
     {
         if(_inputFrozen) return;
-        float timeSinceLastAttack = Time.time - _lastAttack;
-        if(timeSinceLastAttack < attackSpeed) return;
-        _lastAttack = Time.time;
+        
+        if (_attackCooldown > 0f) return;
 
+        /*float timeSinceLastAttack = Time.time - _lastAttack;
+        if(timeSinceLastAttack < attackSpeed) return;
+        _lastAttack = Time.time;*/
+        
         if (_climbing)
         {
             return;
         }
+        _attackCooldown = attackSpeed;
+        
         weaponController.Attack();
-        // ------Attack Visualization--------
-        // ----------------------------------
 
+        
         //Color attackColor = attackPoint.GetComponentInChildren<SpriteRenderer>().color;
         //attackPoint.GetComponentInChildren<SpriteRenderer>().color =
         //    new Color(attackColor.g, attackColor.b, attackColor.r);
 
 #if DEBUG
-            //Debug.Log(" Hit enemy:  " + enemy.name);
+        //Debug.Log(" Hit enemy:  " + enemy.name);
 #endif
         //}
 #if DEBUG
@@ -434,6 +448,26 @@ public class PlayerController : MonoBehaviour
 #if DEBUG
             Debug.Log("On climbing surface.");
 #endif
+        }
+
+        if (other.tag == "LostArmor")
+        {
+            LostChestPiece();
+        }
+
+        if (other.tag == "LostLeggings")
+        {
+            LostLeggings();
+        }
+
+        if (other.tag == "LostSword")
+        {
+            LostSword();
+        }
+
+        if (other.tag == "LostGauntlets")
+        {
+            LostGauntlets();
         }
     }
 
