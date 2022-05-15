@@ -10,7 +10,6 @@ public class Patrol : MonoBehaviour
     public bool movingRight = true;
 
     public Transform groundDetection;
-    public Transform wallDetection;
     public LayerMask groundMask;
 
     private int _directionModifier = 1;
@@ -38,31 +37,28 @@ public class Patrol : MonoBehaviour
         {
             transform.Translate(Vector2.right * _directionModifier * speed * Time.deltaTime);
         } else {
-            reverseMovementPlatform();
+            reverseMovement();
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log(collision.name);
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground") || collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
         {
-            reverseMovementWall();
+            reverseMovement();
         }
     }
 
-    void reverseMovementPlatform()
+    void reverseMovement()
     {
-        // First, force shift the enemy to stay within the ground collider to avoid running off ground glitch.
-        transform.Translate(Vector2.right * -_directionModifier * 4 * Time.deltaTime);
+        // First, rotate the ground detection.
+        groundDetection.RotateAround(GetComponentInParent<Transform>().position, Vector3.up, 180);
 
         // Second, reverse the boolean and the direction modifier.
         movingRight = !movingRight;
         _directionModifier *= -1;
     }
 
-    void reverseMovementWall()
-    {
-        movingRight = !movingRight;
-        _directionModifier *= -1;
-    }
+
 }
