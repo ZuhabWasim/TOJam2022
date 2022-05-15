@@ -183,6 +183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogue:
     onStart: 0
+    onEnd: 0
     name: 
     sentences:
     - You lay down your bulky chestplate.
@@ -505,6 +506,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogue:
     onStart: 0
+    onEnd: 0
     name: 
     sentences:
     - You lay down your mighty sword.
@@ -577,7 +579,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u25C4\u25BA  Move\nSPACE  Jump\nC Interact\nX Attack\n\u25B2/\u25BC Climb/Crouch\n\u25BC+\u25C4\u25BA
+  m_text: "\u25C4\u25BA  Move\nSPACE  Jump\nC Interact\nJ Attack\n\u25B2/\u25BC Climb/Crouch\n\u25BC+LSHIFT
     Slide\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e22d517f6b13b804187c51dd6f094034, type: 2}
@@ -682,7 +684,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00012207031, y: -16.9}
+  m_AnchoredPosition: {x: 0.00012207031, y: -37}
   m_SizeDelta: {x: 755.7, y: 229.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5631197092929907577
@@ -833,7 +835,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5532834503213767087}
-  - {fileID: 6759052385495839216}
+  - {fileID: 6057937227140845019}
   - {fileID: 6513899470364746610}
   - {fileID: 3750332889159328892}
   - {fileID: 1508608578786442214}
@@ -1271,7 +1273,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2876162533374524666}
         m_TargetAssemblyTypeName: PauseMenuUIManager, Assembly-CSharp
-        m_MethodName: CloseDialog
+        m_MethodName: CloseDialogue
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2578,7 +2580,6 @@ RectTransform:
   - {fileID: 2876162533374524667}
   - {fileID: 2876162531991879905}
   - {fileID: 2876162533797613429}
-  - {fileID: 6057937227140845019}
   m_Father: {fileID: 2876162533242628226}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5510,6 +5511,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogue:
     onStart: 0
+    onEnd: 0
     name: 
     sentences:
     - You lay down your durable leggings.
@@ -5542,7 +5544,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4010415720669947764}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5551,13 +5553,14 @@ RectTransform:
   - {fileID: 4954539854973543109}
   - {fileID: 8878175167308441172}
   - {fileID: 6989888768254717067}
-  m_Father: {fileID: 2876162532650872111}
-  m_RootOrder: 7
+  - {fileID: 6759052385495839216}
+  m_Father: {fileID: 8178778429247833116}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 847, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 846.9999, y: 0.000061035156}
+  m_SizeDelta: {x: 700, y: 349.77777}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5055359826055018060
 CanvasRenderer:
@@ -5809,12 +5812,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4154358603118917772}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -30.61523, y: 273.99997, z: 4.8160944}
-  m_LocalScale: {x: 0.41666657, y: 0.41666657, z: 0.41666657}
+  m_LocalPosition: {x: -877.6151, y: 273.99997, z: 4.816095}
+  m_LocalScale: {x: 0.4166666, y: 0.4166666, z: 0.4166666}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8178778429247833116}
-  m_RootOrder: 1
+  m_Father: {fileID: 6057937227140845019}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7449521146749155771
 MonoBehaviour:
@@ -5829,7 +5832,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogue:
-    onStart: 0
+    onStart: 1
+    onEnd: 1
     name: Gonorath
     sentences:
     - 'Well, well... The righteous knight returns. Have you not learned your lesson? '
@@ -5881,6 +5885,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogue:
     onStart: 1
+    onEnd: 0
     name: Gonorath
     sentences:
     - Behold the wrath of GONORATH, the Dark Lord of All!
@@ -5933,6 +5938,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogue:
     onStart: 0
+    onEnd: 0
     name: Gonorath
     sentences:
     - Ha...haha.........hahahahHAHAHAHAH!!!!!
@@ -6162,7 +6168,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 387, y: -16.9}
+  m_AnchoredPosition: {x: 387, y: -37.000004}
   m_SizeDelta: {x: 714.1, y: 229.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8552921356272717621
@@ -6424,6 +6430,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogue:
     onStart: 0
+    onEnd: 0
     name: 
     sentences:
     - You lay down your metal gauntlets.
@@ -6465,7 +6472,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 157.5}
+  m_AnchoredPosition: {x: 0, y: 125}
   m_SizeDelta: {x: 755.7, y: 81.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3197602408427180150
@@ -6664,7 +6671,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5638259001596313964, guid: 3f42b4a8720587446841c9168b3722e2, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6756209462468289329, guid: 3f42b4a8720587446841c9168b3722e2, type: 3}
       propertyPath: m_RootOrder

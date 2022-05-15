@@ -566,9 +566,9 @@ public class PlayerController : MonoBehaviour
 
     // MUST be called by someone outside of the player controller, 
     // ideally UI or a dedicated script
-    public void FreezeInput(){
-        _inputFrozen = !_inputFrozen;
-        InputFreeze?.Invoke(_inputFrozen);
+    public void FreezeInput(bool freeze){
+        _inputFrozen = freeze;
+        InputFreeze?.Invoke(freeze);
     }
 
     void LostChestPiece()

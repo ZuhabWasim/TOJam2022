@@ -15,7 +15,9 @@ public class DialogueManager : MonoBehaviour
 	
 	public void StartDialogue (Dialogue dialogue){
 		animator.SetBool("isOpen",true);
-		FindObjectOfType<PlayerController>().FreezeInput();
+		if (FindObjectOfType<PlayerController>() == true) {
+			FindObjectOfType<PlayerController>().FreezeInput(true);
+		}
 		
 		sentences = new Queue<string>();
 		nameText.text = dialogue.name;
@@ -25,25 +27,25 @@ public class DialogueManager : MonoBehaviour
 			sentences.Enqueue(sentence);
 		}
 		
-		DisplayNextSentence();
+		DisplayNextSentence(dialogue);
 		
 	}
 
-	public void DisplayNextSentence(){
+	public void DisplayNextSentence(Dialogue dialogue){
 		if (sentences.Count == 0){
 			playsound.GetComponent<AudioSource>().Stop ();
-			EndDialogue();
+			EndDialogue(dialogue);
 			return;
 		}
 		
 		string sentence = sentences.Dequeue();
 		
 		StopAllCoroutines();
-		StartCoroutine(TypeSentence(sentence));
+		StartCoroutine(TypeSentence(sentence, dialogue));
 		
 	}
 	
-	IEnumerator TypeSentence (string sentence){
+	IEnumerator TypeSentence (string sentence, Dialogue dialogue){
 		dialogueText.text = "";
 		
 		playsound.GetComponent<AudioSource>().Play();	
@@ -63,16 +65,23 @@ public class DialogueManager : MonoBehaviour
 			yield return null;
 		
 		yield return new WaitForSeconds(0.02f);
-		DisplayNextSentence();
+		DisplayNextSentence(dialogue);
 		
 	}
 	
 
 
 	
-	void EndDialogue(){
-		
+	void EndDialogue(Dialogue dialogue){
 		animator.SetBool("isOpen",false);
-		FindObjectOfType<PlayerController>().FreezeInput();
+		if (dialogue.onEnd == true){
+			FindObjectOfType<PauseMenuUIManager>().StartFinalCutscene();
+		}
+		else{
+			animator.SetBool("isOpen",false);
+			if (FindObjectOfType<PlayerController>() == true) {
+				FindObjectOfType<PlayerController>().FreezeInput(false);
+			}
+		}
 	}
 }
