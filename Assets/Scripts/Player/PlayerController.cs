@@ -8,14 +8,6 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
-	// Particle System
-	public ParticleSystem dust;
-	
-	// Sound Effects
-	public AudioSource jumpSound;
-	public AudioSource runSoundSlow;
-	public AudioSource runSoundFast;
-	
     private const string HORIZONTAL_AXIS = "Horizontal";
     private const string VERTICAL_AXIS = "Vertical";
     private const string PLAYER_TAG = "Player";
@@ -214,12 +206,10 @@ public class PlayerController : MonoBehaviour
         // Changing direction.
         if (_lateralMovement > 0 && !_facingRight)
         {
-			CreateDust(); 
             FlipCharacter();
         }
         else if (_lateralMovement < 0 && _facingRight)
         {
-			CreateDust(); 
             FlipCharacter();
         }
 
@@ -269,7 +259,6 @@ public class PlayerController : MonoBehaviour
 
     void FlipCharacter()
     {
-		
         _facingRight = !_facingRight;
         transform.Rotate(0f, 180f, 0f);
     }
@@ -306,7 +295,6 @@ public class PlayerController : MonoBehaviour
         // Disable gravity to only rely on up/down input when the player is climbing.
         if (_climbing)
         {
-			
             _rigidbody.gravityScale = 0f;
             // Snap the player to the ladder block
             SnapToRope();
@@ -314,7 +302,6 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-			
             _rigidbody.gravityScale = GRAVITY_SCALE;
             _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed,
                 Mathf.Clamp(_rigidbody.velocity.y, -terminalVelocity, terminalVelocity));
@@ -323,15 +310,12 @@ public class PlayerController : MonoBehaviour
         // If the player scheduled a jump, trigger it once and set it to false.
         if (_isJumping)
         {
-			
             // Re-enable regular movement
             _rigidbody.gravityScale = GRAVITY_SCALE;
             _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed,
                 Mathf.Clamp(_rigidbody.velocity.y, -terminalVelocity, terminalVelocity));
 
             // Add the jump velocity.
-			CreateDust(); 
-			jumpSound.Play();
             _rigidbody.AddForce(new Vector2(0f, jumpForce));
 
             // Set climbing on cooldown for a bit.
@@ -573,8 +557,4 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Lost Sword");
 #endif
     }
-	
-	void CreateDust(){
-		dust.Play();
-	}
 }
