@@ -102,7 +102,7 @@ public enum KeyBinds
 
     UP_KEY = KeyCode.UpArrow,
     DOWN_KEY = KeyCode.DownArrow,
-    
+    CROWCH_DASH_KEY = KeyCode.LeftShift,
     // Armour piece keys for debugging.
     CHEST_PIECE = KeyCode.Alpha1,
     GAUNTLET = KeyCode.Alpha3,

@@ -19,6 +19,12 @@ public class PlayerController : MonoBehaviour
     public float terminalVelocity = 18f;
     public float crouchDashForce;
 
+    // CROWCH DASH +++
+    [SerializeField] private float _dashForce;
+    [SerializeField] private float _StartDashTime;
+    private float _dashTime;
+
+
     [Header("Climbing")] public float climbingSpeed;
     public float climbCooldownDuration = 0.3f;
     public float climbGraceDuration = 0.2f;
@@ -43,12 +49,15 @@ public class PlayerController : MonoBehaviour
     private float _climbTimer;
     private float _climbGrace;
 
+
     // Movement states.
     private bool _onRope;
     private bool _crouchPress;
     private bool _climbPress;
     private bool _isJumping = false;
     private bool _isGrounded;
+
+    private bool _isCrowchDashing;
 
     private bool _climbing;
     private float _ropeX;
@@ -78,6 +87,7 @@ public class PlayerController : MonoBehaviour
         _spriteScale = sprite.transform.localScale;
 
         RegisterEventListeners();
+        _dashTime = _StartDashTime;
     }
 
     void RegisterEventListeners()
@@ -86,7 +96,7 @@ public class PlayerController : MonoBehaviour
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.ATTACK_KEY), HandleAttack);
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.INTERACT_KEY), HandleInteract);
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.MENU_KEY), HandleMenu);
-
+        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.CROWCH_DASH_KEY), HandleCrowchDash);
         // Placeholder events for each armour piece lost.
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.CHEST_PIECE), LostChestPiece);
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.GAUNTLET), LostGauntlets);
@@ -99,11 +109,14 @@ public class PlayerController : MonoBehaviour
         // Only be able to jump again if we come back down. Put this back in Update because it works better.
         _isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundObjects);
         MovePlayer();
+        crowchDash();
     }
 
     // Update is called once per frame
     void Update()
     {
+
+       
         GetPlayerInput();
 
 
@@ -284,6 +297,39 @@ public class PlayerController : MonoBehaviour
         _isJumping = false;
     }
 
+    void crowchDash()
+    {
+        //Debug.Log(_dashTime);
+        if (!_isCrowchDashing)
+        {
+            return;
+        }
+        //dash if timer is greater than 0
+        if (_dashTime >= 0)
+        {
+            _dashTime -=  Time.deltaTime;
+            if (!_facingRight)
+            {
+                //Debug.Log("DASH Left!!");
+                _rigidbody.velocity = Vector2.left * _dashForce;
+                
+            }
+            else if (_facingRight)
+            {
+                //Debug.Log("DASH Right!!");
+                _rigidbody.velocity = Vector2.right * _dashForce;
+            }
+        }
+        //reset dash time and dash bool
+        if(_dashTime <= 0)
+        {
+            _isCrowchDashing = false;
+            _dashTime = _StartDashTime;
+        }
+    }
+
+
+
     void SnapToRope()
     {
         Vector3 position = _rigidbody.transform.position;
@@ -308,6 +354,19 @@ public class PlayerController : MonoBehaviour
 #endif
         }
     }
+    void HandleCrowchDash()
+    {
+        if ( _crouching)
+        {
+            _isCrowchDashing = true;
+        }
+    }
+
+
+
+
+
+
 
     void HandleAttack()
     {
