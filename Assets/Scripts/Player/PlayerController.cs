@@ -290,6 +290,9 @@ public class PlayerController : MonoBehaviour
 
             Vector3 position = sprite.transform.position;
             sprite.transform.position = new Vector3(position.x, position.y - 0.2f, position.z);
+            
+            position = transform.position;
+            this.transform.position = new Vector3(position.x, position.y + 0.2f, position.z);
         }
     }
 
