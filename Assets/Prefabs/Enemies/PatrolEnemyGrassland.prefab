@@ -44,6 +44,8 @@ GameObject:
   - component: {fileID: 5769426122916321879}
   - component: {fileID: 6061073066040459036}
   - component: {fileID: 1789589498}
+  - component: {fileID: 8354999709517650511}
+  - component: {fileID: 1090233657443631327}
   m_Layer: 0
   m_Name: PatrolEnemyGrassland
   m_TagString: PatrolEnemy
@@ -136,8 +138,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0159359cb2cc83641a48b670bb3b72b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hasOnHitInvincibility: 0
   _health: 0
   maxHealth: 1
+--- !u!114 &8354999709517650511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3945998341557001570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7fa820c06d2ec24984c63fe844d7c8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackFilter:
+    serializedVersion: 2
+    m_Bits: 1024
+  _weapon: {fileID: 1090233657443631327}
+--- !u!114 &1090233657443631327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3945998341557001570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9550a5c895bf7554f8e973a598d982bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damage: 1
+  _range: 0.5
+  _attackDelay: 0
 --- !u!1 &5911117911456773403
 GameObject:
   m_ObjectHideFlags: 0

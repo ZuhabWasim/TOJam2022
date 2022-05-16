@@ -5,12 +5,13 @@ using UnityEngine;
 public class DamageCheck : MonoBehaviour
 {
 
-    [SerializeField] private int _patrolEnemyDmg;
-    [SerializeField] private int _flyingEnemyDmg;
     [SerializeField] private float _invincibleTime;
-    [SerializeField] private float invincibilityDeltaTime;
+    [Range (0,1)][SerializeField] private float invincibilityDeltaTime;
     private SpriteRenderer _spriteRenderer;
-    private bool _isInvincible;
+    public bool IsInvincible{
+        get;
+        set;
+    }
     private Color _curColor;
 
     private void Start()
@@ -19,25 +20,7 @@ public class DamageCheck : MonoBehaviour
         _curColor = _spriteRenderer.color;
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (!_isInvincible)
-        {
-            if (collision.tag == "PatrolEnemy")
-            {
-                this.gameObject.GetComponent<IDamageable>().BeDamaged(_patrolEnemyDmg);
-                triggerInvcinibility();
-            }
-
-            if (collision.tag == "FlyingEnemy")
-            {
-                this.gameObject.GetComponent<IDamageable>().BeDamaged(_flyingEnemyDmg);
-                triggerInvcinibility();
-            }
-        }
-    }
-
-    private void triggerInvcinibility()
+    public void triggerInvincibility()
     {
         StartCoroutine(CountdownInvincibilityTime(_invincibleTime));
     }
@@ -45,7 +28,7 @@ public class DamageCheck : MonoBehaviour
 
     private IEnumerator CountdownInvincibilityTime(float seconds)
     {
-        _isInvincible = true;
+        IsInvincible = true;
         for (float i = 0; i < seconds; i += invincibilityDeltaTime)
         {
             // Alternate between 0 and 1 scale to simulate flashing
@@ -59,7 +42,7 @@ public class DamageCheck : MonoBehaviour
             }
             yield return new WaitForSeconds(invincibilityDeltaTime);
         }
-        _isInvincible = false;
+        IsInvincible = false;
     }
 
     private void setAlpha(float alpha)
