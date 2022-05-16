@@ -8,17 +8,22 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
+    // MOVEMENT CONSTANTS
     private const string HORIZONTAL_AXIS = "Horizontal";
     private const string VERTICAL_AXIS = "Vertical";
-    private const string PLAYER_TAG = "Player";
     private const float GRAVITY_SCALE = 5f;
-    private const float ROPE_SNAP_OFFSET = 0f;
-    private const float CLIMBING_LATERAL_REDUCTION = 0.5f;
-    
+
+    private const float GROUND_CHECK_RADIUS = 0.45f;
+    private const float CEILING_CHECK_RADIUS = 0.35f;
+
     // Armour constants.
     private const float POST_CHESTPPIECE_SPEED = 1000f;
     private const float PRE_CHESTPIECE_SPEED = 350f;
     private const float STARTING_MOVE_SPEED = 4f;
+
+    // Misc constants.
+    private const float ROPE_SNAP_OFFSET = 0f;
+    private const float CLIMBING_LATERAL_REDUCTION = 0.5f;
 
     [Header("Movement")] public float moveSpeed;
     public float jumpForce;
@@ -81,6 +86,7 @@ public class PlayerController : MonoBehaviour
 
     private bool _isJumping = false; // The player invokes jumping.
     private bool _isGrounded; // The player is currently on the ground.
+    private bool _headBumped; // The player's head is touching a ceiling.
 
     private bool _inputFrozen = false;
 
@@ -147,7 +153,8 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         // Only be able to jump again if we come back down. Put this back in Update because it works better.
-        _isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundObjects);
+        _isGrounded = Physics2D.OverlapCircle(groundCheck.position, GROUND_CHECK_RADIUS, groundObjects);
+        _headBumped = Physics2D.OverlapCircle(ceilingCheck.position, CEILING_CHECK_RADIUS, groundObjects);
         MovePlayer();
         CrouchDash();
     }
@@ -265,7 +272,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Crouch the player if they want to.
-        if (_crouchPress /*&& Nothing above player*/)
+        if (_crouchPress)
         {
             CrouchCharacter(true);
             return;
@@ -312,6 +319,9 @@ public class PlayerController : MonoBehaviour
         }
         else if (!crouch && _crouching)
         {
+            // Don't let the player stand up in a tunnel.
+            if (_headBumped) return;
+
             // Return the player to their original height.
             collider.size = new Vector2(_colliderSize.x, _colliderSize.y);
             sprite.transform.localScale = new Vector3(_spriteScale.x, _spriteScale.y, _spriteScale.z);
@@ -336,7 +346,8 @@ public class PlayerController : MonoBehaviour
             _rigidbody.gravityScale = 0f;
             // Snap the player to the ladder block
             //SnapToRope();
-            _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed * CLIMBING_LATERAL_REDUCTION, _verticalMovement * climbingSpeed);
+            _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed * CLIMBING_LATERAL_REDUCTION,
+                _verticalMovement * climbingSpeed);
         }
         else
         {
@@ -363,7 +374,7 @@ public class PlayerController : MonoBehaviour
         }
 
         _isJumping = false;
-        
+
         // Limit the player's movement speed if they're crouching.
         if (_crouching)
         {
@@ -382,13 +393,14 @@ public class PlayerController : MonoBehaviour
         if (_dashTime >= 0)
         {
             _dashTime -= Time.deltaTime;
+            Vector2 velocity = _rigidbody.velocity;
             if (!_facingRight)
             {
-                _rigidbody.velocity = Vector2.left * _dashForce;
+                _rigidbody.velocity = new Vector2(Vector2.left.x * _dashForce, velocity.y);
             }
             else if (_facingRight)
             {
-                _rigidbody.velocity = Vector2.right * _dashForce;
+                _rigidbody.velocity = new Vector2(Vector2.right.x * _dashForce, velocity.y);
             }
         }
 
@@ -567,9 +579,9 @@ public class PlayerController : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(groundCheck.position, checkRadius);
+        Gizmos.DrawWireSphere(groundCheck.position, GROUND_CHECK_RADIUS);
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(ceilingCheck.position, checkRadius);
+        Gizmos.DrawWireSphere(ceilingCheck.position, CEILING_CHECK_RADIUS);
     }
 #endif
 }
