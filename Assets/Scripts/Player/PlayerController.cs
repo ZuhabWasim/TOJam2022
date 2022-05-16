@@ -18,18 +18,15 @@ public class PlayerController : MonoBehaviour
     private const float POST_CHESTPPIECE_SPEED = 1000f;
     private const float PRE_CHESTPIECE_SPEED = 350f;
     private const float STARTING_MOVE_SPEED = 4f;
-    private const float POST_SWORD_ATTACK_RANGE = 0.65f;
-    private const float PRE_SWORD_ATTACK_RANGE = 1f;
 
     [Header("Movement")] public float moveSpeed;
     public float jumpForce;
-    public float terminalVelocity = 18f;
+    public float terminalVelocity = 20f;
 
     // CROWCH DASH +++
     [SerializeField] private float _dashForce;
     [SerializeField] private float _StartDashTime;
     private float _dashTime;
-
 
     [Header("Climbing")] public float climbingSpeed;
     public float climbCooldownDuration = 0.3f;
@@ -47,40 +44,41 @@ public class PlayerController : MonoBehaviour
     public GameObject playerCenter;
     public Animator animator;
     public ParticleSystem particles;
-    
-    [Header("Camera")] 
-    [SerializeField] Transform cameraFollowPoint;
+
+    [Header("Camera")] [SerializeField] Transform cameraFollowPoint;
     [SerializeField] float lookaheadMinimumHoldTime = 1f;
-    [SerializeField][Range(0, 3f)] float lookaheadDistance;
+    [SerializeField] [Range(0, 3f)] float lookaheadDistance;
 
 
-    [Header("RuntimeController")]
-    [SerializeField] private RuntimeAnimatorController a_Armored;
+    [Header("RuntimeController")] [SerializeField]
+    private RuntimeAnimatorController a_Armored;
+
     [SerializeField] private RuntimeAnimatorController a_ChestPiece;
     [SerializeField] private RuntimeAnimatorController a_Gauntlets;
     [SerializeField] private RuntimeAnimatorController a_Unarmoured;
 
-    // Movement values.
+    // Player movement values.
     private Rigidbody2D _rigidbody;
     private float _lateralMovement;
     private float _verticalMovement;
+
+    // Timers for movement/input restrictions/leniency.
     private float _crouchDashCooldown;
     private float _climbTimer;
     private float _climbGrace;
 
+    // Player movement states.
+    private bool _climbPress; // The player *wants* to climb.
+    private bool _onRope; // The player is near a rope.
+    private float _ropeX; // Where the rope is located to latch on to.
+    private bool _climbing; // The player is currently climbing.
 
-    // Movement states.
-    private bool _onRope;
-    private bool _crouchPress;
-    private bool _climbPress;
-    private bool _isJumping = false;
-    private bool _isGrounded;
+    private bool _crouchPress; // The player *wants* to crouch.
+    private bool _crouching = false; // The player is currently crouching.
+    private bool _isCrouchDashing;
 
-    private bool _isCrowchDashing;
-
-    private bool _climbing;
-    private float _ropeX;
-    private bool _crouching = false;
+    private bool _isJumping = false; // The player invokes jumping.
+    private bool _isGrounded; // The player is currently on the ground.
 
     private bool _inputFrozen = false;
 
@@ -115,18 +113,18 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //default runTimeController;
-        animator.runtimeAnimatorController = a_Armored;
+        InitializeVariables();
+        RegisterEventListeners();
+        PutOnArmour();
+    }
 
+    void InitializeVariables()
+    {
         _colliderSize = GetComponent<CapsuleCollider2D>().size;
         _spriteScale = sprite.transform.localScale;
-
-        RegisterEventListeners();
         _dashTime = _StartDashTime;
-
-        PutOnArmour();
-
-        if(cameraFollowPoint == null){
+        if (cameraFollowPoint == null)
+        {
             Debug.LogWarning("You should add a camera follow point, assigning self for now");
             cameraFollowPoint = this.transform;
         }
@@ -144,7 +142,6 @@ public class PlayerController : MonoBehaviour
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.CHEST_PIECE), LostChestPiece);
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.GAUNTLET), LostGauntlets);
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.LEGGINGS), LostLeggings);
-        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.SWORD), LostSword);
 #endif
     }
 
@@ -159,21 +156,17 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Get what the player *wants* to do (via button presses).
         GetPlayerInput();
-        AnimatePlayer();
-        // Debug.Log("_isJumping" + _isJumping + ",    " +
-        //           "_isCrouching" + _isCrouching + ",    " +
-        //           "_isClimbing" +  _isClimbing + ",    " +
-        //           "_isGrounded" + _isGrounded + ",    ");
+
+        // Handle what the player *is allowed* to do in their current situation.
+        RefreshPlayerStates();
+
+        // Refresh any leniency counters, e.g. climbing prevention.
         TickCooldowns();
 
-        animator.SetBool("isCrouching", _crouching);
-        animator.SetBool("isJumping", !_isGrounded);
-        animator.SetBool("isAttacking", _attackCooldown > 0f);
-        animator.SetFloat("horizontalSpeed", Mathf.Abs(_lateralMovement));
-        animator.SetBool("isClimbing", _climbing && Mathf.Abs(_verticalMovement) > 0.01f);
-        animator.SetBool("isOnRope", _climbing);
-        animator.SetBool("isCrouchSliding", _isCrowchDashing);
+        // Animate the player's actions to the Animation Controller.
+        AnimatePlayer();
     }
 
     void GetPlayerInput()
@@ -185,7 +178,7 @@ public class PlayerController : MonoBehaviour
         _climbPress = _gauntlets && _verticalMovement > 0f;
         _crouchPress = _leggings && _verticalMovement < 0f;
 
-        // Prioritize climbing in the air.
+        // Allows the player to jump off of ropes.
         if (_gauntlets && _onRope && _verticalMovement != 0 && _climbTimer == 0f)
         {
             _climbing = true;
@@ -193,34 +186,34 @@ public class PlayerController : MonoBehaviour
             {
                 _climbGrace = climbGraceDuration;
             }
-
             return;
         }
-
+        
+        // Prioritize climbing over crouching if both are pressed.
         if (_climbPress)
         {
             _crouchPress = false;
         }
-
-
+        
         // Lookahead Camera Related
-        if ((Math.Abs(_verticalMovement) > 0) && !_climbing )
+        if ((Math.Abs(_verticalMovement) > 0) && !_climbing)
         {
-            _verticalLookCooldown = _verticalLookCooldown == -1? lookaheadMinimumHoldTime :  _verticalLookCooldown;
-            if(_verticalLookCooldown == 0){
+            _verticalLookCooldown = _verticalLookCooldown == -1 ? lookaheadMinimumHoldTime : _verticalLookCooldown;
+            if (_verticalLookCooldown == 0)
+            {
                 cameraFollowPoint.localPosition = new Vector2(0, lookaheadDistance * _verticalMovement);
                 _verticalLookCooldown = -1;
             }
-
         }
-        else if (Math.Abs(_verticalMovement) == 0){
+        else if (Math.Abs(_verticalMovement) == 0)
+        {
             // We run this each update...
             // Good enough for now?
             _verticalLookCooldown = -1;
             cameraFollowPoint.localPosition = new Vector2(0, 0);
         }
 
-        // Player is in the air elsewise.
+        // Player is in the air else wise.
         if (!_isGrounded)
         {
             _crouchPress = false;
@@ -233,21 +226,17 @@ public class PlayerController : MonoBehaviour
         {
             _crouchPress = false;
         }
-
-        // Otherwise if the player isn't crouching, then get the player input.
-        /*if (!_isCrouching)
-        {
-            _lateralMovement = Input.GetAxis(HORIZONTAL_AXIS); // Left/Right movement.
-            //_lateralMovement = 0f;
-        }*/
+        
     }
 
-    void CreateDust(){
+    void CreateDust()
+    {
         particles?.Play();
     }
-    void AnimatePlayer()
+
+    void RefreshPlayerStates()
     {
-        // Changing direction.
+        // Changing direction of the player.
         if (_lateralMovement > 0 && !_facingRight)
         {
             FlipCharacter();
@@ -257,48 +246,46 @@ public class PlayerController : MonoBehaviour
             FlipCharacter();
         }
 
-        // TODO: Add animations/sprites.
-        SpriteRenderer playerSprite = sprite.GetComponent<SpriteRenderer>();
-
+        // Stop the character from climbing after they reach the bottom.
         if (_climbing)
         {
-            this.transform.localScale = Vector3.one;
-
             if (_isGrounded && _climbGrace == 0f)
             {
-                //playerSprite.color = new Color(1f, 1f, 1f);
                 _climbing = false;
             }
-            else
-            {
-                //playerSprite.color = new Color(1f, 0f, 0f);
-            }
 
             CrouchCharacter(false);
             return;
         }
 
-        // Mid-air sprite.
+        // Ensure the player can't crouch when in the air.
         if (!_isGrounded)
         {
-            this.transform.localScale = Vector3.one;
-            //playerSprite.color = new Color(0f, 0f, 1f);
             CrouchCharacter(false);
             return;
         }
 
-        // Crouching sprite.
-        if (_crouchPress)
+        // Crouch the player if they want to.
+        if (_crouchPress /*&& Nothing above player*/)
         {
-            //playerSprite.color = new Color(0f, 1f, 0f);
             CrouchCharacter(true);
             return;
         }
 
-        // Idle sprite.
-        this.transform.localScale = Vector3.one;
-        //playerSprite.color = new Color(1f, 1f, 1f);
+        // If none of these states, the player must be idle.
         CrouchCharacter(false);
+    }
+
+    void AnimatePlayer()
+    {
+        // Set parameters for all movement controllers.
+        animator.SetBool("isCrouching", _crouching);
+        animator.SetBool("isJumping", !_isGrounded);
+        animator.SetBool("isAttacking", _attackCooldown > 0f);
+        animator.SetFloat("horizontalSpeed", Mathf.Abs(_lateralMovement));
+        animator.SetBool("isClimbing", _climbing && Mathf.Abs(_verticalMovement) > 0.01f);
+        animator.SetBool("isOnRope", _climbing);
+        animator.SetBool("isCrouchSliding", _isCrouchDashing);
     }
 
     void FlipCharacter()
@@ -314,9 +301,11 @@ public class PlayerController : MonoBehaviour
 
         if (crouch && !_crouching)
         {
+            // Make the player shorter.
             collider.size = new Vector2(_colliderSize.x, _colliderSize.y / 2);
             sprite.transform.localScale = new Vector3(_spriteScale.x, _spriteScale.y * 0.8f, _spriteScale.z);
 
+            // Sprite specific adjustments.
             Vector3 position = sprite.transform.position;
             sprite.transform.position = new Vector3(position.x, position.y + 0.2f, position.z);
 
@@ -324,16 +313,19 @@ public class PlayerController : MonoBehaviour
         }
         else if (!crouch && _crouching)
         {
+            // Return the player to their original height.
             collider.size = new Vector2(_colliderSize.x, _colliderSize.y);
             sprite.transform.localScale = new Vector3(_spriteScale.x, _spriteScale.y, _spriteScale.z);
 
-            _crouching = false;
-
+            // Sprite specific adjustments.
             Vector3 position = sprite.transform.position;
             sprite.transform.position = new Vector3(position.x, position.y - 0.2f, position.z);
             
+            // Push the player up a bit to avoid clipping through the ground.
             position = transform.position;
             this.transform.position = new Vector3(position.x, position.y + 0.2f, position.z);
+            
+            _crouching = false;
         }
     }
 
@@ -352,7 +344,7 @@ public class PlayerController : MonoBehaviour
             _rigidbody.gravityScale = GRAVITY_SCALE;
             _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed,
                 Mathf.Clamp(_rigidbody.velocity.y, -terminalVelocity, terminalVelocity));
-            if(Math.Abs(_rigidbody.velocity.x) > 1 && _isGrounded) CreateDust();
+            if (Math.Abs(_rigidbody.velocity.x) > 1 && _isGrounded) CreateDust();
         }
 
         // If the player scheduled a jump, trigger it once and set it to false.
@@ -370,13 +362,14 @@ public class PlayerController : MonoBehaviour
             _climbing = false;
             _climbTimer = climbCooldownDuration;
         }
+
         _isJumping = false;
     }
 
     void crowchDash()
     {
         //Debug.Log(_dashTime);
-        if (!_isCrowchDashing)
+        if (!_isCrouchDashing)
         {
             return;
         }
@@ -400,7 +393,7 @@ public class PlayerController : MonoBehaviour
         //reset dash time and dash bool
         if (_dashTime <= 0)
         {
-            _isCrowchDashing = false;
+            _isCrouchDashing = false;
             _dashTime = _StartDashTime;
         }
     }
@@ -417,12 +410,14 @@ public class PlayerController : MonoBehaviour
         _climbTimer = Mathf.Max(0f, _climbTimer - Time.deltaTime);
         _climbGrace = Mathf.Max(0f, _climbGrace - Time.deltaTime);
         _attackCooldown = Mathf.Max(0f, _attackCooldown - Time.deltaTime);
-        _verticalLookCooldown = _verticalLookCooldown >= 0? Mathf.Max(0f, _verticalLookCooldown - Time.deltaTime) : _verticalLookCooldown; // Has a -1 state
+        _verticalLookCooldown = _verticalLookCooldown >= 0
+            ? Mathf.Max(0f, _verticalLookCooldown - Time.deltaTime)
+            : _verticalLookCooldown; // Has a -1 state
     }
 
     void HandleJump()
     {
-        if(_inputFrozen) return;
+        if (_inputFrozen) return;
         if (_isGrounded || _climbing)
         {
             _isJumping = true;
@@ -437,32 +432,33 @@ public class PlayerController : MonoBehaviour
 
     void HandleCrowchDash()
     {
-        if(_inputFrozen) return;
+        if (_inputFrozen) return;
         if (_crouching)
         {
-            _isCrowchDashing = true;
+            _isCrouchDashing = true;
         }
     }
 
     void HandleAttack()
     {
-        if(_inputFrozen) return;
-        
+        if (_inputFrozen) return;
+
         if (_attackCooldown > 0f) return;
 
         /*float timeSinceLastAttack = Time.time - _lastAttack;
         if(timeSinceLastAttack < attackSpeed) return;
         _lastAttack = Time.time;*/
-        
+
         if (_climbing)
         {
             return;
         }
+
         _attackCooldown = attackSpeed;
-        
+
         weaponController.Attack();
 
-        
+
         //Color attackColor = attackPoint.GetComponentInChildren<SpriteRenderer>().color;
         //attackPoint.GetComponentInChildren<SpriteRenderer>().color =
         //    new Color(attackColor.g, attackColor.b, attackColor.r);
@@ -478,13 +474,13 @@ public class PlayerController : MonoBehaviour
 
     void HandleInteract()
     {
-        if(_inputFrozen) return;
+        if (_inputFrozen) return;
         Debug.Log("INTERACT!!");
     }
 
     void HandleMenu()
     {
-        if(_inputFrozen) return;
+        if (_inputFrozen) return;
         Debug.Log("Menu? Thinking emoji");
     }
 
@@ -508,12 +504,6 @@ public class PlayerController : MonoBehaviour
         if (other.tag == "LostLeggings" && !_leggings)
         {
             LostLeggings();
-            other.GetComponent<PlaceOnAlter>().Place();
-        }
-
-        if (other.tag == "LostSword" && !_sword)
-        {
-            LostSword();
             other.GetComponent<PlaceOnAlter>().Place();
         }
 
@@ -541,34 +531,17 @@ public class PlayerController : MonoBehaviour
         return _crouching;
     }
 
-#if DEBUG
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(groundCheck.position, checkRadius);
-        Gizmos.color = Color.cyan;
-        //Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
-    }
-#endif
-
     // Start method to revoke abilities in the beginning of the game.
     void PutOnArmour()
     {
-        // General deabilitiation.
+        // Assign the fully-armoured animations.
+        animator.runtimeAnimatorController = a_Armored;
+
+        // Movement debilitation.
         moveSpeed = STARTING_MOVE_SPEED;
 
-        // Chest piece.
+        // Chest piece jump restriction.
         jumpForce = PRE_CHESTPIECE_SPEED;
-
-        // Sword
-        /*attackRadius = PRE_SWORD_ATTACK_RANGE;*/
-    }
-
-    // MUST be called by someone outside of the player controller, 
-    // ideally UI or a dedicated script
-    public void FreezeInput(bool freeze){
-        _inputFrozen = freeze;
-        InputFreeze?.Invoke(freeze);
     }
 
     void LostChestPiece()
@@ -577,7 +550,6 @@ public class PlayerController : MonoBehaviour
         _chestPiece = true;
         jumpForce = POST_CHESTPPIECE_SPEED;
         moveSpeed += 1f;
-
 #if DEBUG
         Debug.Log("Lost Chest Piece");
 #endif
@@ -603,15 +575,20 @@ public class PlayerController : MonoBehaviour
 #endif
     }
 
-    void LostSword()
+    // MUST be called by someone outside of the player controller, 
+    // ideally UI or a dedicated script
+    public void FreezeInput(bool freeze)
     {
-
-        _sword = true;
-        /*attackRadius = POST_SWORD_ATTACK_RANGE;
-        // Visualization
-        attackPoint.GetComponentInChildren<SpriteRenderer>().transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);*/
-#if DEBUG
-        Debug.Log("Lost Sword");
-#endif
+        _inputFrozen = freeze;
+        InputFreeze?.Invoke(freeze);
     }
+
+#if DEBUG
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(groundCheck.position, checkRadius);
+        Gizmos.color = Color.cyan;
+    }
+#endif
 }
