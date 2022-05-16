@@ -6,9 +6,11 @@ public class VerticalPlatform : MonoBehaviour
 {
     private PlatformEffector2D effector;
     public float waitDuration = 0.2f;
-    public float _waitTime;
+    private float _waitTime;
 
     private PlayerController player;
+
+    private bool resetted = true;
     
     // Start is called before the first frame update
     void Start()
@@ -16,22 +18,24 @@ public class VerticalPlatform : MonoBehaviour
         effector = GetComponent<PlatformEffector2D>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.JUMP_KEY), ResetPlatform);
+        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.UP_KEY1), ResetPlatform);
+        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.UP_KEY2), ResetPlatform);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!player.isCrouching())
+        if (player.GetVerticalMovement() >= 0f)
         {
             _waitTime = waitDuration;
         }
 
-        if (player.isCrouching())
+        if (player.GetVerticalMovement() < 0f)
         {
             if (_waitTime <= 0)
             {
                 effector.rotationalOffset = 180f;
-                this.gameObject.layer = LayerMask.NameToLayer("Background");
+                effector.colliderMask = LayerMask.NameToLayer("Background"); // Sets it to 0 but that still works.
                 _waitTime = waitDuration;
             }
             else
@@ -44,6 +48,6 @@ public class VerticalPlatform : MonoBehaviour
     void ResetPlatform()
     {
         effector.rotationalOffset = 0f;
-        this.gameObject.layer = LayerMask.NameToLayer("Ground");
+        effector.colliderMask = ~0;
     }
 }

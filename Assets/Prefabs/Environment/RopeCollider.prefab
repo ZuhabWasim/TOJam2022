@@ -71,7 +71,7 @@ GameObject:
   - component: {fileID: 303834457859524184}
   - component: {fileID: 303834457859524187}
   - component: {fileID: 303834457859524186}
-  m_Layer: 9
+  m_Layer: 7
   m_Name: 2dPlatform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +125,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waitDuration: 0.2
-  _waitTime: 0
 --- !u!61 &303834457859524186
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -139,7 +138,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 1
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.0696975}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -150,5 +149,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 0.25}
+  m_Size: {x: 1, y: 0.110605}
   m_EdgeRadius: 0
