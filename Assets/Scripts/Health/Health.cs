@@ -16,12 +16,16 @@ using UnityEngine;
 // ---------------------
 public class Health : MonoBehaviour, IDamageable
 {
+    [SerializeField] private bool hasOnHitInvincibility = false;
+
     // -----EVENTS-----------------------------
     public delegate void OnHealthChange(float oldHealth, float newHealth);
     public event OnHealthChange HealthChanged; 
 
     public delegate void OnDeath();
     public event OnDeath Death;
+
+    private DamageCheck _damageCheck;
 
     // ------HEALTH RELATED--------------------
     [SerializeField] private float _health;
@@ -44,14 +48,14 @@ public class Health : MonoBehaviour, IDamageable
     [SerializeField] public float maxHealth = 10; // Provide default for rapid dev
 
     public void BeDamaged(float dmg){
+        if(_damageCheck != null && _damageCheck.IsInvincible) return;
         health -= dmg;
-        // TODO
-        // This is where we would put checks based on resistances...
-        // Want to restrict damage to while you're alive?
+        if(hasOnHitInvincibility) _damageCheck?.triggerInvincibility();
     }
 
     void Start(){
         health = maxHealth;
+        _damageCheck = GetComponent<DamageCheck>();
 
         #if DMGTEST
         HealthChanged+=(float oldHealth, float newHealth)=>{Debug.Log(oldHealth + " -> " + newHealth);};
@@ -61,15 +65,5 @@ public class Health : MonoBehaviour, IDamageable
         #endif
     }
 
-    void Update(){
-        #if DMGTEST
-        if(Input.GetMouseButtonDown(0)){
-            BeDamaged(2);
-        }
-        else if(Input.GetMouseButtonDown(1)){
-            BeDamaged(-2);
-        }
-        #endif
-    }
 
 }

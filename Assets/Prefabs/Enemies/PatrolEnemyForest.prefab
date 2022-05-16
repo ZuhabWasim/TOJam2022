@@ -149,6 +149,8 @@ GameObject:
   - component: {fileID: 6113892305572002654}
   - component: {fileID: 8931867246823120540}
   - component: {fileID: 598534857468099661}
+  - component: {fileID: -5390384546330870207}
+  - component: {fileID: -6312377277386584920}
   m_Layer: 0
   m_Name: PatrolEnemyForest
   m_TagString: PatrolEnemy
@@ -241,5 +243,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0159359cb2cc83641a48b670bb3b72b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hasOnHitInvincibility: 0
   _health: 0
   maxHealth: 1
+--- !u!114 &-5390384546330870207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9139165683763894029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7fa820c06d2ec24984c63fe844d7c8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackFilter:
+    serializedVersion: 2
+    m_Bits: 1024
+  _weapon: {fileID: -6312377277386584920}
+--- !u!114 &-6312377277386584920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9139165683763894029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9550a5c895bf7554f8e973a598d982bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _damage: 1
+  _range: 0.5
+  _attackDelay: 0

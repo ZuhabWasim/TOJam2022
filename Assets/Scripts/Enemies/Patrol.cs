@@ -15,6 +15,7 @@ public class Patrol : MonoBehaviour
     private int _directionModifier = 1;
     private SpriteRenderer _spriteRenderer;
     private Health _health;
+    private WeaponController _weaponController;
 
     private void OnDrawGizmos()
     {
@@ -26,10 +27,10 @@ public class Patrol : MonoBehaviour
     {
         _spriteRenderer = gameObject.GetComponentInChildren<SpriteRenderer>();
         _health = gameObject.GetComponent<Health>();
-        if (_health)
-        {
-            _health.Death += OnDeath;
-        }
+        if (_health) _health.Death += OnDeath;
+
+        _weaponController = gameObject.GetComponent<WeaponController>();
+        if(!_weaponController) Debug.LogWarning("No Weapon Controller on, this enemy will not damage the player: " + name);
     }
 
    
@@ -54,11 +55,11 @@ public class Patrol : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log(collision.name);
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground") || collision.gameObject.layer == LayerMask.NameToLayer("Wall"))
         {
             reverseMovement();
         }
+        _weaponController.Attack(); // Weapon controller will determine if anything can be hit
     }
 
     void reverseMovement()
@@ -70,6 +71,5 @@ public class Patrol : MonoBehaviour
         movingRight = !movingRight;
         _directionModifier *= -1;
     }
-
 
 }
