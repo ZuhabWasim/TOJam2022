@@ -23,7 +23,12 @@ public class Weapon : MonoBehaviour
     [SerializeField] protected float _range = 1;
     public virtual float range{
         get{return _range;}
-        set{_range=value;} // not really necessary to modify a weapon's range but hey, might as well chuck it in there
+        set{_range=value;}     
+    }
+    [SerializeField][Range(0,2)] protected float _attackDelay = 0.2f;
+    public virtual float attackDelay{
+        get{return _attackDelay;}
+        set{_attackDelay=value;} 
     }
 
     public virtual void Attack(GameObject other){
