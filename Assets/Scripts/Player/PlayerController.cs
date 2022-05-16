@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     private const string VERTICAL_AXIS = "Vertical";
     private const float GRAVITY_SCALE = 5f;
 
-    private const float GROUND_CHECK_RADIUS = 0.45f;
+    private const float GROUND_CHECK_RADIUS = 0.38f;
     private const float CEILING_CHECK_RADIUS = 0.35f;
 
     // Armour constants.
@@ -461,10 +461,10 @@ public class PlayerController : MonoBehaviour
         if (_attackCooldown > 0f) return;
 
         // Don't let the player attack while climbing.
-        if (_climbing)
-        {
-            return;
-        }
+        if (_climbing) return;
+
+        // Don't let the player attack while crouching.
+        if (_crouching) return;
 
         _attackCooldown = attackSpeed;
 
