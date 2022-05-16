@@ -13,7 +13,8 @@ public class PlayerController : MonoBehaviour
     private const string PLAYER_TAG = "Player";
     private const float GRAVITY_SCALE = 5f;
     private const float ROPE_SNAP_OFFSET = 0f;
-
+    private const float CLIMBING_LATERAL_REDUCTION = 0.5f;
+    
     // Armour constants.
     private const float POST_CHESTPPIECE_SPEED = 1000f;
     private const float PRE_CHESTPIECE_SPEED = 350f;
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour
     public LayerMask climbingLayer;
 
     [Header("Collision")] public Transform groundCheck;
+    public Transform ceilingCheck;
     public LayerMask groundObjects;
     public float checkRadius;
 
@@ -134,9 +136,6 @@ public class PlayerController : MonoBehaviour
     {
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.JUMP_KEY), HandleJump);
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.ATTACK_KEY), HandleAttack);
-        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.INTERACT_KEY), HandleInteract);
-        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.MENU_KEY), HandleMenu);
-        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.CROWCH_DASH_KEY), HandleCrowchDash);
         // Placeholder events for each armour piece lost.
 #if DEBUG
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.CHEST_PIECE), LostChestPiece);
@@ -186,15 +185,16 @@ public class PlayerController : MonoBehaviour
             {
                 _climbGrace = climbGraceDuration;
             }
+
             return;
         }
-        
+
         // Prioritize climbing over crouching if both are pressed.
         if (_climbPress)
         {
             _crouchPress = false;
         }
-        
+
         // Lookahead Camera Related
         if ((Math.Abs(_verticalMovement) > 0) && !_climbing)
         {
@@ -226,7 +226,6 @@ public class PlayerController : MonoBehaviour
         {
             _crouchPress = false;
         }
-        
     }
 
     void CreateDust()
@@ -320,11 +319,11 @@ public class PlayerController : MonoBehaviour
             // Sprite specific adjustments.
             Vector3 position = sprite.transform.position;
             sprite.transform.position = new Vector3(position.x, position.y - 0.2f, position.z);
-            
+
             // Push the player up a bit to avoid clipping through the ground.
             position = transform.position;
             this.transform.position = new Vector3(position.x, position.y + 0.2f, position.z);
-            
+
             _crouching = false;
         }
     }
@@ -336,8 +335,8 @@ public class PlayerController : MonoBehaviour
         {
             _rigidbody.gravityScale = 0f;
             // Snap the player to the ladder block
-            SnapToRope();
-            _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed, _verticalMovement * climbingSpeed);
+            //SnapToRope();
+            _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed * CLIMBING_LATERAL_REDUCTION, _verticalMovement * climbingSpeed);
         }
         else
         {
@@ -364,6 +363,12 @@ public class PlayerController : MonoBehaviour
         }
 
         _isJumping = false;
+        
+        // Limit the player's movement speed if they're crouching.
+        if (_crouching)
+        {
+            _rigidbody.velocity = new Vector2(0f, _verticalMovement);
+        }
     }
 
     void CrouchDash()
@@ -386,7 +391,7 @@ public class PlayerController : MonoBehaviour
                 _rigidbody.velocity = Vector2.right * _dashForce;
             }
         }
-        
+
         //reset dash time and dash bool
         if (_dashTime <= 0)
         {
@@ -415,7 +420,7 @@ public class PlayerController : MonoBehaviour
     void HandleJump()
     {
         if (_inputFrozen) return;
-        if (_isGrounded || _climbing)
+        if (!_crouching && (_isGrounded || _climbing))
         {
             _isJumping = true;
             _crouchPress = false;
@@ -424,15 +429,16 @@ public class PlayerController : MonoBehaviour
 #if DEBUG
             Debug.Log("JUMP!!");
 #endif
+            return;
         }
-    }
 
-    void HandleCrowchDash()
-    {
-        if (_inputFrozen) return;
         if (_crouching)
         {
             _isCrouchDashing = true;
+            CreateDust();
+#if DEBUG
+            Debug.Log("CROUCH DASH!!");
+#endif
         }
     }
 
@@ -442,10 +448,7 @@ public class PlayerController : MonoBehaviour
 
         if (_attackCooldown > 0f) return;
 
-        /*float timeSinceLastAttack = Time.time - _lastAttack;
-        if(timeSinceLastAttack < attackSpeed) return;
-        _lastAttack = Time.time;*/
-
+        // Don't let the player attack while climbing.
         if (_climbing)
         {
             return;
@@ -455,30 +458,9 @@ public class PlayerController : MonoBehaviour
 
         weaponController.Attack();
 
-
-        //Color attackColor = attackPoint.GetComponentInChildren<SpriteRenderer>().color;
-        //attackPoint.GetComponentInChildren<SpriteRenderer>().color =
-        //    new Color(attackColor.g, attackColor.b, attackColor.r);
-
-#if DEBUG
-        //Debug.Log(" Hit enemy:  " + enemy.name);
-#endif
-        //}
 #if DEBUG
         Debug.Log("ATTACK!!");
 #endif
-    }
-
-    void HandleInteract()
-    {
-        if (_inputFrozen) return;
-        Debug.Log("INTERACT!!");
-    }
-
-    void HandleMenu()
-    {
-        if (_inputFrozen) return;
-        Debug.Log("Menu? Thinking emoji");
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -493,19 +475,19 @@ public class PlayerController : MonoBehaviour
 #endif
         }
 
-        if (other.tag == "LostArmor" && !_chestPiece)
+        if (other.CompareTag("LostArmor") && !_chestPiece)
         {
             LostChestPiece();
             other.GetComponent<PlaceOnAlter>().Place();
         }
 
-        if (other.tag == "LostLeggings" && !_leggings)
+        if (other.CompareTag("LostLeggings") && !_leggings)
         {
             LostLeggings();
             other.GetComponent<PlaceOnAlter>().Place();
         }
 
-        if (other.tag == "LostGauntlets" && !_gauntlets)
+        if (other.CompareTag("LostGauntlets") && !_gauntlets)
         {
             LostGauntlets();
             other.GetComponent<PlaceOnAlter>().Place();
@@ -524,7 +506,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public float  getVerticalMovement()
+    public float GetVerticalMovement()
     {
         return _verticalMovement;
     }
@@ -587,6 +569,7 @@ public class PlayerController : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(groundCheck.position, checkRadius);
         Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(ceilingCheck.position, checkRadius);
     }
 #endif
 }

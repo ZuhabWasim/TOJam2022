@@ -6,7 +6,7 @@ public class VerticalPlatform : MonoBehaviour
 {
     private PlatformEffector2D effector;
     public float waitDuration = 0.2f;
-    public float _waitTime;
+    private float _waitTime;
 
     private PlayerController player;
 
@@ -25,17 +25,17 @@ public class VerticalPlatform : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (player.getVerticalMovement() >= 0f)
+        if (player.GetVerticalMovement() >= 0f)
         {
             _waitTime = waitDuration;
         }
 
-        if (player.getVerticalMovement() < 0f)
+        if (player.GetVerticalMovement() < 0f)
         {
             if (_waitTime <= 0)
             {
                 effector.rotationalOffset = 180f;
-                this.gameObject.layer = LayerMask.NameToLayer("Background");
+                effector.colliderMask = LayerMask.NameToLayer("Background"); // Sets it to 0 but that still works.
                 _waitTime = waitDuration;
             }
             else
@@ -48,6 +48,6 @@ public class VerticalPlatform : MonoBehaviour
     void ResetPlatform()
     {
         effector.rotationalOffset = 0f;
-        this.gameObject.layer = LayerMask.NameToLayer("Ground");
+        effector.colliderMask = ~0;
     }
 }
