@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Collider2D))]
 public class FlyingEnemy : MonoBehaviour
 {
     [SerializeField] Transform start;
@@ -10,6 +11,7 @@ public class FlyingEnemy : MonoBehaviour
     [SerializeField] float swoopSpeed = 1.0f;
     [SerializeField] float returnSpeed = 1.0f;
     [SerializeField] bool _flyingRight;
+    [SerializeField] float aggroCooldown = 1.0f;
 
     public bool isAggroed;
 
@@ -24,6 +26,8 @@ public class FlyingEnemy : MonoBehaviour
 
     private Health _health;
 
+    private WeaponController _weaponController;
+
     private void Start()
     {
         _spriteRenderer = gameObject.GetComponentInChildren<SpriteRenderer>();
@@ -34,6 +38,9 @@ public class FlyingEnemy : MonoBehaviour
         _defaultFlyingRight = _flyingRight;
         _animator = gameObject.GetComponentInChildren<Animator>();
         _health = gameObject.GetComponent<Health>();
+
+        _weaponController = gameObject.GetComponent<WeaponController>();
+        if(!_weaponController) Debug.LogWarning("No Weapon Controller on, this enemy will not damage the player" + name);
 
         if (_flyingRight)
         {
@@ -121,5 +128,22 @@ public class FlyingEnemy : MonoBehaviour
                 _count = 0.0f;
             }
         }
+    }
+    private void OnTriggerExit2D(Collider2D other) {
+        if(other.gameObject.layer == LayerMask.NameToLayer("Player")){
+            ReturnToIdle();
+        }
+
+    }
+    private void OnTriggerStay2D(Collider2D other) {
+        if(other.gameObject.layer == LayerMask.NameToLayer("Player")){
+            isAggroed = true;
+        }
+
+        _weaponController.Attack(); // Weapon controller will determine if anything can be hit
+    }
+    private async void ReturnToIdle(){
+        await System.Threading.Tasks.Task.Delay(Mathf.CeilToInt(aggroCooldown * 1000f)); // Just await the delay finishing
+        isAggroed = true;
     }
 }
