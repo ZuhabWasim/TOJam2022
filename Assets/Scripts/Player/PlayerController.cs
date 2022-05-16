@@ -524,9 +524,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public bool IsCrouching()
+    public float  getVerticalMovement()
     {
-        return _crouching;
+        return _verticalMovement;
     }
 
     // Start method to revoke abilities in the beginning of the game.

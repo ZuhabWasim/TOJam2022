@@ -25,12 +25,12 @@ public class VerticalPlatform : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!player.IsCrouching())
+        if (player.getVerticalMovement() >= 0f)
         {
             _waitTime = waitDuration;
         }
 
-        if (player.IsCrouching())
+        if (player.getVerticalMovement() < 0f)
         {
             if (_waitTime <= 0)
             {
