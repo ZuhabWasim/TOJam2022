@@ -9,6 +9,8 @@ public class VerticalPlatform : MonoBehaviour
     public float _waitTime;
 
     private PlayerController player;
+
+    private bool resetted = true;
     
     // Start is called before the first frame update
     void Start()
@@ -16,17 +18,19 @@ public class VerticalPlatform : MonoBehaviour
         effector = GetComponent<PlatformEffector2D>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.JUMP_KEY), ResetPlatform);
+        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.UP_KEY1), ResetPlatform);
+        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.UP_KEY2), ResetPlatform);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!player.isCrouching())
+        if (!player.IsCrouching())
         {
             _waitTime = waitDuration;
         }
 
-        if (player.isCrouching())
+        if (player.IsCrouching())
         {
             if (_waitTime <= 0)
             {

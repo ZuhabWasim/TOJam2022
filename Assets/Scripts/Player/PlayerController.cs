@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     private const string VERTICAL_AXIS = "Vertical";
     private const string PLAYER_TAG = "Player";
     private const float GRAVITY_SCALE = 5f;
-    private const float ROPE_SNAP_OFFSET = 0.5f;
+    private const float ROPE_SNAP_OFFSET = 0f;
 
     // Armour constants.
     private const float POST_CHESTPPIECE_SPEED = 1000f;
@@ -150,7 +150,7 @@ public class PlayerController : MonoBehaviour
         // Only be able to jump again if we come back down. Put this back in Update because it works better.
         _isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundObjects);
         MovePlayer();
-        crowchDash();
+        CrouchDash();
     }
 
     // Update is called once per frame
@@ -366,9 +366,8 @@ public class PlayerController : MonoBehaviour
         _isJumping = false;
     }
 
-    void crowchDash()
+    void CrouchDash()
     {
-        //Debug.Log(_dashTime);
         if (!_isCrouchDashing)
         {
             return;
@@ -380,16 +379,14 @@ public class PlayerController : MonoBehaviour
             _dashTime -= Time.deltaTime;
             if (!_facingRight)
             {
-                //Debug.Log("DASH Left!!");
                 _rigidbody.velocity = Vector2.left * _dashForce;
             }
             else if (_facingRight)
             {
-                //Debug.Log("DASH Right!!");
                 _rigidbody.velocity = Vector2.right * _dashForce;
             }
         }
-
+        
         //reset dash time and dash bool
         if (_dashTime <= 0)
         {
@@ -490,6 +487,7 @@ public class PlayerController : MonoBehaviour
         {
             _onRope = true;
             _ropeX = other.transform.position.x;
+            print(_ropeX);
 #if DEBUG
             Debug.Log("On climbing surface.");
 #endif
@@ -526,7 +524,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public bool isCrouching()
+    public bool IsCrouching()
     {
         return _crouching;
     }

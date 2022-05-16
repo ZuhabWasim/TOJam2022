@@ -100,7 +100,8 @@ public enum KeyBinds
     INTERACT_KEY = KeyCode.C,
     MENU_KEY = KeyCode.Escape,
 
-    UP_KEY = KeyCode.UpArrow,
+    UP_KEY1 = KeyCode.UpArrow,
+    UP_KEY2 = KeyCode.W,
     DOWN_KEY = KeyCode.DownArrow,
     CROWCH_DASH_KEY = KeyCode.LeftShift,
     // Armour piece keys for debugging.
