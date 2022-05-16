@@ -4850,6 +4850,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2141645336, guid: 42f3d56b416b29741aa171395845798a, type: 3}
+      propertyPath: hasOnHitInvincibility
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2141645337, guid: 42f3d56b416b29741aa171395845798a, type: 3}
       propertyPath: fullHeart
       value: 
@@ -5019,25 +5023,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damage: 1
   _range: 1
---- !u!1 &3646526589825881650 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7461344696706572161, guid: 42f3d56b416b29741aa171395845798a, type: 3}
-  m_PrefabInstance: {fileID: 6131393492110674355}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &231962998
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3646526589825881650}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0159359cb2cc83641a48b670bb3b72b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _health: 0
-  maxHealth: 10
+  _attackDelay: 0.2
 --- !u!4 &5135255768933556179 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1320401380294874720, guid: 42f3d56b416b29741aa171395845798a, type: 3}
