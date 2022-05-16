@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-
 public class WeaponController : MonoBehaviour
 {
     [SerializeField] LayerMask attackFilter;
@@ -31,7 +30,6 @@ public class WeaponController : MonoBehaviour
     public async void Attack(){
         await System.Threading.Tasks.Task.Delay(Mathf.CeilToInt(weapon.attackDelay * 1000f)); // Just await the delay finishing
 
-        Debug.Log("attacking now");
         Collider2D[] collisions = Physics2D.OverlapCircleAll(transform.position, weapon.range, attackFilter.value);
         if(collisions.Length > 0){
             collisions.Where(collider => collider.GetComponent<IDamageable>() != null)
