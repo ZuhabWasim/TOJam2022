@@ -570,6 +570,7 @@ public class PlayerController : MonoBehaviour
 
     void LostChestPiece()
     {
+		FindObjectOfType<SoundManager>().PlayMetal();
 		_lateralMovement = 0f;
 		GameObject go = GameObject.Find("ChestPlateTrigger");
 		DialogueTrigger trigger = (DialogueTrigger) go.GetComponent(typeof(DialogueTrigger));
@@ -588,6 +589,7 @@ public class PlayerController : MonoBehaviour
 
     void LostGauntlets()
     {
+		FindObjectOfType<SoundManager>().PlayMetal();
 		_lateralMovement = 0f;
 		GameObject go2 = GameObject.Find("GauntletsTrigger");
 		DialogueTrigger trigger2 = (DialogueTrigger) go2.GetComponent(typeof(DialogueTrigger));
@@ -603,6 +605,7 @@ public class PlayerController : MonoBehaviour
 
     void LostLeggings()
     {
+		FindObjectOfType<SoundManager>().PlayMetal();
 		_lateralMovement = 0f;
 		GameObject go = GameObject.Find("LeggingsTrigger");
 		DialogueTrigger trigger = (DialogueTrigger) go.GetComponent(typeof(DialogueTrigger));
