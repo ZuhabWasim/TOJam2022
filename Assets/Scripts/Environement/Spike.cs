@@ -11,7 +11,7 @@ public class Spike : MonoBehaviour
         if (col.transform.CompareTag(PlayerController.PLAYER))
         {
             Health playerHealth = GameObject.FindGameObjectWithTag(PlayerController.PLAYER).GetComponent<Health>();
-            playerHealth.BeDamaged(playerHealth.health);
+            playerHealth.BeDamaged(playerHealth.health); // Kills the player
         }
     }
 }
