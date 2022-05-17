@@ -8,6 +8,9 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
+    // Player Tag
+    public static string PLAYER = "Player";
+    
     // MOVEMENT CONSTANTS
     private const string HORIZONTAL_AXIS = "Horizontal";
     private const string VERTICAL_AXIS = "Vertical";
