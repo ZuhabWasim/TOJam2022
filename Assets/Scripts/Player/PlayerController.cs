@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("RuntimeController")] [SerializeField]
     private RuntimeAnimatorController a_Armored;
-	
+
     [SerializeField] private RuntimeAnimatorController a_ChestPiece;
     [SerializeField] private RuntimeAnimatorController a_Gauntlets;
     [SerializeField] private RuntimeAnimatorController a_Unarmoured;
@@ -118,7 +118,6 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
-		
     }
 
     // Start is called before the first frame update
@@ -127,10 +126,10 @@ public class PlayerController : MonoBehaviour
         InitializeVariables();
         RegisterEventListeners();
         PutOnArmour();
-		_lateralMovement = 0f;
-		GameObject go = GameObject.Find("TutorialTrigger");
-		DialogueTrigger trigger = (DialogueTrigger) go.GetComponent(typeof(DialogueTrigger));
-		trigger.TriggerDialogue();
+        _lateralMovement = 0f;
+        GameObject go = GameObject.Find("TutorialTrigger");
+        DialogueTrigger trigger = (DialogueTrigger) go.GetComponent(typeof(DialogueTrigger));
+        trigger.TriggerDialogue();
     }
 
     void InitializeVariables()
@@ -195,7 +194,7 @@ public class PlayerController : MonoBehaviour
         _verticalMovement = Input.GetAxisRaw(VERTICAL_AXIS);
         _climbPress = _gauntlets && _verticalMovement > 0f;
         _crouchPress = _leggings && _verticalMovement < 0f;
-		
+
         // Allows the player to jump off of ropes.
         if (_gauntlets && _onRope && _verticalMovement != 0 && _climbTimer == 0f)
         {
@@ -257,12 +256,12 @@ public class PlayerController : MonoBehaviour
         // Changing direction of the player.
         if (_lateralMovement > 0 && !_facingRight)
         {
-			CreateDust();
+            CreateDust();
             FlipCharacter();
         }
         else if (_lateralMovement < 0 && _facingRight)
         {
-			CreateDust();
+            CreateDust();
             FlipCharacter();
         }
 
@@ -367,19 +366,21 @@ public class PlayerController : MonoBehaviour
             //SnapToRope();
             _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed * CLIMBING_LATERAL_REDUCTION,
                 _verticalMovement * climbingSpeed);
-			if (!FindObjectOfType<SoundManager>().audioSource.isPlaying){
-				FindObjectOfType<SoundManager>().PlayClimb();
-			}
+            if (!FindObjectOfType<SoundManager>().audioSource.isPlaying)
+            {
+                FindObjectOfType<SoundManager>().PlayClimb();
+            }
         }
         else
         {
             _rigidbody.gravityScale = GRAVITY_SCALE;
             _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed,
                 Mathf.Clamp(_rigidbody.velocity.y, -terminalVelocity, terminalVelocity));
-			if (Math.Abs(_rigidbody.velocity.x) > 0.1 && !_crouching && _isGrounded && !FindObjectOfType<SoundManager>().audioSource.isPlaying){
-				FindObjectOfType<SoundManager>().PlayRun();
-			}
-		
+            if (Math.Abs(_rigidbody.velocity.x) > 0.1 && !_crouching && _isGrounded &&
+                !FindObjectOfType<SoundManager>().audioSource.isPlaying)
+            {
+                FindObjectOfType<SoundManager>().PlayRun();
+            }
         }
 
         // If the player scheduled a jump, trigger it once and set it to false.
@@ -391,8 +392,8 @@ public class PlayerController : MonoBehaviour
                 Mathf.Clamp(_rigidbody.velocity.y, -terminalVelocity, terminalVelocity));
 
             // Add the jump velocity.
-			CreateDust();
-			FindObjectOfType<SoundManager>().PlayJump();
+            CreateDust();
+            FindObjectOfType<SoundManager>().PlayJump();
             _rigidbody.AddForce(new Vector2(0f, jumpForce));
 
             // Set climbing on cooldown for a bit.
@@ -419,9 +420,11 @@ public class PlayerController : MonoBehaviour
         //dash if timer is greater than 0
         if (_dashTime >= 0)
         {
-			if(!FindObjectOfType<SoundManager>().audioSource.isPlaying){
-				FindObjectOfType<SoundManager>().PlaySlide();
-			}
+            if (!FindObjectOfType<SoundManager>().audioSource.isPlaying)
+            {
+                FindObjectOfType<SoundManager>().PlaySlide();
+            }
+
             _dashTime -= Time.deltaTime;
             Vector2 velocity = _rigidbody.velocity;
             if (!_facingRight)
@@ -499,7 +502,7 @@ public class PlayerController : MonoBehaviour
         _attackCooldown = attackSpeed;
 
         weaponController.Attack();
-		FindObjectOfType<SoundManager>().PlaySword();
+        FindObjectOfType<SoundManager>().PlaySword();
 #if DEBUG
         Debug.Log("ATTACK!!");
 #endif
@@ -520,21 +523,18 @@ public class PlayerController : MonoBehaviour
         {
             LostChestPiece();
             other.GetComponent<PlaceOnAlter>().Place();
-            other.GetComponent<PlaceOnAlter>().MakeCheckpoint();
         }
 
         if (other.CompareTag("LostLeggings") && !_leggings)
         {
             LostLeggings();
             other.GetComponent<PlaceOnAlter>().Place();
-            other.GetComponent<PlaceOnAlter>().MakeCheckpoint();
         }
 
         if (other.CompareTag("LostGauntlets") && !_gauntlets)
         {
             LostGauntlets();
             other.GetComponent<PlaceOnAlter>().Place();
-            other.GetComponent<PlaceOnAlter>().MakeCheckpoint();
         }
     }
 
@@ -570,18 +570,18 @@ public class PlayerController : MonoBehaviour
 
     void LostChestPiece()
     {
-		FindObjectOfType<SoundManager>().PlayMetal();
-		_lateralMovement = 0f;
-		GameObject go = GameObject.Find("ChestPlateTrigger");
-		DialogueTrigger trigger = (DialogueTrigger) go.GetComponent(typeof(DialogueTrigger));
-		trigger.TriggerDialogue();
-		
+        FindObjectOfType<SoundManager>().PlayMetal();
+        _lateralMovement = 0f;
+        GameObject go = GameObject.Find("ChestPlateTrigger");
+        DialogueTrigger trigger = (DialogueTrigger) go.GetComponent(typeof(DialogueTrigger));
+        trigger.TriggerDialogue();
+
         animator.runtimeAnimatorController = a_ChestPiece;
         _chestPiece = true;
         jumpForce = POST_CHESTPPIECE_SPEED;
         moveSpeed += 1f;
-		
-		
+
+
 #if DEBUG
         Debug.Log("Lost Chest Piece");
 #endif
@@ -589,12 +589,12 @@ public class PlayerController : MonoBehaviour
 
     void LostGauntlets()
     {
-		FindObjectOfType<SoundManager>().PlayMetal();
-		_lateralMovement = 0f;
-		GameObject go2 = GameObject.Find("GauntletsTrigger");
-		DialogueTrigger trigger2 = (DialogueTrigger) go2.GetComponent(typeof(DialogueTrigger));
-		trigger2.TriggerDialogue();
-		
+        FindObjectOfType<SoundManager>().PlayMetal();
+        _lateralMovement = 0f;
+        GameObject go2 = GameObject.Find("GauntletsTrigger");
+        DialogueTrigger trigger2 = (DialogueTrigger) go2.GetComponent(typeof(DialogueTrigger));
+        trigger2.TriggerDialogue();
+
         animator.runtimeAnimatorController = a_Gauntlets;
         _gauntlets = true;
         moveSpeed += 1f;
@@ -605,12 +605,12 @@ public class PlayerController : MonoBehaviour
 
     void LostLeggings()
     {
-		FindObjectOfType<SoundManager>().PlayMetal();
-		_lateralMovement = 0f;
-		GameObject go = GameObject.Find("LeggingsTrigger");
-		DialogueTrigger trigger = (DialogueTrigger) go.GetComponent(typeof(DialogueTrigger));
-		trigger.TriggerDialogue();
-		
+        FindObjectOfType<SoundManager>().PlayMetal();
+        _lateralMovement = 0f;
+        GameObject go = GameObject.Find("LeggingsTrigger");
+        DialogueTrigger trigger = (DialogueTrigger) go.GetComponent(typeof(DialogueTrigger));
+        trigger.TriggerDialogue();
+
         animator.runtimeAnimatorController = a_Unarmoured;
         _leggings = true;
         moveSpeed += 1f;

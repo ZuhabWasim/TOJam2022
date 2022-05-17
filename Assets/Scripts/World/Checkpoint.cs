@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,6 +29,19 @@ public class Checkpoint : MonoBehaviour, IDamageable
     public bool activated = false;
 
     public void BeDamaged(float _)
+    {
+        Activate();
+    }
+
+    public void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.transform.CompareTag(PlayerController.PLAYER))
+        {
+            Activate();
+        }
+    }
+
+    private void Activate()
     {
         ActiveCheckpoint = this;
         ActivateCheckpoint?.Invoke();
