@@ -624,7 +624,7 @@ public class PlayerController : MonoBehaviour
         Vector3 position = Checkpoint.GetActiveCheckpoint().transform.position;
         this.transform.position = new Vector3(position.x, position.y + RESPAWN_POINT_OFFSET, position.z);
         Health playerHealth = GetComponent<Health>();
-        playerHealth.Heal(playerHealth.maxHealth);
+        playerHealth.FullyHeal();
 #if DEBUG
         Debug.Log("YOU DIED.");
 #endif
