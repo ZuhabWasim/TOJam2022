@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 4887876546504350836}
   - component: {fileID: 4887876546504350837}
   - component: {fileID: 17080599675274576}
+  - component: {fileID: 8741235603468375752}
   m_Layer: 0
   m_Name: GauntletsAltar
   m_TagString: LostGauntlets
@@ -231,3 +232,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e42e6c9426dcac9418b0962533548ccd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _checkpoint: {fileID: 8741235603468375752}
+--- !u!114 &8741235603468375752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4887876546504350838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a99b66b67d8f394fa9a4d9aa4d4673c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activated: 0
