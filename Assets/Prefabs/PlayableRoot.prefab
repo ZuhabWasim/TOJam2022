@@ -238,15 +238,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3547926592014463010, guid: 1836a4873ef414544bae774bac250d8d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 10.298471
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3547926592014463010, guid: 1836a4873ef414544bae774bac250d8d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.7601166
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3547926592014463010, guid: 1836a4873ef414544bae774bac250d8d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -11.556852
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 3547926592014463011, guid: 1836a4873ef414544bae774bac250d8d, type: 3}
       propertyPath: field of view
@@ -262,7 +262,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3547926592014463011, guid: 1836a4873ef414544bae774bac250d8d, type: 3}
       propertyPath: orthographic size
-      value: 8.44
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3547926592085222037, guid: 1836a4873ef414544bae774bac250d8d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -939,6 +939,10 @@ PrefabInstance:
     - target: {fileID: 6131393491999187883, guid: 39b1b230e540dc641ab51e9733c7a6a8, type: 3}
       propertyPath: maxHealth
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7067363550246063356, guid: 39b1b230e540dc641ab51e9733c7a6a8, type: 3}
+      propertyPath: _dashForce
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 7067363550246063356, guid: 39b1b230e540dc641ab51e9733c7a6a8, type: 3}
       propertyPath: audioSource
