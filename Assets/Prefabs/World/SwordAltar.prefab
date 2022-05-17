@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 5920359668773197487}
   - component: {fileID: 5920359668773197486}
   - component: {fileID: 5739981758908529400}
+  - component: {fileID: 7930921687937720950}
   m_Layer: 0
   m_Name: SwordAltar
   m_TagString: LostSword
@@ -147,6 +148,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e42e6c9426dcac9418b0962533548ccd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _checkpoint: {fileID: 7930921687937720950}
+--- !u!114 &7930921687937720950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5920359668773197485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a99b66b67d8f394fa9a4d9aa4d4673c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  activated: 0
 --- !u!1 &5920359668826834309
 GameObject:
   m_ObjectHideFlags: 0

@@ -502,18 +502,21 @@ public class PlayerController : MonoBehaviour
         {
             LostChestPiece();
             other.GetComponent<PlaceOnAlter>().Place();
+            other.GetComponent<PlaceOnAlter>().MakeCheckpoint();
         }
 
         if (other.CompareTag("LostLeggings") && !_leggings)
         {
             LostLeggings();
             other.GetComponent<PlaceOnAlter>().Place();
+            other.GetComponent<PlaceOnAlter>().MakeCheckpoint();
         }
 
         if (other.CompareTag("LostGauntlets") && !_gauntlets)
         {
             LostGauntlets();
             other.GetComponent<PlaceOnAlter>().Place();
+            other.GetComponent<PlaceOnAlter>().MakeCheckpoint();
         }
     }
 

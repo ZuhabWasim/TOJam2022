@@ -8,6 +8,9 @@ public class PlaceOnAlter : MonoBehaviour
 
     SpriteRenderer _itemSprite;
     private Color _curColor;
+
+    [SerializeField] private Checkpoint _checkpoint = null;
+
     void Start()
     {
         emptyAlterSpriteColor.a = 0.4f;
@@ -19,5 +22,11 @@ public class PlaceOnAlter : MonoBehaviour
     public void Place()
     {
         _itemSprite.color = _curColor;
+    }
+
+    public void MakeCheckpoint()
+    {
+        if (_checkpoint == null) return;
+        _checkpoint.BeDamaged(0f);
     }
 }
