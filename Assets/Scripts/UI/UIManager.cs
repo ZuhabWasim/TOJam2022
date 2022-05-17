@@ -29,7 +29,7 @@ public class UIManager : MonoBehaviour
 
 		animator.SetTrigger("TriggerTransition");
 		
-		SceneManager.LoadScene("TestSceneLarge");
+		SceneManager.LoadScene("MainGameplayScene");
 	}
 	
 	public void CloseMenuSettings(){
