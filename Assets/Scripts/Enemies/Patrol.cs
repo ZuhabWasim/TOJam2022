@@ -28,7 +28,6 @@ public class Patrol : MonoBehaviour
         _spriteRenderer = gameObject.GetComponentInChildren<SpriteRenderer>();
         _health = gameObject.GetComponent<Health>();
         if (_health) _health.Death += OnDeath;
-
         _weaponController = gameObject.GetComponent<WeaponController>();
         if(!_weaponController) Debug.LogWarning("No Weapon Controller on, this enemy will not damage the player: " + name);
     }
@@ -50,7 +49,9 @@ public class Patrol : MonoBehaviour
 
     private void OnDeath()
     {
+		FindObjectOfType<SoundManager>().PlaySnake();
         gameObject.SetActive(false);
+		
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -60,6 +61,7 @@ public class Patrol : MonoBehaviour
             reverseMovement();
         }
         _weaponController.Attack(); // Weapon controller will determine if anything can be hit
+		
     }
 
     void reverseMovement()
