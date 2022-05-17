@@ -10,29 +10,17 @@ public class sceneManager: MonoBehaviour
 
     
     public static int sceneIndex;
-    public Transform StartingPosition1;
-    public Transform StartingPosition2;
-    
-
+    private void Start()
+    {
+       // sceneIndex = SceneManager.GetActiveScene().buildIndex;
+    }
     private void Update()
     {
-        if(sceneIndex == 0)
-        {
-            return;
-        }
-        if(sceneIndex == 1)
-        {
-            StartCoroutine(loadingScene(1));
-            Player.transform.position = StartingPosition1.position;
-        }
+        Debug.Log(sceneIndex);
+     
+ 
 
-        if (sceneIndex == 2)
-        {
-            StartCoroutine(loadingScene(1));
-            Player.transform.position = StartingPosition2.position;
-        }
     }
-
     public static IEnumerator loadingScene(int index)
     {
         sceneIndex = index;
@@ -41,10 +29,8 @@ public class sceneManager: MonoBehaviour
         SceneManager.LoadScene(index);
         yield return new WaitForSeconds(1);
         //fade white;
-  
+        //sceneIndex++;
     }
-
-
 
 
 
