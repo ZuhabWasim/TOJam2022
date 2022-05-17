@@ -62,7 +62,7 @@ public class FlyingEnemy : MonoBehaviour
     {
         _spriteRenderer.flipX = _flyingRight;
         if (isAggroed)
-        {
+        {	
             Swoop();
         }
         else
@@ -95,7 +95,9 @@ public class FlyingEnemy : MonoBehaviour
         Debug.DrawLine(_defaultStartPos, _defaultClimaxPos);
         Debug.DrawLine(_defaultClimaxPos, _defaultEndPos);
         _animator.SetBool("isAggroed", true);
-
+		if (gameObject.transform.position == _defaultStartPos || gameObject.transform.position == _defaultEndPos){
+			FindObjectOfType<SoundManager>().PlayBird();
+		}
         if (_flyingRight)
         {
             if (_count < 1.0f)

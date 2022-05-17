@@ -11,6 +11,8 @@ public class SoundManager : MonoBehaviour
 	public AudioClip climbSound;
 	public AudioClip hitSound;
 	public AudioClip runSound;
+	public AudioClip birdSound;
+	public AudioClip snakeSound;
 	
 	public void PlayJump(){
 		audioSource.volume = 1f;
@@ -42,4 +44,12 @@ public class SoundManager : MonoBehaviour
 		audioSource.PlayOneShot(runSound);
 	}
 	
+	public void PlayBird(){
+		audioSource.volume = 1f;
+		audioSource.PlayOneShot(birdSound);
+	}
+	public void PlaySnake(){
+		audioSource.volume = 0.9f;
+		audioSource.PlayOneShot(snakeSound);
+	}
 }
