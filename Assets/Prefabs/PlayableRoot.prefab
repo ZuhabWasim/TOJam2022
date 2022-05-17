@@ -64,15 +64,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3547926592014463010, guid: 1836a4873ef414544bae774bac250d8d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 10.298471
       objectReference: {fileID: 0}
     - target: {fileID: 3547926592014463010, guid: 1836a4873ef414544bae774bac250d8d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 5.7601166
       objectReference: {fileID: 0}
     - target: {fileID: 3547926592014463010, guid: 1836a4873ef414544bae774bac250d8d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -10
+      value: -11.556852
       objectReference: {fileID: 0}
     - target: {fileID: 3547926592014463011, guid: 1836a4873ef414544bae774bac250d8d, type: 3}
       propertyPath: field of view
@@ -88,7 +88,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3547926592014463011, guid: 1836a4873ef414544bae774bac250d8d, type: 3}
       propertyPath: orthographic size
-      value: 5
+      value: 8.44
       objectReference: {fileID: 0}
     - target: {fileID: 3547926592085222037, guid: 1836a4873ef414544bae774bac250d8d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -194,6 +194,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 857282494880033549}
     m_Modifications:
+    - target: {fileID: 213606958938959078, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 1113988275766785486, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
       propertyPath: Loop
       value: 1
@@ -201,6 +205,19 @@ PrefabInstance:
     - target: {fileID: 1113988275766785486, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
       propertyPath: m_PlayOnAwake
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1242556767821135120, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
+      propertyPath: m_text
+      value: "\u25C4\u25BA  Move\nSPACE  Jump\nJ Attack\n\u25B2/\u25BC Climb/Crouch\nHOLD\u25B2/\u25BC
+        Look\n\u25BC+Space Slide\n"
+      objectReference: {fileID: 0}
+    - target: {fileID: 1338613323894819298, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -117
+      objectReference: {fileID: 0}
+    - target: {fileID: 1508608578786442214, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2876162532224860578, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
       propertyPath: m_IsActive
@@ -334,6 +351,14 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4294967295
       objectReference: {fileID: 0}
+    - target: {fileID: 3704921431635614963, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3750332889159328892, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4311087807293049987, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -342,9 +367,69 @@ PrefabInstance:
       propertyPath: m_Interactable
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4965906878647386364, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
+      propertyPath: dialogue.name
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4965906878647386364, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
+      propertyPath: dialogue.onStart
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4965906878647386364, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
+      propertyPath: dialogue.sentences.Array.data[0]
+      value: Welcome to LIGHTER SOULS, a game about losing your equipment to discover
+        your true strength.
+      objectReference: {fileID: 0}
+    - target: {fileID: 4965906878647386364, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
+      propertyPath: dialogue.sentences.Array.data[1]
+      value: "Use \u25B2\u25BC\u25C4\u25BA to move, and SPACE to jump. Holding \u25B2\u25BC
+        allows you to look up and down."
+      objectReference: {fileID: 0}
+    - target: {fileID: 4965906878647386364, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
+      propertyPath: dialogue.sentences.Array.data[2]
+      value: Go forth, and embrace your humanity!
+      objectReference: {fileID: 0}
+    - target: {fileID: 5962383079226146968, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6057937227140845019, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6513899470364746610, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7209627011680738776, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7441300749540092577, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
+      propertyPath: m_text
+      value: 'Development
+
+
+        Zuhab Wasim - Player movement and controls, Back
+        end Event/Input systems
+
+
+        Jimmy Tan - Enemy Movement
+
+
+        Cameron
+        Hadfield - DevOps, Damage/Health Systems, Camera
+
+
+        Val Roussel -
+        Level Design
+
+
+        Tim Chang - Player Movement and Controls, Animation
+        Implementation
+
+
+        Darren Tran - Menu, UI, Audio, Particles'
       objectReference: {fileID: 0}
     - target: {fileID: 7475542830054828316, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
       propertyPath: playsound
@@ -357,6 +442,10 @@ PrefabInstance:
     - target: {fileID: 7759937118942612781, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
       propertyPath: m_RootOrder
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7829847034985108551, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
+      propertyPath: dialogue.onStart
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7829847034985108551, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
       propertyPath: dialogue.sentences.Array.size
@@ -514,6 +603,38 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 857282494880033549}
     m_Modifications:
+    - target: {fileID: 857282495132820345, guid: 39b1b230e540dc641ab51e9733c7a6a8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 857282495132820347, guid: 39b1b230e540dc641ab51e9733c7a6a8, type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 857282495132820347, guid: 39b1b230e540dc641ab51e9733c7a6a8, type: 3}
+      propertyPath: ShapeModule.m_Scale.x
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 857282495132820347, guid: 39b1b230e540dc641ab51e9733c7a6a8, type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 857282495132820347, guid: 39b1b230e540dc641ab51e9733c7a6a8, type: 3}
+      propertyPath: InitialModule.startSize.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 857282495132820347, guid: 39b1b230e540dc641ab51e9733c7a6a8, type: 3}
+      propertyPath: InitialModule.startSizeY.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 857282495132820347, guid: 39b1b230e540dc641ab51e9733c7a6a8, type: 3}
+      propertyPath: InitialModule.startSizeZ.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 857282495132820347, guid: 39b1b230e540dc641ab51e9733c7a6a8, type: 3}
+      propertyPath: InitialModule.startSize.maxCurve.m_Curve.Array.data[0].value
+      value: 0.2461538
+      objectReference: {fileID: 0}
     - target: {fileID: 2058037707873594716, guid: 39b1b230e540dc641ab51e9733c7a6a8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.64

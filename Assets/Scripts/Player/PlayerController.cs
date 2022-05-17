@@ -120,6 +120,7 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
+		
     }
 
     // Start is called before the first frame update
@@ -128,6 +129,10 @@ public class PlayerController : MonoBehaviour
         InitializeVariables();
         RegisterEventListeners();
         PutOnArmour();
+		_lateralMovement = 0f;
+		GameObject go = GameObject.Find("TutorialTrigger");
+		DialogueTrigger trigger = (DialogueTrigger) go.GetComponent(typeof(DialogueTrigger));
+		trigger.TriggerDialogue();
     }
 
     void InitializeVariables()
@@ -249,10 +254,12 @@ public class PlayerController : MonoBehaviour
         // Changing direction of the player.
         if (_lateralMovement > 0 && !_facingRight)
         {
+			CreateDust();
             FlipCharacter();
         }
         else if (_lateralMovement < 0 && _facingRight)
         {
+			CreateDust();
             FlipCharacter();
         }
 
@@ -362,7 +369,7 @@ public class PlayerController : MonoBehaviour
             _rigidbody.gravityScale = GRAVITY_SCALE;
             _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed,
                 Mathf.Clamp(_rigidbody.velocity.y, -terminalVelocity, terminalVelocity));
-            if (Math.Abs(_rigidbody.velocity.x) > 1 && _isGrounded) CreateDust();
+            // Run sound here if (Math.Abs(_rigidbody.velocity.x) > 1 && _isGrounded) ;
         }
 
         // If the player scheduled a jump, trigger it once and set it to false.
@@ -374,6 +381,7 @@ public class PlayerController : MonoBehaviour
                 Mathf.Clamp(_rigidbody.velocity.y, -terminalVelocity, terminalVelocity));
 
             // Add the jump velocity.
+			CreateDust();
             _rigidbody.AddForce(new Vector2(0f, jumpForce));
 
             // Set climbing on cooldown for a bit.
@@ -546,10 +554,17 @@ public class PlayerController : MonoBehaviour
 
     void LostChestPiece()
     {
+		_lateralMovement = 0f;
+		GameObject go = GameObject.Find("ChestPlateTrigger");
+		DialogueTrigger trigger = (DialogueTrigger) go.GetComponent(typeof(DialogueTrigger));
+		trigger.TriggerDialogue();
+		
         animator.runtimeAnimatorController = a_ChestPiece;
         _chestPiece = true;
         jumpForce = POST_CHESTPPIECE_SPEED;
         moveSpeed += 1f;
+		
+		
 #if DEBUG
         Debug.Log("Lost Chest Piece");
 #endif
@@ -557,6 +572,11 @@ public class PlayerController : MonoBehaviour
 
     void LostGauntlets()
     {
+		_lateralMovement = 0f;
+		GameObject go2 = GameObject.Find("GauntletsTrigger");
+		DialogueTrigger trigger2 = (DialogueTrigger) go2.GetComponent(typeof(DialogueTrigger));
+		trigger2.TriggerDialogue();
+		
         animator.runtimeAnimatorController = a_Gauntlets;
         _gauntlets = true;
         moveSpeed += 1f;
@@ -567,6 +587,11 @@ public class PlayerController : MonoBehaviour
 
     void LostLeggings()
     {
+		_lateralMovement = 0f;
+		GameObject go = GameObject.Find("LeggingsTrigger");
+		DialogueTrigger trigger = (DialogueTrigger) go.GetComponent(typeof(DialogueTrigger));
+		trigger.TriggerDialogue();
+		
         animator.runtimeAnimatorController = a_Unarmoured;
         _leggings = true;
         moveSpeed += 1f;

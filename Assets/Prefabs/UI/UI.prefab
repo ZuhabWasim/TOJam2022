@@ -137,6 +137,59 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &423209695467916299
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 213606958938959078}
+  - component: {fileID: 4965906878647386364}
+  m_Layer: 0
+  m_Name: TutorialTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &213606958938959078
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 423209695467916299}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -877.6151, y: 273.9999, z: 4.8160944}
+  m_LocalScale: {x: 0.41666657, y: 0.41666657, z: 0.41666657}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8178778429247833116}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4965906878647386364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 423209695467916299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1737abd87d91fd148b20f107314df9f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogue:
+    onStart: 1
+    onEnd: 0
+    name: Gonorath
+    sentences:
+    - Behold the wrath of GONORATH, the Dark Lord of All!
+    - ' Not even you and your Relics of Power could defeat me!'
+    - I will spare your puny human life just to show how useless you are. Come and
+      stop me... if you dare!
 --- !u!1 &782831418132481490
 GameObject:
   m_ObjectHideFlags: 0
@@ -167,7 +220,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8178778429247833116}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2060611912942872074
 MonoBehaviour:
@@ -490,7 +543,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8178778429247833116}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3334894793508476501
 MonoBehaviour:
@@ -835,6 +888,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5532834503213767087}
+  - {fileID: 213606958938959078}
   - {fileID: 6057937227140845019}
   - {fileID: 6513899470364746610}
   - {fileID: 3750332889159328892}
@@ -5495,7 +5549,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8178778429247833116}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2168037486170212031
 MonoBehaviour:
@@ -5555,7 +5609,7 @@ RectTransform:
   - {fileID: 6989888768254717067}
   - {fileID: 6759052385495839216}
   m_Father: {fileID: 8178778429247833116}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -5922,7 +5976,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8178778429247833116}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2768569349966616761
 MonoBehaviour:
@@ -6414,7 +6468,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8178778429247833116}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4598961543393624259
 MonoBehaviour:
