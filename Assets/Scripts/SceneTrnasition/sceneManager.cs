@@ -5,45 +5,19 @@ using UnityEngine.SceneManagement;
 
 public class sceneManager: MonoBehaviour
 {
-  
-    public GameObject Player;
-
-    
-    public static int sceneIndex;
-    public Transform StartingPosition1;
-    public Transform StartingPosition2;
-    
-
-    private void Update()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(sceneIndex == 0)
-        {
-            return;
-        }
-        if(sceneIndex == 1)
-        {
-            StartCoroutine(loadingScene(1));
-            Player.transform.position = StartingPosition1.position;
-        }
-
-        if (sceneIndex == 2)
-        {
-            StartCoroutine(loadingScene(1));
-            Player.transform.position = StartingPosition2.position;
-        }
+        StartCoroutine(loadingScene("Boss Area"));
     }
 
-    public static IEnumerator loadingScene(int index)
+
+    IEnumerator loadingScene(string index)
     {
-        sceneIndex = index;
-        //fadeBlack;
-        yield return new WaitForSeconds(1);
         SceneManager.LoadScene(index);
         yield return new WaitForSeconds(1);
         //fade white;
-  
     }
-
+ 
 
 
 
