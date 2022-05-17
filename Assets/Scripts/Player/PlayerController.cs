@@ -24,7 +24,8 @@ public class PlayerController : MonoBehaviour
     // Misc constants.
     private const float ROPE_SNAP_OFFSET = 0f;
     private const float CLIMBING_LATERAL_REDUCTION = 0.5f;
-
+    private const float CROUCH_DOWN_OFFSET = 0.33f;
+    
     [Header("Movement")] public float moveSpeed;
     public float jumpForce;
     public float terminalVelocity = 20f;
@@ -289,7 +290,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isJumping", !_isGrounded);
         animator.SetBool("isAttacking", _attackCooldown > 0f);
         animator.SetFloat("horizontalSpeed", Mathf.Abs(_lateralMovement));
-        animator.SetBool("isClimbing", _climbing && Mathf.Abs(_verticalMovement) > 0.01f);
+        animator.SetBool("isClimbing", _climbing && (Mathf.Abs(_verticalMovement) > 0.01f || Mathf.Abs(_lateralMovement) > 0.01f));
         animator.SetBool("isOnRope", _climbing);
         animator.SetBool("isCrouchSliding", _isCrouchDashing);
     }
@@ -314,6 +315,10 @@ public class PlayerController : MonoBehaviour
             // Sprite specific adjustments.
             Vector3 position = sprite.transform.position;
             sprite.transform.position = new Vector3(position.x, position.y + 0.2f, position.z);
+            
+            // Push the player up a bit to avoid clipping through the ground.
+            position = transform.position;
+            this.transform.position = new Vector3(position.x, position.y - CROUCH_DOWN_OFFSET, position.z);
 
             _crouching = true;
         }
@@ -332,7 +337,7 @@ public class PlayerController : MonoBehaviour
 
             // Push the player up a bit to avoid clipping through the ground.
             position = transform.position;
-            this.transform.position = new Vector3(position.x, position.y + 0.2f, position.z);
+            this.transform.position = new Vector3(position.x, position.y + CROUCH_DOWN_OFFSET, position.z);
 
             _crouching = false;
         }
