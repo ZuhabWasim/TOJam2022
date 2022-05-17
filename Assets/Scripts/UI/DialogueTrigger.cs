@@ -7,9 +7,9 @@ public class DialogueTrigger : MonoBehaviour
     public Dialogue dialogue;
 	
 	void Start(){
-		if (dialogue.onStart == true){
+		if (dialogue.onEnd == true){
 			TriggerDialogue();
-		} else {return;}
+		}
 	}
 	
 	public void TriggerDialogue(){
