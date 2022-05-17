@@ -23,10 +23,4 @@ public class PlaceOnAlter : MonoBehaviour
     {
         _itemSprite.color = _curColor;
     }
-
-    public void MakeCheckpoint()
-    {
-        if (_checkpoint == null) return;
-        _checkpoint.BeDamaged(0f);
-    }
 }
