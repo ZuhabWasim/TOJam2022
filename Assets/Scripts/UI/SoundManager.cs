@@ -13,6 +13,8 @@ public class SoundManager : MonoBehaviour
 	public AudioClip runSound;
 	public AudioClip birdSound;
 	public AudioClip snakeSound;
+	public AudioClip fireSound;
+	public AudioClip metalSound;
 	
 	public void PlayJump(){
 		audioSource.volume = 1f;
@@ -51,5 +53,13 @@ public class SoundManager : MonoBehaviour
 	public void PlaySnake(){
 		audioSource.volume = 0.9f;
 		audioSource.PlayOneShot(snakeSound);
+	}
+	public void PlayFire(){
+		audioSource.volume = 1f;
+		audioSource.PlayOneShot(fireSound);
+	}
+	public void PlayMetal(){
+		audioSource.volume = 0.9f;
+		audioSource.PlayOneShot(metalSound);
 	}
 }

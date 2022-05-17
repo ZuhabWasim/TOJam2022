@@ -977,6 +977,8 @@ MonoBehaviour:
   runSound: {fileID: 8300000, guid: 246e64036c8120147a800c196ff75da8, type: 3}
   birdSound: {fileID: 8300000, guid: a672d8cbeb8ff264a8156f58dc24b1e4, type: 3}
   snakeSound: {fileID: 8300000, guid: 3838275922c15d24c9efadf792ad4dca, type: 3}
+  fireSound: {fileID: 8300000, guid: d9c2bb1ab7bfb4f4a8f042705c7db74f, type: 3}
+  metalSound: {fileID: 8300000, guid: ad2724d0b15bc134b8bf1ad6981169e4, type: 3}
 --- !u!4 &5521899167591392843 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5135255768933556179, guid: 39b1b230e540dc641ab51e9733c7a6a8, type: 3}

@@ -25,6 +25,7 @@ public class CheckpointAnimator : MonoBehaviour
         GameObject activatedCheckpoint = Checkpoint.GetActiveCheckpoint();
         if (checkpointObject == activatedCheckpoint)
         {
+			FindObjectOfType<SoundManager>().PlayFire();
             _animator.SetBool("isActivated", true);
         }
     }
