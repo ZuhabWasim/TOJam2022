@@ -10,8 +10,6 @@ public class VerticalPlatform : MonoBehaviour
 
     private PlayerController player;
 
-    private bool resetted = true;
-    
     // Start is called before the first frame update
     void Start()
     {
