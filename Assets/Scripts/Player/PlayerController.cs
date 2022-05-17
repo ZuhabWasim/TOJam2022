@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("RuntimeController")] [SerializeField]
     private RuntimeAnimatorController a_Armored;
-
+	
     [SerializeField] private RuntimeAnimatorController a_ChestPiece;
     [SerializeField] private RuntimeAnimatorController a_Gauntlets;
     [SerializeField] private RuntimeAnimatorController a_Unarmoured;
@@ -192,7 +192,7 @@ public class PlayerController : MonoBehaviour
         _verticalMovement = Input.GetAxisRaw(VERTICAL_AXIS);
         _climbPress = _gauntlets && _verticalMovement > 0f;
         _crouchPress = _leggings && _verticalMovement < 0f;
-
+		
         // Allows the player to jump off of ropes.
         if (_gauntlets && _onRope && _verticalMovement != 0 && _climbTimer == 0f)
         {
@@ -363,13 +363,19 @@ public class PlayerController : MonoBehaviour
             //SnapToRope();
             _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed * CLIMBING_LATERAL_REDUCTION,
                 _verticalMovement * climbingSpeed);
+			if (!FindObjectOfType<SoundManager>().audioSource.isPlaying){
+				FindObjectOfType<SoundManager>().PlayClimb();
+			}
         }
         else
         {
             _rigidbody.gravityScale = GRAVITY_SCALE;
             _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed,
                 Mathf.Clamp(_rigidbody.velocity.y, -terminalVelocity, terminalVelocity));
-            // Run sound here if (Math.Abs(_rigidbody.velocity.x) > 1 && _isGrounded) ;
+			if (Math.Abs(_rigidbody.velocity.x) > 0.1 && !_crouching && _isGrounded && !FindObjectOfType<SoundManager>().audioSource.isPlaying){
+				FindObjectOfType<SoundManager>().PlayRun();
+			}
+		
         }
 
         // If the player scheduled a jump, trigger it once and set it to false.
@@ -382,6 +388,7 @@ public class PlayerController : MonoBehaviour
 
             // Add the jump velocity.
 			CreateDust();
+			FindObjectOfType<SoundManager>().PlayJump();
             _rigidbody.AddForce(new Vector2(0f, jumpForce));
 
             // Set climbing on cooldown for a bit.
@@ -408,6 +415,9 @@ public class PlayerController : MonoBehaviour
         //dash if timer is greater than 0
         if (_dashTime >= 0)
         {
+			if(!FindObjectOfType<SoundManager>().audioSource.isPlaying){
+				FindObjectOfType<SoundManager>().PlaySlide();
+			}
             _dashTime -= Time.deltaTime;
             Vector2 velocity = _rigidbody.velocity;
             if (!_facingRight)
@@ -485,7 +495,7 @@ public class PlayerController : MonoBehaviour
         _attackCooldown = attackSpeed;
 
         weaponController.Attack();
-
+		FindObjectOfType<SoundManager>().PlaySword();
 #if DEBUG
         Debug.Log("ATTACK!!");
 #endif

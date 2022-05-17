@@ -48,8 +48,10 @@ public class Health : MonoBehaviour, IDamageable
     [SerializeField] public float maxHealth = 10; // Provide default for rapid dev
 
     public void BeDamaged(float dmg){
+
         if(_damageCheck != null && _damageCheck.IsInvincible) return;
         health -= dmg;
+		FindObjectOfType<SoundManager>().PlayHit();
         if(hasOnHitInvincibility) _damageCheck?.triggerInvincibility();
     }
 
