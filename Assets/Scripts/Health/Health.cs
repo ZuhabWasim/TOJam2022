@@ -37,7 +37,7 @@ public class Health : MonoBehaviour, IDamageable
     public float health
     {
         get { return _health; }
-        private set
+        set
         {
             float oldHealth = _health;
             _health = value;
@@ -77,5 +77,10 @@ public class Health : MonoBehaviour, IDamageable
     public void Heal(float healAmount)
     {
         health = Mathf.Min(health + healAmount, maxHealth);
+    }
+
+    public void FullyHeal()
+    {
+        health = maxHealth;
     }
 }

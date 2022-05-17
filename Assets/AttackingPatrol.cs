@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Patrol : MonoBehaviour
+public class AttackingPatrol : MonoBehaviour
 {
     public float speed;
     public float distanceForRay;
@@ -10,6 +10,8 @@ public class Patrol : MonoBehaviour
     public bool movingRight = true;
 
     public Transform groundDetection;
+    public Transform attackPoint;
+    public float attackPointDistance = 2;
     public LayerMask groundMask;
 
     private int _directionModifier = 1;
@@ -31,11 +33,11 @@ public class Patrol : MonoBehaviour
         _health = gameObject.GetComponent<Health>();
         if (_health) _health.Death += OnDeath;
         _weaponController = gameObject.GetComponent<WeaponController>();
-        
+
         if (!_weaponController) Debug.LogWarning("No Weapon Controller on, this enemy will not damage the player: " + name);
     }
 
-   
+
 
     void Update()
     {
@@ -45,16 +47,18 @@ public class Patrol : MonoBehaviour
         if (groundinfo.collider)
         {
             transform.Translate(Vector2.right * _directionModifier * speed * Time.deltaTime);
-        } else {
+        }
+        else
+        {
             reverseMovement();
         }
     }
 
     private void OnDeath()
     {
-		FindObjectOfType<SoundManager>().PlaySnake();
+        FindObjectOfType<SoundManager>().PlaySnake();
         gameObject.SetActive(false);
-		
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -64,7 +68,7 @@ public class Patrol : MonoBehaviour
             reverseMovement();
         }
         _weaponController.Attack(); // Weapon controller will determine if anything can be hit
-		
+
     }
 
     void reverseMovement()
@@ -75,6 +79,9 @@ public class Patrol : MonoBehaviour
         // Second, reverse the boolean and the direction modifier.
         movingRight = !movingRight;
         _directionModifier *= -1;
+
+        // Third, reverse the attack position.
+        attackPoint.localPosition = new Vector3(attackPointDistance * _directionModifier, attackPoint.localPosition.y, attackPoint.localPosition.z);
     }
 
 }
