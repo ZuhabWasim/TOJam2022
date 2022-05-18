@@ -10,8 +10,8 @@ using Vector3 = UnityEngine.Vector3;
 /*
  * Boss AI and how it works. The boss will follow a set of instructions on a random interval and place.
  *  (1) Randomly get an attack path from the list of start and end points.
- *  (2) Indicate to the player (via blinking red) where the boss intends to attack for a few seconds.
- *  (3) Moves into the position and orientation to perform the dash.
+ *  (2) Moves into the position and orientation to perform the dash.
+ *  (3) Indicate to the player (via blinking red) where the boss intends to attack for a few seconds.
  *  (4) Does the dash with a lot of speed.
  *  (5) Slowly returns to a rest spot from the list of idle positions.
  *  (6) Begins idling there until its next attack.
@@ -30,34 +30,33 @@ enum AttackStage
 
 public class BossAI : MonoBehaviour
 {
-    private const float IDLING_TRANSITION_DURATION = 1f;
-    private const float IDLING_BOB_DISTANCE = 0.2f;
-    private const float IDLING_BOB_DURATION = 1f;
+    private const float PRE_ATTACK_TRANSITION_DURATION = 1f;
+    private const float PRE_ATTACK_PAUSE_DURATION = 3f;
 
-    private const float PRE_ATTACK_TRANSITION_DURATION = 2f;
-    private const float PRE_ATTACK_PAUSE_DURATION = 1f;
+    private const float HIT_INDICATOR_MIN_ALPHA = 0.25f;
+    private const float HIT_INDICATOR_MAX_ALPHA = 0.6f;
 
     private const float ATTACKING_TRANSITION_DURATION = 0.5f;
     private const float ATTACKING_PAUSE_DURATION = 1f;
 
-    private const float ATTACK_COOLDOWN = 5f;
+    private const float IDLING_TRANSITION_DURATION = 1f;
+    private const float IDLING_BOB_DISTANCE = 0.2f;
+    private const float IDLING_BOB_DURATION = 1f;
 
-    [SerializeField] private GameObject arenaCenter = null;
-    private Vector3 _centerPosition;
+    private const float ATTACK_COOLDOWN = 5f;
 
     public List<GameObject> attackStartPositions = null;
     public List<GameObject> attackEndPositions = null;
-
     public List<GameObject> idlePositions = null;
 
+    [SerializeField] private GameObject arenaCenter = null;
+    [SerializeField] private GameObject hitIndicator = null;
 
-    [SerializeField] private float _attackCooldownLength = 5f;
-    private float _attackCooldown = 0f;
-
+    private Vector3 _centerPosition;
+    private HitIndicator _hitIndicator;
     private BossMover _bossMover;
-    private bool _facingRight;
     private Health _health;
-
+    private bool _facingRight;
 
     [SerializeField] private AttackStage attackStage;
 
@@ -65,12 +64,15 @@ public class BossAI : MonoBehaviour
     {
         _bossMover = GetComponent<BossMover>();
         _health = GetComponent<Health>();
-        _centerPosition = arenaCenter == null ? Vector3.zero : arenaCenter.transform.position;
 
         Assert.AreEqual(attackStartPositions.Count, attackEndPositions.Count);
         Assert.IsTrue(attackStartPositions.Count > 0);
         Assert.IsTrue(idlePositions.Count > 0);
         Assert.IsNotNull(arenaCenter);
+        Assert.IsNotNull(hitIndicator);
+
+        _centerPosition = arenaCenter.transform.position;
+        _hitIndicator = hitIndicator.GetComponent<HitIndicator>();
 
         StartCoroutines(); // I start the boss fight at start but this should occur when the player is done with dialog.
 
@@ -98,12 +100,7 @@ public class BossAI : MonoBehaviour
             Vector3 endPosition = attackEndPositions[attackIndex].transform.position;
             Vector3 centerVector = (endPosition - startPosition) * ((endPosition - startPosition).magnitude / 2);
 
-            // ================================= (2) ALERTING =================================
-
-            // (2) Indicate to the player (via blinking red) where the boss intends to attack for a few seconds.
-            attackStage = AttackStage.ALERTING;
-
-            // ================================= (3) PRE-ATTACK =================================
+            // ================================= (2) PRE-ATTACK =================================
 
             attackStage = AttackStage.PRE_ATTACK;
 
@@ -114,7 +111,18 @@ public class BossAI : MonoBehaviour
             yield return new WaitForSeconds(PRE_ATTACK_TRANSITION_DURATION);
             transform.right = -centerVector;
 
+            // ================================= (3) ALERTING =================================
+
+            // (2) Indicate to the player (via blinking red) where the boss intends to attack for a few seconds.
+            attackStage = AttackStage.ALERTING;
+
+            _hitIndicator.duration = PRE_ATTACK_PAUSE_DURATION;
+            _hitIndicator.startAlpha = HIT_INDICATOR_MIN_ALPHA;
+            _hitIndicator.endAlpha = HIT_INDICATOR_MAX_ALPHA;
+            _hitIndicator.StartBlinking();
+
             yield return new WaitForSeconds(PRE_ATTACK_PAUSE_DURATION); // Wait a bit longer for the player.
+            _hitIndicator.StopBlinking();
 
             // ================================= (4) ATTACKING =================================
 
