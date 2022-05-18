@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using UnityEditorInternal;
 using UnityEngine;
 
+/*
+ * Based on by Lakshya Gupta's InterpolateTransform.cs script made for Reflection.
+ */
 public class BossMover : MonoBehaviour
 {
     public int loopCount = 0;
