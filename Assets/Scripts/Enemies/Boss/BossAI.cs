@@ -80,7 +80,7 @@ public class BossAI : MonoBehaviour
         Assert.IsNotNull(arenaCenter);
         Assert.IsNotNull(hitIndicator);
 
-        _centerPosition = arenaCenter.transform.position;
+        _centerPosition = arenaCenter.transform.localPosition;
         _hitIndicator = hitIndicator.GetComponent<HitIndicator>();
 
         StartBossFight(); // I start the boss fight at start but this should occur when the player is done with dialog.
@@ -115,15 +115,15 @@ public class BossAI : MonoBehaviour
             if (_onRight)
             {
                 int attackIndex = Random.Range(0, rightAttackStartPos.Count);
-                startPosition = rightAttackStartPos[attackIndex].transform.position;
-                endPosition = rightAttackEndPos[attackIndex].transform.position;
+                startPosition = rightAttackStartPos[attackIndex].transform.localPosition;
+                endPosition = rightAttackEndPos[attackIndex].transform.localPosition;
                 centerVector = (endPosition - startPosition) * ((endPosition - startPosition).magnitude / 2);
             }
             else
             {
                 int attackIndex = Random.Range(0, leftAttackStartPos.Count);
-                startPosition = leftAttackStartPos[attackIndex].transform.position;
-                endPosition = leftAttackEndPos[attackIndex].transform.position;
+                startPosition = leftAttackStartPos[attackIndex].transform.localPosition;
+                endPosition = leftAttackEndPos[attackIndex].transform.localPosition;
                 centerVector = (endPosition - startPosition) * ((endPosition - startPosition).magnitude / 2);
             }
 
@@ -133,7 +133,7 @@ public class BossAI : MonoBehaviour
 
             // (3) Moves into the position and orientation to perform the dash.
             MoveBoss(true, startPosition,
-                false, new Vector3(0, transform.rotation.eulerAngles.y, Vector3.Angle(centerVector, Vector3.zero)),
+                false, new Vector3(0, transform.localRotation.eulerAngles.y, Vector3.Angle(centerVector, Vector3.zero)),
                 PRE_ATTACK_TRANSITION_DURATION);
             yield return new WaitForSeconds(PRE_ATTACK_TRANSITION_DURATION);
             transform.right = -centerVector;
@@ -170,7 +170,7 @@ public class BossAI : MonoBehaviour
             Vector3 idlePosition = GetClosestIdlePosition();
 
             MoveBoss(true, idlePosition,
-                true, new Vector3(0, transform.rotation.eulerAngles.y, 0), IDLING_TRANSITION_DURATION);
+                true, new Vector3(0, transform.localRotation.eulerAngles.y, 0), IDLING_TRANSITION_DURATION);
             yield return new WaitForSeconds(IDLING_TRANSITION_DURATION);
             transform.right = idlePosition - _centerPosition;
 
@@ -179,7 +179,7 @@ public class BossAI : MonoBehaviour
             attackStage = AttackStage.IDLING;
 
             // (6) Begins idling there until its next attack.
-            MoveBoss(true, transform.position + new Vector3(0, IDLING_BOB_DISTANCE, 0),
+            MoveBoss(true, transform.localPosition + new Vector3(0, IDLING_BOB_DISTANCE, 0),
                 false, Vector3.zero, IDLING_BOB_DURATION, -1);
 
             yield return new WaitForSeconds(ATTACK_COOLDOWN);
@@ -188,18 +188,18 @@ public class BossAI : MonoBehaviour
 
     bool CheckRight()
     {
-        return _centerPosition.x < transform.position.x;
+        return _centerPosition.x < transform.localPosition.x;
     }
 
     Vector3 GetClosestIdlePosition()
     {
-        Vector3 bossPos = transform.position;
+        Vector3 bossPos = transform.localPosition;
         int closest = -1;
         float closestDistance = Mathf.Infinity;
 
         for (int i = 0; i < idlePositions.Count; i++)
         {
-            float distance = Vector3.Distance(idlePositions[i].transform.position, bossPos);
+            float distance = Vector3.Distance(idlePositions[i].transform.localPosition, bossPos);
             if (distance < closestDistance)
             {
                 closest = i;
@@ -207,7 +207,7 @@ public class BossAI : MonoBehaviour
             }
         }
 
-        return idlePositions[closest].transform.position;
+        return idlePositions[closest].transform.localPosition;
     }
 
     void MoveBoss(bool move, Vector3 position,
@@ -225,7 +225,7 @@ public class BossAI : MonoBehaviour
         if (move)
         {
             _bossMover.move = true;
-            _bossMover.startPosition = transform.position;
+            _bossMover.startPosition = transform.localPosition;
             _bossMover.endPosition = position;
         }
         else
@@ -237,7 +237,7 @@ public class BossAI : MonoBehaviour
         if (rotate)
         {
             _bossMover.rotate = true;
-            _bossMover.startRotation = transform.rotation.eulerAngles;
+            _bossMover.startRotation = transform.localRotation.eulerAngles;
             _bossMover.endRotation = rotation;
         }
         else
