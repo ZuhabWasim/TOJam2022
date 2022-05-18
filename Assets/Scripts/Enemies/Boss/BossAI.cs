@@ -1,4 +1,4 @@
-#define DEBUG
+#undef DEBUG
 
 using System.Collections;
 using System.Collections.Generic;
@@ -9,13 +9,12 @@ using Vector3 = UnityEngine.Vector3;
 
 /*
  * Boss AI and how it works. The boss will follow a set of instructions on a random interval and place.
- *  (1) Randomly get an attack path from the list of start and end points.
+ *  (1) Randomly get a close attack path from the list of start and end points. (right attacks vs left side attacks)
  *  (2) Moves into the position and orientation to perform the dash.
  *  (3) Indicate to the player (via blinking red) where the boss intends to attack for a few seconds.
- *  (4) Does the dash with a lot of speed.
- *  (5) Slowly returns to a rest spot from the list of idle positions.
+ *  (4) Does the dash with a lot of speed. (With no indicator)
+ *  (5) Slowly returns to a rest spot from the list of idle positions. (was random now it's the nearest)
  *  (6) Begins idling there until its next attack.
- * 
  */
 
 enum AttackStage
@@ -30,7 +29,7 @@ enum AttackStage
 
 public class BossAI : MonoBehaviour
 {
-    private const float PRE_ATTACK_TRANSITION_DURATION = 1f;
+    private const float PRE_ATTACK_TRANSITION_DURATION = 3f;
     private const float PRE_ATTACK_PAUSE_DURATION = 3f;
 
     private const float HIT_INDICATOR_MIN_ALPHA = 0.25f;
@@ -45,18 +44,22 @@ public class BossAI : MonoBehaviour
 
     private const float ATTACK_COOLDOWN = 5f;
 
-    public List<GameObject> attackStartPositions = null;
-    public List<GameObject> attackEndPositions = null;
-    public List<GameObject> idlePositions = null;
+    [Header("Right Attacks")] public List<GameObject> rightAttackStartPos = null;
+    public List<GameObject> rightAttackEndPos = null;
 
-    [SerializeField] private GameObject arenaCenter = null;
+    [Header("Left Attacks")] public List<GameObject> leftAttackStartPos = null;
+    public List<GameObject> leftAttackEndPos = null;
+
+    [Header("Idle Spots")] public List<GameObject> idlePositions = null;
+
+    [Header("Utilities")] [SerializeField] private GameObject arenaCenter = null;
     [SerializeField] private GameObject hitIndicator = null;
 
     private Vector3 _centerPosition;
     private HitIndicator _hitIndicator;
     private BossMover _bossMover;
     private Health _health;
-    private bool _facingRight;
+    private bool _onRight;
 
     [SerializeField] private AttackStage attackStage;
 
@@ -65,8 +68,9 @@ public class BossAI : MonoBehaviour
         _bossMover = GetComponent<BossMover>();
         _health = GetComponent<Health>();
 
-        Assert.AreEqual(attackStartPositions.Count, attackEndPositions.Count);
-        Assert.IsTrue(attackStartPositions.Count > 0);
+        Assert.AreEqual(rightAttackStartPos.Count, leftAttackStartPos.Count);
+        Assert.AreEqual(rightAttackEndPos.Count, leftAttackEndPos.Count);
+        Assert.IsTrue(rightAttackStartPos.Count > 0);
         Assert.IsTrue(idlePositions.Count > 0);
         Assert.IsNotNull(arenaCenter);
         Assert.IsNotNull(hitIndicator);
@@ -75,10 +79,6 @@ public class BossAI : MonoBehaviour
         _hitIndicator = hitIndicator.GetComponent<HitIndicator>();
 
         StartCoroutines(); // I start the boss fight at start but this should occur when the player is done with dialog.
-
-#if DEBUG
-        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.CROWCH_DASH_KEY), TestMethod);
-#endif
     }
 
     void StartCoroutines()
@@ -94,11 +94,27 @@ public class BossAI : MonoBehaviour
 
             attackStage = AttackStage.PREPARATION;
 
-            // (1) Randomly get an attack path from the list of start and end points.
-            int attackIndex = Random.Range(0, attackStartPositions.Count);
-            Vector3 startPosition = attackStartPositions[attackIndex].transform.position;
-            Vector3 endPosition = attackEndPositions[attackIndex].transform.position;
-            Vector3 centerVector = (endPosition - startPosition) * ((endPosition - startPosition).magnitude / 2);
+            // (1) Randomly get an attack path from the list of start and end points from the specific side.
+
+            _onRight = CheckRight();
+
+            Vector3 startPosition = Vector3.zero;
+            Vector3 endPosition = Vector3.zero;
+            Vector3 centerVector = Vector3.zero;
+            if (_onRight)
+            {
+                int attackIndex = Random.Range(0, rightAttackStartPos.Count);
+                startPosition = rightAttackStartPos[attackIndex].transform.position;
+                endPosition = rightAttackEndPos[attackIndex].transform.position;
+                centerVector = (endPosition - startPosition) * ((endPosition - startPosition).magnitude / 2);
+            }
+            else
+            {
+                int attackIndex = Random.Range(0, leftAttackStartPos.Count);
+                startPosition = leftAttackStartPos[attackIndex].transform.position;
+                endPosition = leftAttackEndPos[attackIndex].transform.position;
+                centerVector = (endPosition - startPosition) * ((endPosition - startPosition).magnitude / 2);
+            }
 
             // ================================= (2) PRE-ATTACK =================================
 
@@ -140,8 +156,7 @@ public class BossAI : MonoBehaviour
             attackStage = AttackStage.RESETTING;
 
             // (5) Slowly returns to a rest spot from the list of idle positions.
-            int idleIndex = Random.Range(0, idlePositions.Count);
-            Vector3 idlePosition = idlePositions[idleIndex].transform.position;
+            Vector3 idlePosition = GetClosestIdlePosition();
 
             MoveBoss(true, idlePosition,
                 true, new Vector3(0, transform.rotation.eulerAngles.y, 0), IDLING_TRANSITION_DURATION);
@@ -160,8 +175,28 @@ public class BossAI : MonoBehaviour
         }
     }
 
-    void TestMethod()
+    bool CheckRight()
     {
+        return _centerPosition.x < transform.position.x;
+    }
+
+    Vector3 GetClosestIdlePosition()
+    {
+        Vector3 bossPos = transform.position;
+        int closest = -1;
+        float closestDistance = Mathf.Infinity;
+
+        for (int i = 0; i < idlePositions.Count; i++)
+        {
+            float distance = Vector3.Distance(idlePositions[i].transform.position, bossPos);
+            if (distance < closestDistance)
+            {
+                closest = i;
+                closestDistance = distance;
+            }
+        }
+
+        return idlePositions[closest].transform.position;
     }
 
     void MoveBoss(bool move, Vector3 position,
