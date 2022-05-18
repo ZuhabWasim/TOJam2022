@@ -6,7 +6,7 @@ public class TouchDamage : MonoBehaviour
 {
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.tag == "Player")
+        if (collision.transform.CompareTag(PlayerController.PLAYER))
         {
             gameObject.GetComponent<WeaponController>().Attack();
         }

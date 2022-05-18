@@ -3,6 +3,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Vector3 = UnityEngine.Vector3;
@@ -29,7 +30,7 @@ enum AttackStage
 
 public class BossAI : MonoBehaviour
 {
-    private const float PRE_ATTACK_TRANSITION_DURATION = 3f;
+    private const float PRE_ATTACK_TRANSITION_DURATION = 1f;
     private const float PRE_ATTACK_PAUSE_DURATION = 3f;
 
     private const float HIT_INDICATOR_MIN_ALPHA = 0.25f;
@@ -42,7 +43,7 @@ public class BossAI : MonoBehaviour
     private const float IDLING_BOB_DISTANCE = 0.2f;
     private const float IDLING_BOB_DURATION = 1f;
 
-    private const float ATTACK_COOLDOWN = 5f;
+    private const float ATTACK_COOLDOWN = 4f;
 
     [Header("Right Attacks")] public List<GameObject> rightAttackStartPos = null;
     public List<GameObject> rightAttackEndPos = null;
@@ -67,7 +68,11 @@ public class BossAI : MonoBehaviour
     {
         _bossMover = GetComponent<BossMover>();
         _health = GetComponent<Health>();
-
+        if (_health)
+        {
+            _health.Death += OnDeath;
+        }
+        
         Assert.AreEqual(rightAttackStartPos.Count, leftAttackStartPos.Count);
         Assert.AreEqual(rightAttackEndPos.Count, leftAttackEndPos.Count);
         Assert.IsTrue(rightAttackStartPos.Count > 0);
@@ -78,14 +83,20 @@ public class BossAI : MonoBehaviour
         _centerPosition = arenaCenter.transform.position;
         _hitIndicator = hitIndicator.GetComponent<HitIndicator>();
 
-        StartCoroutines(); // I start the boss fight at start but this should occur when the player is done with dialog.
+        StartBossFight(); // I start the boss fight at start but this should occur when the player is done with dialog.
     }
 
-    void StartCoroutines()
+    void StartBossFight()
     {
         StartCoroutine(Attack());
     }
 
+    void OnDeath()
+    {
+        gameObject.SetActive(false);
+        Debug.Log("You killed the boss!");
+    }
+    
     IEnumerator Attack()
     {
         while (_health.health > 0)
