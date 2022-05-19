@@ -95,13 +95,17 @@ public class BossCutsceneManager : MonoBehaviour
     public void AnimateDeath()
     {
         // Make the boss violently shake back and forth while flashing red.
+		FindObjectOfType<PlayerController>().FreezeInput(false);
         _bossMover.BreakMotion();
         _bossSpriteIndicator.ChangeColor(Color.red);
         _bossSpriteIndicator.IndicateBlinking(BossParameters.DEATH_FLASH_MAX_ALPHA,
             BossParameters.DEATH_FLASH_MIN_ALPHA, 0, loopEndless: true);
         _bossMover.MoveBoss(true, transform.localPosition + new Vector3(BossParameters.DEATH_SHAKE_DISTANCE, 0, 0),
             false, Vector3.zero, BossParameters.DEATH_SHAKE_DURATION, -1);
-
+			
+		GameObject go = GameObject.Find("FinalBossEndTrigger");
+        DialogueTrigger trigger = (DialogueTrigger) go.GetComponent(typeof(DialogueTrigger));
+        trigger.TriggerDialogue();
         // TODO: Trigger dialog for what happens when the boss is dying.
     }
 
@@ -120,9 +124,10 @@ public class BossCutsceneManager : MonoBehaviour
         _bossSpriteIndicator.IndicateBlinking(BossParameters.DEATH_FADE_MAX_ALPHA,
             BossParameters.DEATH_FADE_MIN_ALPHA, BossParameters.DEATH_FADE_DURATION,
             blinkingRate: BossParameters.DEATH_FADE_DURATION);
-
+		FindObjectOfType<SoundManager>().PlayBossDeath();
         yield return new WaitForSeconds(BossParameters.DEATH_FADE_DURATION);
 
         this.gameObject.SetActive(false);
+		FindObjectOfType<PauseMenuUIManager>().StartFinalCutscene();
     }
 }

@@ -38,6 +38,7 @@ public class Checkpoint : MonoBehaviour, IDamageable
         if (other.transform.CompareTag(PlayerController.PLAYER))
         {
             Activate();
+			
         }
     }
 
@@ -45,7 +46,14 @@ public class Checkpoint : MonoBehaviour, IDamageable
     {
         ActiveCheckpoint = this;
         ActivateCheckpoint?.Invoke();
-
+		if (activated == false){
+			FindObjectOfType<SoundManager>().PlayFire();
+			if (FindObjectOfType<PlayerController>()._leggings == true){
+				GameObject go = GameObject.Find("FinalBossStartTrigger");
+				DialogueTrigger trigger = (DialogueTrigger) go.GetComponent(typeof(DialogueTrigger));
+				trigger.TriggerDialogue();
+			}
+		}
         activated = true;
         Debug.Log("Activated checkpoint!");
     }

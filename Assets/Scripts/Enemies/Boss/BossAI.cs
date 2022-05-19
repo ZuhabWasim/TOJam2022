@@ -93,13 +93,15 @@ public class BossAI : MonoBehaviour
         //StartBossFight(); // I start the boss fight at start but this should occur when the player is done with dialog.
     }
 
-    void StartBossFight()
+    public void StartBossFight()
     {
+		FindObjectOfType<SoundManager>().PlayBossLaugh();
         StartCoroutine(_attackCoroutine);
     }
 
     void OnDeath()
     {
+		FindObjectOfType<PlayerController>().FreezeInput(true);
         // Stop the boss wherever it died
         StopCoroutine(_attackCoroutine);
         _bossMover.BreakMotion();
@@ -182,7 +184,7 @@ public class BossAI : MonoBehaviour
 
             // (4) Does the dash with a lot of speed.
             _weapon.damage = 100f;
-
+			FindObjectOfType<SoundManager>().PlayBossAttack();
             _bossMover.MoveBoss(true, endPosition,
                 false, Vector3.zero, BossParameters.ATTACKING_TRANSITION_DURATION);
             yield return new WaitForSeconds(BossParameters.ATTACKING_TRANSITION_DURATION);
