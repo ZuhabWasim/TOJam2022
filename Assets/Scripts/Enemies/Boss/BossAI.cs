@@ -45,6 +45,10 @@ public class BossAI : MonoBehaviour
 
     private const float ATTACK_COOLDOWN = 4f;
 
+    private const float BOSS_HIT_FLASH_DURATION = 0.5f;
+    private const float BOSS_HIT_FLASH_MIN_ALPHA = 0f;
+    private const float BOSS_HIT_FLASH_MAX_ALPHA = 1f;
+
     [Header("Right Attacks")] public List<GameObject> rightAttackStartPos = null;
     public List<GameObject> rightAttackEndPos = null;
 
@@ -55,9 +59,11 @@ public class BossAI : MonoBehaviour
 
     [Header("Utilities")] [SerializeField] private GameObject arenaCenter = null;
     [SerializeField] private GameObject hitIndicator = null;
+    [SerializeField] private GameObject bossSprite = null;
 
     private Vector3 _centerPosition;
     private HitIndicator _hitIndicator;
+    private HitIndicator _bossSpriteIndicator;
     private BossMover _bossMover;
     private Health _health;
     private bool _onRight;
@@ -71,17 +77,20 @@ public class BossAI : MonoBehaviour
         if (_health)
         {
             _health.Death += OnDeath;
+            _health.HealthChanged += OnHealthChanged;
         }
-        
+
         Assert.AreEqual(rightAttackStartPos.Count, leftAttackStartPos.Count);
         Assert.AreEqual(rightAttackEndPos.Count, leftAttackEndPos.Count);
         Assert.IsTrue(rightAttackStartPos.Count > 0);
         Assert.IsTrue(idlePositions.Count > 0);
         Assert.IsNotNull(arenaCenter);
         Assert.IsNotNull(hitIndicator);
+        Assert.IsNotNull(bossSprite);
 
         _centerPosition = arenaCenter.transform.localPosition;
         _hitIndicator = hitIndicator.GetComponent<HitIndicator>();
+        _bossSpriteIndicator = bossSprite.GetComponent<HitIndicator>();
 
         StartBossFight(); // I start the boss fight at start but this should occur when the player is done with dialog.
     }
@@ -96,7 +105,16 @@ public class BossAI : MonoBehaviour
         gameObject.SetActive(false);
         Debug.Log("You killed the boss!");
     }
-    
+
+    void OnHealthChanged(float oldHealth, float newHealth)
+    {
+        /*_bossSpriteIndicator.StopBlinking();*/
+        _bossSpriteIndicator.duration = BOSS_HIT_FLASH_DURATION;
+        _bossSpriteIndicator.startAlpha = BOSS_HIT_FLASH_MIN_ALPHA;
+        _bossSpriteIndicator.endAlpha = BOSS_HIT_FLASH_MAX_ALPHA;
+        _bossSpriteIndicator.StartBlinking();
+    }
+
     IEnumerator Attack()
     {
         while (_health.health > 0)

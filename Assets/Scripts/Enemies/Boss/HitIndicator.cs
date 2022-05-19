@@ -35,23 +35,23 @@ public class HitIndicator : MonoBehaviour
 
         percentComplete += Blink();
 
-        CheckBlinkomplete(percentComplete, 1f);
+        CheckBlinkComplete(percentComplete, 1f);
     }
 
     public void StartBlinking()
     {
-        blinkCount = Mathf.FloorToInt(duration / BLINK_RATE);
+        blinkCount = Mathf.RoundToInt(duration / BLINK_RATE);
         duration = duration / blinkCount;
         this.isBlinking = true;
         fadingIn = true;
     }
 
-    public void StopBlinking()
+    public void StopBlinking(float endAlpha = 0f)
     {
         blinkCount = 0;
         this.isBlinking = false;
         fadingIn = true;
-        ChangeAlpha(0f);
+        ChangeAlpha(endAlpha);
     }
 
 
@@ -71,13 +71,13 @@ public class HitIndicator : MonoBehaviour
         return percentComplete;
     }
 
-    private void CheckBlinkomplete(float percentComplete, float targetPercent)
+    private void CheckBlinkComplete(float percentComplete, float targetPercent)
     {
         if (percentComplete >= targetPercent - SNAP_ALLOWANCE)
         {
             FinishBlinking();
 
-            if (blinkCount == 0) // Stop looping animation
+            if (blinkCount == 1) // Stop looping animation
             {
                 isBlinking = false;
             }
