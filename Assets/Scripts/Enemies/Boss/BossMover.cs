@@ -10,18 +10,21 @@ using UnityEngine;
  */
 public class BossMover : MonoBehaviour
 {
+    [Tooltip("Setting this to -1 will loop the animation endlessly.")]
     public int loopCount = 0;
+
+    [Tooltip("How long (in seconds) the movement should take.")]
     public float duration = 0f;
 
     [Header("Positional")] public bool move = true;
     public Vector3 startPosition;
     public Vector3 endPosition;
-    private bool movingForward = true;
+    private bool _movingForward = true;
 
     [Header("Rotational")] public bool rotate = false;
     public Vector3 startRotation;
     public Vector3 endRotation;
-    private bool rotatingForward = true;
+    private bool _rotatingForward = true;
 
     private float elapsedTime = 0;
     [SerializeField] private bool isMoving = false;
@@ -34,7 +37,7 @@ public class BossMover : MonoBehaviour
         EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.CROWCH_DASH_KEY), TriggerMotion);
 #endif
     }
-    
+
     // Update is called once per frame
     void Update()
     {
@@ -64,20 +67,20 @@ public class BossMover : MonoBehaviour
     public void TriggerMotion()
     {
         this.isMoving = true;
-        movingForward = true;
+        _movingForward = true;
     }
 
     public void BreakMotion()
     {
         this.isMoving = false;
-        movingForward = true;
+        _movingForward = true;
     }
 
     private float Move()
     {
         float percentComplete = elapsedTime / duration;
 
-        if (movingForward)
+        if (_movingForward)
         {
             this.gameObject.transform.localPosition = Vector3.Lerp(startPosition, endPosition, percentComplete);
         }
@@ -93,7 +96,7 @@ public class BossMover : MonoBehaviour
     {
         float percentComplete = elapsedTime / duration;
 
-        if (rotatingForward)
+        if (_rotatingForward)
         {
             this.gameObject.transform.localRotation =
                 Quaternion.Euler(Vector3.Lerp(startRotation, endRotation, percentComplete));
@@ -130,13 +133,52 @@ public class BossMover : MonoBehaviour
 
     private void FinishMoving()
     {
-        this.gameObject.transform.localPosition = movingForward ? endPosition : startPosition;
-        movingForward = !movingForward;
+        this.gameObject.transform.localPosition = _movingForward ? endPosition : startPosition;
+        _movingForward = !_movingForward;
     }
 
     private void FinishRotating()
     {
-        this.gameObject.transform.localRotation = Quaternion.Euler(rotatingForward ? endRotation : startRotation);
-        rotatingForward = !rotatingForward;
+        this.gameObject.transform.localRotation = Quaternion.Euler(_rotatingForward ? endRotation : startRotation);
+        _rotatingForward = !_rotatingForward;
+    }
+
+    public void MoveBoss(bool isMove, Vector3 movePosition,
+        bool isRotate, Vector3 rotationAngle,
+        float desiredDuration, int loopMovement = 0)
+    {
+        // Break motion for anything done before.
+        BreakMotion();
+
+        // Duration and looping.
+        this.loopCount = loopMovement;
+        this.duration = desiredDuration;
+
+        // If the boss needs to move, set the parameters.
+        if (isMove)
+        {
+            this.move = true;
+            this.startPosition = transform.localPosition;
+            this.endPosition = movePosition;
+        }
+        else
+        {
+            this.move = false;
+        }
+
+        // If the boss needs to rotate, set the parameters.
+        if (isRotate)
+        {
+            this.rotate = true;
+            this.startRotation = transform.localRotation.eulerAngles;
+            this.endRotation = rotationAngle;
+        }
+        else
+        {
+            this.rotate = false;
+        }
+
+        // Move the boss asynchronously (passive movement).
+        TriggerMotion();
     }
 }

@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class TouchDamage : MonoBehaviour
 {
+    public bool Active = true;
+    
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.transform.CompareTag(PlayerController.PLAYER))
+        if (Active && collision.transform.CompareTag(PlayerController.PLAYER))
         {
             gameObject.GetComponent<WeaponController>().Attack();
         }

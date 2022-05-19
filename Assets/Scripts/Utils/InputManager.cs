@@ -1,3 +1,5 @@
+#define DEBUG
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -51,7 +53,7 @@ public class InputManager : MonoBehaviour
         foreach (KeyBinds key in keyBinds)
         {
             if (registeredKeybinds.Contains(key)) continue;
-            
+
             RegisteredKeybind k = new RegisteredKeybind((KeyCode) key);
             registeredKeybinds.Add(key, k);
         }
@@ -86,30 +88,26 @@ public class InputManager : MonoBehaviour
     }
 }
 
-/*
- * 	H_AXIS = "Horizontal";
-	V_AXIS = "Vertical";
-	MOUSE_X = "Mouse X";
-	MOUSE_Y = "Mouse Y";
- */
 // All key binds used for the game.
 public enum KeyBinds
 {
     JUMP_KEY = KeyCode.Space,
     ATTACK_KEY = KeyCode.J,
-    INTERACT_KEY = KeyCode.C,
-    MENU_KEY = KeyCode.Escape,
 
     UP_KEY1 = KeyCode.UpArrow,
     UP_KEY2 = KeyCode.W,
-    DOWN_KEY = KeyCode.DownArrow,
-    CROWCH_DASH_KEY = KeyCode.LeftShift,
-    // Armour piece keys for debugging.
-    CHEST_PIECE = KeyCode.Alpha1,
-    GAUNTLET = KeyCode.Alpha2,
-    LEGGINGS = KeyCode.Alpha3,
-    SWORD = KeyCode.Alpha4,
     
-    // This is for debug only
-    DEBUG_TRIGGER = KeyCode.Alpha0
+#if DEBUG
+    // Debug keys
+    DEBUG1 = KeyCode.Alpha1,
+    DEBUG2 = KeyCode.Alpha2,
+    DEBUG3 = KeyCode.Alpha3,
+    DEBUG4 = KeyCode.Alpha4,
+    DEBUG5 = KeyCode.Alpha5,
+    DEBUG6 = KeyCode.Alpha6,
+    DEBUG7 = KeyCode.Alpha7,
+    DEBUG8 = KeyCode.Alpha8,
+    DEBUG9 = KeyCode.Alpha9,
+    DEBUG0 = KeyCode.Alpha0
+#endif
 }

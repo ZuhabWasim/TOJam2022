@@ -155,9 +155,9 @@ public class PlayerController : MonoBehaviour
 
 #if DEBUG
         // Placeholder events for each armour piece lost.
-        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.CHEST_PIECE), LostChestPiece);
-        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.GAUNTLET), LostGauntlets);
-        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.LEGGINGS), LostLeggings);
+        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.DEBUG1), LostChestPiece);
+        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.DEBUG2), LostGauntlets);
+        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.DEBUG3), LostLeggings);
 #endif
     }
 

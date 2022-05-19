@@ -8,9 +8,18 @@ public class HitIndicator : MonoBehaviour
     private const float BLINK_RATE = 0.5f;
 
     public SpriteRenderer hitbox = null;
-    public float duration = 0f;
-    public float startAlpha;
+
+    [Header("Parameters")] public float startAlpha;
     public float endAlpha;
+
+    [Tooltip("How long the blinking will go on for.")]
+    public float duration = 0f;
+
+    [Tooltip("Optional: Ignores duration to keep looping.")]
+    public bool loopEndlessly = false;
+
+    [Tooltip("Optional: How fast you want the blinking to oscillate.")]
+    public float blinkRate = BLINK_RATE;
 
     [SerializeField] private bool fadingIn = true;
     [SerializeField] private float elapsedTime = 0;
@@ -31,7 +40,6 @@ public class HitIndicator : MonoBehaviour
         elapsedTime += Time.deltaTime;
 
         float percentComplete = 0.0f;
-        Debug.Log("percentComplete: " + percentComplete);
 
         percentComplete += Blink();
 
@@ -40,18 +48,27 @@ public class HitIndicator : MonoBehaviour
 
     public void StartBlinking()
     {
-        blinkCount = Mathf.RoundToInt(duration / BLINK_RATE);
-        duration = duration / blinkCount;
+        if (loopEndlessly)
+        {
+            blinkCount = -1;
+            duration = blinkRate;
+        }
+        else
+        {
+            blinkCount = Mathf.RoundToInt(duration / blinkRate);
+            duration = duration / blinkCount;
+        }
+
         this.isBlinking = true;
         fadingIn = true;
     }
 
-    public void StopBlinking(float endAlpha = 0f)
+    public void StopBlinking(float endingAlpha = 0f)
     {
         blinkCount = 0;
         this.isBlinking = false;
         fadingIn = true;
-        ChangeAlpha(endAlpha);
+        ChangeAlpha(endingAlpha);
     }
 
 
@@ -81,7 +98,7 @@ public class HitIndicator : MonoBehaviour
             {
                 isBlinking = false;
             }
-            else
+            else if (blinkCount != -1)
             {
                 blinkCount -= 1;
             }
@@ -96,10 +113,28 @@ public class HitIndicator : MonoBehaviour
         fadingIn = !fadingIn;
     }
 
-    void ChangeAlpha(float newAlpha)
+    public void ChangeAlpha(float newAlpha)
     {
         Color temp = hitbox.color;
         temp.a = newAlpha;
         hitbox.color = temp;
+    }
+
+    public void ChangeColor(Color newColor)
+    {
+        Color temp = newColor;
+        temp.a = hitbox.color.a; // Preserve the Alpha
+        hitbox.color = temp;
+    }
+
+    public void IndicateBlinking(float startingAlpha, float endingAlpha, float blinkingDuration,
+        float blinkingRate = BLINK_RATE, bool loopEndless = false)
+    {
+        this.startAlpha = startingAlpha;
+        this.endAlpha = endingAlpha;
+        this.duration = blinkingDuration;
+        this.loopEndlessly = loopEndless;
+        this.blinkRate = blinkingRate;
+        this.StartBlinking();
     }
 }
