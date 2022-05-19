@@ -47,6 +47,7 @@ public class BossAI : MonoBehaviour
     private BossMover _bossMover;
     private Health _health;
     private BossCutsceneManager _bossCutsceneManager;
+    private Weapon _weapon;
 
     private IEnumerator _attackCoroutine;
 
@@ -75,6 +76,10 @@ public class BossAI : MonoBehaviour
         _centerPosition = arenaCenter.transform.localPosition;
         _hitIndicator = hitIndicator.GetComponent<HitIndicator>();
         _bossSpriteIndicator = bossSprite.GetComponent<HitIndicator>();
+
+        _weapon = GetComponent<Weapon>();
+        Assert.IsNotNull(_weapon);
+
         _bossCutsceneManager = GetComponent<BossCutsceneManager>();
         Assert.IsNotNull(_bossCutsceneManager);
 
@@ -176,12 +181,16 @@ public class BossAI : MonoBehaviour
 #endif
 
             // (4) Does the dash with a lot of speed.
+            _weapon.damage = 100f;
+
             _bossMover.MoveBoss(true, endPosition,
                 false, Vector3.zero, BossParameters.ATTACKING_TRANSITION_DURATION);
             yield return new WaitForSeconds(BossParameters.ATTACKING_TRANSITION_DURATION);
 
             yield return
                 new WaitForSeconds(BossParameters.ATTACKING_PAUSE_DURATION); // Wait a bit longer for the player.
+
+            _weapon.damage = 1f;
 
             // ================================= (5) RESETTING =================================
 #if DEBUG
