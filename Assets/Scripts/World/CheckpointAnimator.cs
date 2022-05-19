@@ -16,16 +16,16 @@ public class CheckpointAnimator : MonoBehaviour
             Debug.LogWarning("Checkpoint Animator not set, there will be no animations");
             return;
         }
-
+		
         Checkpoint.ActivateCheckpoint += checkpoint_OnActivateCheckpoint;
     }
 
     void checkpoint_OnActivateCheckpoint()
     {
         GameObject activatedCheckpoint = Checkpoint.GetActiveCheckpoint();
+		
         if (checkpointObject == activatedCheckpoint)
         {
-			FindObjectOfType<SoundManager>().PlayFire();
             _animator.SetBool("isActivated", true);
         }
     }

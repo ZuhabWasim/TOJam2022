@@ -69,15 +69,14 @@ public class DialogueManager : MonoBehaviour
 		
 	}
 	
-
-
-	
 	void EndDialogue(Dialogue dialogue){
 		animator.SetBool("isOpen",false);
 		if (dialogue.onEnd == true){
 			FindObjectOfType<PauseMenuUIManager>().StartFinalCutscene();
 		}
+		
 		if(dialogue.onStart == true){
+			FindObjectOfType<SoundManager>().PlayBossLaugh();
 			GameObject go2 = GameObject.Find("DialogueTrigger");
 			DialogueTrigger trigger2 = (DialogueTrigger) go2.GetComponent(typeof(DialogueTrigger));
 			trigger2.TriggerDialogue();

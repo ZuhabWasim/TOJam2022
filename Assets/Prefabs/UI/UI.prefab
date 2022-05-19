@@ -6267,15 +6267,15 @@ MonoBehaviour:
     - Character and Weapon Design, Background Design
 
 
-    Dave (The Lizard)#7865
-    - Level Music
+    David Saldarriaga - Level
+    Music
 
 
     Na-Yung Seoh - Title Music
 
 
-    Sound Effects courtesy of
-    freesound.org and kenney.nl.'
+    Sound Effects courtesy of freesound.org
+    and kenney.nl.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e22d517f6b13b804187c51dd6f094034, type: 2}
   m_sharedMaterial: {fileID: -5622683010241522969, guid: e22d517f6b13b804187c51dd6f094034, type: 2}
@@ -6563,8 +6563,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Our game isn't quite done :) \nWe hope you enjoyed it!\nTOJAM 2022 - All
-    2gether Now\nTeam CVDJ ZIMT"
+  m_text: 'Thank you for playing our game!
+
+    We hope you enjoyed it!
+
+    TOJAM
+    2022 - All 2gether Now
+
+    Team CVDJ ZIMT'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e22d517f6b13b804187c51dd6f094034, type: 2}
   m_sharedMaterial: {fileID: -5622683010241522969, guid: e22d517f6b13b804187c51dd6f094034, type: 2}

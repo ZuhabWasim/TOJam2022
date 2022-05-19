@@ -45,7 +45,9 @@ public class Checkpoint : MonoBehaviour, IDamageable
     {
         ActiveCheckpoint = this;
         ActivateCheckpoint?.Invoke();
-
+		if(activated == false){
+			FindObjectOfType<SoundManager>().PlayFire();
+		}
         activated = true;
         Debug.Log("Activated checkpoint!");
     }

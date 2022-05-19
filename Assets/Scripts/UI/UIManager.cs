@@ -18,7 +18,6 @@ public class UIManager : MonoBehaviour
 		Time.timeScale = 1; 
 	}
 	
-	
 	public void OpenMenuSettings() {
 		startButton.SetBool("isHidden", true);
 		settingsButton.SetBool("isHidden", true);
@@ -35,9 +34,4 @@ public class UIManager : MonoBehaviour
 		settingsButton.SetBool("isHidden", false);
 		dialog.SetBool("isHidden", true);
 	}
-	
-
-	
-
-	
 }

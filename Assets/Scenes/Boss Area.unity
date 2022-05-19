@@ -2430,6 +2430,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3735459747981408492, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
+      propertyPath: m_text
+      value: 'Thank you for playing our game!
+
+        We hope you enjoyed it!
+
+        TOJAM
+        2022 - All 2gether Now
+
+        Team CVDJ ZIMT'
+      objectReference: {fileID: 0}
     - target: {fileID: 4965906878647386364, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
       propertyPath: dialogue.onStart
       value: 0
@@ -2437,6 +2448,32 @@ PrefabInstance:
     - target: {fileID: 7449521146749155771, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
       propertyPath: dialogue.onStart
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7602703462111438795, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
+      propertyPath: m_text
+      value: 'Art
+
+
+        Isabella Scott - Monster Design/Sprites, Title Screen
+
+
+        Michelle
+        Vu - Character Sprite Animations, Tilesets, Environment Assets
+
+
+        Yue
+        Lin - Character and Weapon Design, Background Design
+
+
+        David Saldarriaga
+        - Level Music
+
+
+        Na-Yung Seoh - Title Music
+
+
+        Sound Effects
+        courtesy of freesound.org and kenney.nl.'
       objectReference: {fileID: 0}
     - target: {fileID: 7626054482101258371, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
       propertyPath: m_IsActive

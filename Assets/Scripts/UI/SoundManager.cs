@@ -15,6 +15,8 @@ public class SoundManager : MonoBehaviour
 	public AudioClip snakeSound;
 	public AudioClip fireSound;
 	public AudioClip metalSound;
+	public AudioClip bossLaughSound;
+	public AudioClip bossAttackSound;
 	
 	public void PlayJump(){
 		audioSource.volume = 1f;
@@ -22,7 +24,7 @@ public class SoundManager : MonoBehaviour
 	}
 	
 	public void PlaySword(){
-		audioSource.volume = 1f;
+		audioSource.volume = 0.9f;
 		audioSource.PlayOneShot(swordSound);
 	}
 	
@@ -55,11 +57,21 @@ public class SoundManager : MonoBehaviour
 		audioSource.PlayOneShot(snakeSound);
 	}
 	public void PlayFire(){
-		audioSource.volume = 1f;
+		audioSource.volume = 0.9f;
 		audioSource.PlayOneShot(fireSound);
 	}
 	public void PlayMetal(){
-		audioSource.volume = 0.9f;
+		audioSource.volume = 0.7f;
 		audioSource.PlayOneShot(metalSound);
+	}
+	
+	public void PlayBossLaugh(){
+		audioSource.volume = 0.8f;
+		audioSource.PlayOneShot(bossLaughSound);
+	}
+	
+	public void PlayBossAttack(){
+		audioSource.volume = 0.8f;
+		audioSource.PlayOneShot(bossAttackSound);
 	}
 }
