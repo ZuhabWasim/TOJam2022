@@ -48,13 +48,17 @@ public class PauseMenuUIManager : MonoBehaviour
 		pauseButton.SetActive(true);
 		
 	}
+	
 
+	
 	public void OpenDialog(){
 		dialog.SetBool("isHidden", false);
 		settingsButton.SetBool("isHidden", true);
 		quitButton.SetBool("isHidden", true);
 		menuButton.SetBool("isHidden", true);
 	}
+	
+	
 	
 	public void CloseDialogue(){
 		dialog.SetBool("isHidden", true);
@@ -67,4 +71,5 @@ public class PauseMenuUIManager : MonoBehaviour
 		StopAllCoroutines();
 		finalCutscene.SetBool("finalCutscene",true);
 	}
+
 }
