@@ -12,8 +12,9 @@ public class FlyingEnemy : MonoBehaviour
     [SerializeField] float returnSpeed = 1.0f;
     [SerializeField] bool _flyingRight;
     [SerializeField] float aggroCooldown = 1.0f;
+    [SerializeField] AggroTrigger aggroTrigger;
 
-    public bool isAggroed;
+    private bool _isAggroed;
 
     private Animator _animator;
     private Vector3 _spawnPos;
@@ -55,13 +56,19 @@ public class FlyingEnemy : MonoBehaviour
         {
             _health.Death += OnDeath;
         }
+        if(!aggroTrigger){
+            Debug.LogWarning("Please assign " + name + " an aggro trigger subobject, it will not function without one");
+        }
+        else{
+            aggroTrigger.Aggro += SetAggro;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         _spriteRenderer.flipX = _flyingRight;
-        if (isAggroed)
+        if (_isAggroed)
         {	
             Swoop();
         }
@@ -131,21 +138,12 @@ public class FlyingEnemy : MonoBehaviour
             }
         }
     }
-    private void OnTriggerExit2D(Collider2D other) {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Player")){
-            ReturnToIdle();
-        }
-
-    }
-    private void OnTriggerStay2D(Collider2D other) {
-        if(other.gameObject.layer == LayerMask.NameToLayer("Player")){
-            isAggroed = true;
-        }
-
+    private void OnCollisionEnter2D(Collision2D other) {
         _weaponController.Attack(); // Weapon controller will determine if anything can be hit
     }
-    private async void ReturnToIdle(){
-        await System.Threading.Tasks.Task.Delay(Mathf.CeilToInt(aggroCooldown * 1000f)); // Just await the delay finishing
-        isAggroed = true;
+
+    public async void SetAggro(bool aggro){
+        if(!aggro) await System.Threading.Tasks.Task.Delay(Mathf.CeilToInt(aggroCooldown * 1000f)); // Just await the delay finishing
+        _isAggroed = aggro;
     }
 }
