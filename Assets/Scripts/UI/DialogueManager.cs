@@ -10,15 +10,14 @@ public class DialogueManager : MonoBehaviour
 	
 	public Animator animator;
 	public AudioSource playsound;
-	public int phase;
+	
+	public int phase = 0;
 	
 	private Queue<string> sentences;
 	
 	public void StartDialogue (Dialogue dialogue){
 		animator.SetBool("isOpen",true);
-		if (FindObjectOfType<PlayerController>() == true) {
-			FindObjectOfType<PlayerController>().FreezeInput(true);
-		}
+		FindObjectOfType<PlayerController>().FreezeInput(true);
 		
 		sentences = new Queue<string>();
 		nameText.text = dialogue.name;
@@ -34,16 +33,17 @@ public class DialogueManager : MonoBehaviour
 
 	public void DisplayNextSentence(Dialogue dialogue){
 		if (sentences.Count == 0){
-			playsound.GetComponent<AudioSource>().Stop ();
+			playsound.GetComponent<AudioSource>().Stop();
 			EndDialogue(dialogue);
 			return;
 		}
+
+		else{
+			string sentence = sentences.Dequeue();
 		
-		string sentence = sentences.Dequeue();
-		
-		StopAllCoroutines();
-		StartCoroutine(TypeSentence(sentence, dialogue));
-		
+			StopAllCoroutines();
+			StartCoroutine(TypeSentence(sentence, dialogue));
+		}
 	}
 	
 	IEnumerator TypeSentence (string sentence, Dialogue dialogue){
@@ -70,35 +70,40 @@ public class DialogueManager : MonoBehaviour
 		
 	}
 	
-
-
-	
 	void EndDialogue(Dialogue dialogue){
 		animator.SetBool("isOpen",false);
+		Debug.Log(phase);
 		if (dialogue.onEnd == true){
-			FindObjectOfType<PlayerController>().FreezeInput(false);
+			FindObjectOfType<PlayerController>().FreezeInput(true);
 			FindObjectOfType<BossCutsceneManager>().KillBoss();
+			return;
 		}
+		
 		if(dialogue.onStart == true){
+			FindObjectOfType<SoundManager>().PlayBossLaugh();
 			GameObject go2 = GameObject.Find("DialogueTrigger");
 			DialogueTrigger trigger2 = (DialogueTrigger) go2.GetComponent(typeof(DialogueTrigger));
 			trigger2.TriggerDialogue();
-			FindObjectOfType<SoundManager>().PlayBossLaugh();
+			phase += 1;
+			return;
 		}
+		
 		if (dialogue.onBoss == true){
 			FindObjectOfType<PlayerController>().FreezeInput(false);
 			FindObjectOfType<BossAI>().StartBossFight();
 		}
 		
 		else{
-			if (phase == 0){
+			
+			if (phase == 1){
 				FindObjectOfType<BossCutsceneManager>().MoveToArena();
-				phase += 1;
+				phase +=1;
 			}
+			
 			animator.SetBool("isOpen",false);
-			if (FindObjectOfType<PlayerController>() == true) {
-				FindObjectOfType<PlayerController>().FreezeInput(false);
-			}
+			FindObjectOfType<PlayerController>().FreezeInput(false);
+
 		}
+		
 	}
 }

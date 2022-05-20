@@ -127,6 +127,7 @@ public class PlayerController : MonoBehaviour
         RegisterEventListeners();
         PutOnArmour();
         _lateralMovement = 0f;
+		
         GameObject go = GameObject.Find("TutorialTrigger");
         DialogueTrigger trigger = (DialogueTrigger) go.GetComponent(typeof(DialogueTrigger));
         trigger.TriggerDialogue();

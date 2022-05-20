@@ -95,7 +95,6 @@ public class BossCutsceneManager : MonoBehaviour
     public void AnimateDeath()
     {
         // Make the boss violently shake back and forth while flashing red.
-		FindObjectOfType<PlayerController>().FreezeInput(false);
         _bossMover.BreakMotion();
         _bossSpriteIndicator.ChangeColor(Color.red);
         _bossSpriteIndicator.IndicateBlinking(BossParameters.DEATH_FLASH_MAX_ALPHA,
@@ -112,7 +111,7 @@ public class BossCutsceneManager : MonoBehaviour
     public void KillBoss()
     {
         // TODO: Invoke this method when the player is done hearing the boss dialog.
-
+		
         StartCoroutine(BossDisappear());
 #if DEBUG
         Debug.Log("The boss is dead!");
