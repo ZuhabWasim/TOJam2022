@@ -108,7 +108,7 @@ public class PlayerController : MonoBehaviour
     private bool _chestPiece = false;
     private bool _gauntlets = false;
 
-    private bool _leggings = false;
+    public bool _leggings = false;
     private float _attackCooldown = 0f;
 
     // Camera related
@@ -155,9 +155,9 @@ public class PlayerController : MonoBehaviour
 
 #if DEBUG
         // Placeholder events for each armour piece lost.
-        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.CHEST_PIECE), LostChestPiece);
-        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.GAUNTLET), LostGauntlets);
-        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.LEGGINGS), LostLeggings);
+        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.DEBUG1), LostChestPiece);
+        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.DEBUG2), LostGauntlets);
+        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.DEBUG3), LostLeggings);
 #endif
     }
 
@@ -254,12 +254,12 @@ public class PlayerController : MonoBehaviour
     void RefreshPlayerStates()
     {
         // Changing direction of the player.
-        if (_lateralMovement > 0 && !_facingRight)
+        if (_lateralMovement > 0 && !_facingRight && !_climbing)
         {
             CreateDust();
             FlipCharacter();
         }
-        else if (_lateralMovement < 0 && _facingRight)
+        else if (_lateralMovement < 0 && _facingRight && !_climbing)
         {
             CreateDust();
             FlipCharacter();
@@ -366,7 +366,7 @@ public class PlayerController : MonoBehaviour
             //SnapToRope();
             _rigidbody.velocity = new Vector2(_lateralMovement * moveSpeed * CLIMBING_LATERAL_REDUCTION,
                 _verticalMovement * climbingSpeed);
-            if (!FindObjectOfType<SoundManager>().audioSource.isPlaying)
+            if (!FindObjectOfType<SoundManager>().audioSource.isPlaying && _rigidbody.velocity != new Vector2(0f,0f))
             {
                 FindObjectOfType<SoundManager>().PlayClimb();
             }
@@ -634,6 +634,7 @@ public class PlayerController : MonoBehaviour
     // ideally UI or a dedicated script
     public void FreezeInput(bool freeze)
     {
+		_lateralMovement = 0;
         _inputFrozen = freeze;
         InputFreeze?.Invoke(freeze);
     }

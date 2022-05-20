@@ -529,6 +529,17 @@ PrefabInstance:
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 3735459747981408492, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
+      propertyPath: m_text
+      value: 'Thank you for playing our game!
+
+        We hope you enjoyed it!
+
+        TOJAM
+        2022 - All 2gether Now
+
+        Team CVDJ ZIMT'
+      objectReference: {fileID: 0}
     - target: {fileID: 3750332889159328892, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -625,12 +636,11 @@ PrefabInstance:
         Lin - Character and Weapon Design, Background Design
 
 
-        Dave (The
-        Lizard#7865) - Music
+        Dave Saldarriaga
+        - Level Music
 
 
-        Sound Effects courtesy of freesound.org and
-        kenney.nl.'
+        Sound Effects courtesy of freesound.org and kenney.nl.'
       objectReference: {fileID: 0}
     - target: {fileID: 7626054482101258371, guid: 1f82a9d3f3bb9ea4289f4f1dac2e7c07, type: 3}
       propertyPath: m_IsActive
@@ -983,6 +993,9 @@ MonoBehaviour:
   snakeSound: {fileID: 8300000, guid: 3838275922c15d24c9efadf792ad4dca, type: 3}
   fireSound: {fileID: 8300000, guid: d9c2bb1ab7bfb4f4a8f042705c7db74f, type: 3}
   metalSound: {fileID: 8300000, guid: ad2724d0b15bc134b8bf1ad6981169e4, type: 3}
+  bossLaughSound: {fileID: 8300000, guid: fbab2a88448fa464a8d1ce52cbae9547, type: 3}
+  bossAttackSound: {fileID: 8300000, guid: 2a570b828b323444097503e790b4464b, type: 3}
+  bossDeathSound: {fileID: 8300000, guid: f3309444311d67b4b9838572ea1dd021, type: 3}
 --- !u!4 &5521899167591392843 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5135255768933556179, guid: 39b1b230e540dc641ab51e9733c7a6a8, type: 3}

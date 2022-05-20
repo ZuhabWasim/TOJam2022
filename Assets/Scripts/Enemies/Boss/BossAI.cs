@@ -1,9 +1,7 @@
-#undef DEBUG
+#define DEBUG
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions;
 using Vector3 = UnityEngine.Vector3;
@@ -17,7 +15,7 @@ using Vector3 = UnityEngine.Vector3;
  *  (5) Slowly returns to a rest spot from the list of idle positions. (was random now it's the nearest)
  *  (6) Begins idling there until its next attack.
  */
-
+#if DEBUG
 enum AttackStage
 {
     PREPARATION = 0,
@@ -27,59 +25,38 @@ enum AttackStage
     RESETTING,
     IDLING
 }
+#endif
 
 public class BossAI : MonoBehaviour
 {
-    private const float PRE_ATTACK_TRANSITION_DURATION = 1f;
-    private const float PRE_ATTACK_PAUSE_DURATION = 3f;
+    [Header("Right Attacks")] public List<GameObject> rightAttackStartPos;
+    public List<GameObject> rightAttackEndPos;
 
-    private const float HIT_INDICATOR_MIN_ALPHA = 0.25f;
-    private const float HIT_INDICATOR_MAX_ALPHA = 0.6f;
+    [Header("Left Attacks")] public List<GameObject> leftAttackStartPos;
+    public List<GameObject> leftAttackEndPos;
 
-    private const float ATTACKING_TRANSITION_DURATION = 0.5f;
-    private const float ATTACKING_PAUSE_DURATION = 1f;
+    [Header("Idle Spots")] public List<GameObject> idlePositions;
 
-    private const float IDLING_TRANSITION_DURATION = 1f;
-    private const float IDLING_BOB_DISTANCE = 0.2f;
-    private const float IDLING_BOB_DURATION = 1f;
-
-    private const float ATTACK_COOLDOWN = 4f;
-
-    private const float BOSS_HIT_FLASH_DURATION = 0.5f;
-    private const float BOSS_HIT_FLASH_MIN_ALPHA = 0f;
-    private const float BOSS_HIT_FLASH_MAX_ALPHA = 1f;
-
-    [Header("Right Attacks")] public List<GameObject> rightAttackStartPos = null;
-    public List<GameObject> rightAttackEndPos = null;
-
-    [Header("Left Attacks")] public List<GameObject> leftAttackStartPos = null;
-    public List<GameObject> leftAttackEndPos = null;
-
-    [Header("Idle Spots")] public List<GameObject> idlePositions = null;
-
-    [Header("Utilities")] [SerializeField] private GameObject arenaCenter = null;
-    [SerializeField] private GameObject hitIndicator = null;
-    [SerializeField] private GameObject bossSprite = null;
+    [Header("Utilities")] [SerializeField] private GameObject arenaCenter;
+    [SerializeField] private GameObject hitIndicator;
+    [SerializeField] private GameObject bossSprite;
 
     private Vector3 _centerPosition;
     private HitIndicator _hitIndicator;
     private HitIndicator _bossSpriteIndicator;
     private BossMover _bossMover;
     private Health _health;
-    private bool _onRight;
+    private BossCutsceneManager _bossCutsceneManager;
+    private Weapon _weapon;
 
+    private IEnumerator _attackCoroutine;
+
+#if DEBUG
     [SerializeField] private AttackStage attackStage;
+#endif
 
     void Start()
     {
-        _bossMover = GetComponent<BossMover>();
-        _health = GetComponent<Health>();
-        if (_health)
-        {
-            _health.Death += OnDeath;
-            _health.HealthChanged += OnHealthChanged;
-        }
-
         Assert.AreEqual(rightAttackStartPos.Count, leftAttackStartPos.Count);
         Assert.AreEqual(rightAttackEndPos.Count, leftAttackEndPos.Count);
         Assert.IsTrue(rightAttackStartPos.Count > 0);
@@ -88,31 +65,62 @@ public class BossAI : MonoBehaviour
         Assert.IsNotNull(hitIndicator);
         Assert.IsNotNull(bossSprite);
 
+        _bossMover = GetComponent<BossMover>();
+        _health = GetComponent<Health>();
+        if (_health)
+        {
+            _health.Death += OnDeath;
+            _health.HealthChanged += OnHealthChanged;
+        }
+
         _centerPosition = arenaCenter.transform.localPosition;
         _hitIndicator = hitIndicator.GetComponent<HitIndicator>();
         _bossSpriteIndicator = bossSprite.GetComponent<HitIndicator>();
 
-        StartBossFight(); // I start the boss fight at start but this should occur when the player is done with dialog.
+        _weapon = GetComponent<Weapon>();
+        Assert.IsNotNull(_weapon);
+
+        _bossCutsceneManager = GetComponent<BossCutsceneManager>();
+        Assert.IsNotNull(_bossCutsceneManager);
+
+        _attackCoroutine = Attack();
+
+#if DEBUG
+        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.DEBUG8), StartBossFight);
+        EventManager.Sub(InputManager.GetKeyDownEventName(KeyBinds.DEBUG9), OnDeath);
+#endif
+
+        //StartBossFight(); // I start the boss fight at start but this should occur when the player is done with dialog.
     }
 
-    void StartBossFight()
+    public void StartBossFight()
     {
-        StartCoroutine(Attack());
+		FindObjectOfType<SoundManager>().PlayBossLaugh();
+        StartCoroutine(_attackCoroutine);
     }
 
     void OnDeath()
     {
-        gameObject.SetActive(false);
-        Debug.Log("You killed the boss!");
+		FindObjectOfType<PlayerController>().FreezeInput(true);
+        // Stop the boss wherever it died
+        StopCoroutine(_attackCoroutine);
+        _bossMover.BreakMotion();
+
+        // Don't let the boss be able to hurt the player anymore.
+        GetComponent<TouchDamage>().Active = false;
+
+        // Do the death animation.
+        _bossCutsceneManager.AnimateDeath();
+
+#if DEBUG
+        Debug.Log("The boss is dying!");
+#endif
     }
 
     void OnHealthChanged(float oldHealth, float newHealth)
     {
-        /*_bossSpriteIndicator.StopBlinking();*/
-        _bossSpriteIndicator.duration = BOSS_HIT_FLASH_DURATION;
-        _bossSpriteIndicator.startAlpha = BOSS_HIT_FLASH_MIN_ALPHA;
-        _bossSpriteIndicator.endAlpha = BOSS_HIT_FLASH_MAX_ALPHA;
-        _bossSpriteIndicator.StartBlinking();
+        _bossSpriteIndicator.IndicateBlinking(BossParameters.BOSS_HIT_FLASH_MIN_ALPHA,
+            BossParameters.BOSS_HIT_FLASH_MAX_ALPHA, BossParameters.BOSS_HIT_FLASH_DURATION);
     }
 
     IEnumerator Attack()
@@ -120,17 +128,15 @@ public class BossAI : MonoBehaviour
         while (_health.health > 0)
         {
             // ================================= (1) PREPARATION =================================
-
+#if DEBUG
             attackStage = AttackStage.PREPARATION;
+#endif
 
             // (1) Randomly get an attack path from the list of start and end points from the specific side.
-
-            _onRight = CheckRight();
-
-            Vector3 startPosition = Vector3.zero;
-            Vector3 endPosition = Vector3.zero;
-            Vector3 centerVector = Vector3.zero;
-            if (_onRight)
+            Vector3 startPosition;
+            Vector3 endPosition;
+            Vector3 centerVector;
+            if (CheckIfOnRight())
             {
                 int attackIndex = Random.Range(0, rightAttackStartPos.Count);
                 startPosition = rightAttackStartPos[attackIndex].transform.localPosition;
@@ -146,65 +152,77 @@ public class BossAI : MonoBehaviour
             }
 
             // ================================= (2) PRE-ATTACK =================================
-
+#if DEBUG
             attackStage = AttackStage.PRE_ATTACK;
+#endif
 
             // (3) Moves into the position and orientation to perform the dash.
-            MoveBoss(true, startPosition,
+            _bossMover.MoveBoss(true, startPosition,
                 false, new Vector3(0, transform.localRotation.eulerAngles.y, Vector3.Angle(centerVector, Vector3.zero)),
-                PRE_ATTACK_TRANSITION_DURATION);
-            yield return new WaitForSeconds(PRE_ATTACK_TRANSITION_DURATION);
+                BossParameters.PRE_ATTACK_TRANSITION_DURATION);
+            yield return new WaitForSeconds(BossParameters.PRE_ATTACK_TRANSITION_DURATION);
             transform.right = -centerVector;
 
             // ================================= (3) ALERTING =================================
+#if DEBUG
+            attackStage = AttackStage.ALERTING;
+#endif
 
             // (2) Indicate to the player (via blinking red) where the boss intends to attack for a few seconds.
-            attackStage = AttackStage.ALERTING;
+            _hitIndicator.IndicateBlinking(BossParameters.HIT_INDICATOR_MIN_ALPHA,
+                BossParameters.HIT_INDICATOR_MAX_ALPHA, BossParameters.PRE_ATTACK_PAUSE_DURATION);
+            _bossSpriteIndicator.ChangeColor(Color.red);
 
-            _hitIndicator.duration = PRE_ATTACK_PAUSE_DURATION;
-            _hitIndicator.startAlpha = HIT_INDICATOR_MIN_ALPHA;
-            _hitIndicator.endAlpha = HIT_INDICATOR_MAX_ALPHA;
-            _hitIndicator.StartBlinking();
-
-            yield return new WaitForSeconds(PRE_ATTACK_PAUSE_DURATION); // Wait a bit longer for the player.
+            yield return
+                new WaitForSeconds(BossParameters.PRE_ATTACK_PAUSE_DURATION); // Wait a bit longer for the player.
             _hitIndicator.StopBlinking();
 
             // ================================= (4) ATTACKING =================================
-
+#if DEBUG
             attackStage = AttackStage.ATTACKING;
+#endif
 
             // (4) Does the dash with a lot of speed.
-            MoveBoss(true, endPosition,
-                false, Vector3.zero, ATTACKING_TRANSITION_DURATION);
-            yield return new WaitForSeconds(ATTACKING_TRANSITION_DURATION);
+            _weapon.damage = 100f;
+			FindObjectOfType<SoundManager>().PlayBossAttack();
+            _bossMover.MoveBoss(true, endPosition,
+                false, Vector3.zero, BossParameters.ATTACKING_TRANSITION_DURATION);
+            yield return new WaitForSeconds(BossParameters.ATTACKING_TRANSITION_DURATION);
 
-            yield return new WaitForSeconds(ATTACKING_PAUSE_DURATION); // Wait a bit longer for the player.
+            yield return
+                new WaitForSeconds(BossParameters.ATTACKING_PAUSE_DURATION); // Wait a bit longer for the player.
+
+            _weapon.damage = 1f;
 
             // ================================= (5) RESETTING =================================
-
+#if DEBUG
             attackStage = AttackStage.RESETTING;
+#endif
 
             // (5) Slowly returns to a rest spot from the list of idle positions.
+            _bossSpriteIndicator.ChangeColor(Color.white);
             Vector3 idlePosition = GetClosestIdlePosition();
 
-            MoveBoss(true, idlePosition,
-                true, new Vector3(0, transform.localRotation.eulerAngles.y, 0), IDLING_TRANSITION_DURATION);
-            yield return new WaitForSeconds(IDLING_TRANSITION_DURATION);
+            _bossMover.MoveBoss(true, idlePosition,
+                true, new Vector3(0, transform.localRotation.eulerAngles.y, 0),
+                BossParameters.IDLING_TRANSITION_DURATION);
+            yield return new WaitForSeconds(BossParameters.IDLING_TRANSITION_DURATION);
             transform.right = idlePosition - _centerPosition;
 
             // ================================= (6) IDLING =================================
-
+#if DEBUG
             attackStage = AttackStage.IDLING;
+#endif
 
             // (6) Begins idling there until its next attack.
-            MoveBoss(true, transform.localPosition + new Vector3(0, IDLING_BOB_DISTANCE, 0),
-                false, Vector3.zero, IDLING_BOB_DURATION, -1);
+            _bossMover.MoveBoss(true, transform.localPosition + new Vector3(0, BossParameters.IDLING_BOB_DISTANCE, 0),
+                false, Vector3.zero, BossParameters.IDLING_BOB_DURATION, -1);
 
-            yield return new WaitForSeconds(ATTACK_COOLDOWN);
+            yield return new WaitForSeconds(BossParameters.ATTACK_COOLDOWN);
         }
     }
 
-    bool CheckRight()
+    bool CheckIfOnRight()
     {
         return _centerPosition.x < transform.localPosition.x;
     }
@@ -226,44 +244,5 @@ public class BossAI : MonoBehaviour
         }
 
         return idlePositions[closest].transform.localPosition;
-    }
-
-    void MoveBoss(bool move, Vector3 position,
-        bool rotate, Vector3 rotation,
-        float duration, int loopCount = 0)
-    {
-        // Break motion for anything done before.
-        _bossMover.BreakMotion();
-
-        // Duration and looping.
-        _bossMover.loopCount = loopCount;
-        _bossMover.duration = duration;
-
-        // If the boss needs to move, set the parameters.
-        if (move)
-        {
-            _bossMover.move = true;
-            _bossMover.startPosition = transform.localPosition;
-            _bossMover.endPosition = position;
-        }
-        else
-        {
-            _bossMover.move = false;
-        }
-
-        // If the boss needs to rotate, set the parameters.
-        if (rotate)
-        {
-            _bossMover.rotate = true;
-            _bossMover.startRotation = transform.localRotation.eulerAngles;
-            _bossMover.endRotation = rotation;
-        }
-        else
-        {
-            _bossMover.rotate = false;
-        }
-
-        // Move the boss asynchronously (passive movement).
-        _bossMover.TriggerMotion();
     }
 }

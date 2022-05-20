@@ -69,6 +69,7 @@ public class PauseMenuUIManager : MonoBehaviour
 	
 	public void StartFinalCutscene(){
 		StopAllCoroutines();
+		FindObjectOfType<PlayerController>().FreezeInput(true);
 		finalCutscene.SetBool("finalCutscene",true);
 	}
 

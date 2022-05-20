@@ -10,6 +10,7 @@ public class DialogueManager : MonoBehaviour
 	
 	public Animator animator;
 	public AudioSource playsound;
+	public int phase;
 	
 	private Queue<string> sentences;
 	
@@ -75,15 +76,25 @@ public class DialogueManager : MonoBehaviour
 	void EndDialogue(Dialogue dialogue){
 		animator.SetBool("isOpen",false);
 		if (dialogue.onEnd == true){
-			FindObjectOfType<PauseMenuUIManager>().StartFinalCutscene();
+			FindObjectOfType<PlayerController>().FreezeInput(false);
+			FindObjectOfType<BossCutsceneManager>().KillBoss();
 		}
 		if(dialogue.onStart == true){
 			GameObject go2 = GameObject.Find("DialogueTrigger");
 			DialogueTrigger trigger2 = (DialogueTrigger) go2.GetComponent(typeof(DialogueTrigger));
 			trigger2.TriggerDialogue();
+			FindObjectOfType<SoundManager>().PlayBossLaugh();
+		}
+		if (dialogue.onBoss == true){
+			FindObjectOfType<PlayerController>().FreezeInput(false);
+			FindObjectOfType<BossAI>().StartBossFight();
 		}
 		
 		else{
+			if (phase == 0){
+				FindObjectOfType<BossCutsceneManager>().MoveToArena();
+				phase += 1;
+			}
 			animator.SetBool("isOpen",false);
 			if (FindObjectOfType<PlayerController>() == true) {
 				FindObjectOfType<PlayerController>().FreezeInput(false);

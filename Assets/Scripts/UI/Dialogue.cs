@@ -8,6 +8,7 @@ public class Dialogue
 {
 	public bool onStart;
 	public bool onEnd;
+	public bool onBoss;
 	public string name; 
 	[TextArea(3,10)]
 	public string[] sentences;
