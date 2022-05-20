@@ -48,6 +48,7 @@ public class BossAI : MonoBehaviour
     private Health _health;
     private BossCutsceneManager _bossCutsceneManager;
     private Weapon _weapon;
+    private Animator _animator;
 
     private IEnumerator _attackCoroutine;
 
@@ -76,6 +77,7 @@ public class BossAI : MonoBehaviour
         _centerPosition = arenaCenter.transform.localPosition;
         _hitIndicator = hitIndicator.GetComponent<HitIndicator>();
         _bossSpriteIndicator = bossSprite.GetComponent<HitIndicator>();
+        _animator = GetComponentInChildren<Animator>();
 
         _weapon = GetComponent<Weapon>();
         Assert.IsNotNull(_weapon);
@@ -97,6 +99,7 @@ public class BossAI : MonoBehaviour
     {
 		FindObjectOfType<SoundManager>().PlayBossLaugh();
         StartCoroutine(_attackCoroutine);
+        _animator.SetBool("inFight", true);
     }
 
     void OnDeath()
@@ -111,6 +114,9 @@ public class BossAI : MonoBehaviour
 
         // Do the death animation.
         _bossCutsceneManager.AnimateDeath();
+
+        // TODO replace idle aniamtion with death aniamtion
+        _animator.SetBool("inFight", false);
 
 #if DEBUG
         Debug.Log("The boss is dying!");
